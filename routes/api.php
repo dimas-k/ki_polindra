@@ -18,14 +18,14 @@ use App\Http\Controllers\Api\ApiUsersController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
-Route::get('/data/count/paten', [ApiPatenController::class, 'countAllDataPaten']);
-Route::get('/data/count/hak-cipta', [ApiHcController::class, 'countAllDataHc']);
-Route::get('/data/count/desain-industri', [ApiDiController::class, 'countAllDataDi']);
-// Route::prefix('hak-cipta')->group(function () {
+// Route::get('/data/count/paten', [ApiPatenController::class, 'countAllDataPaten']);
+// Route::get('/data/count/hak-cipta', [ApiHcController::class, 'countAllDataHc']);
+// Route::get('/data/count/desain-industri', [ApiDiController::class, 'countAllDataDi']);
+// // Route::prefix('hak-cipta')->group(function () {
 //     Route::get('/get/data/{id}', [ApiHcController::class, 'getHcById']);
 //     Route::get('/get/data/dosen', [ApiHcController::class, 'getDataDosen']);
 //     Route::get('/get/data/umum', [ApiHcController::class, 'getDataUmum']);
