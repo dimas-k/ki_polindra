@@ -7,7 +7,6 @@
         "php": "^8.3",
         "andes2912/indobank": "^0.9.0",
         "asantibanez/livewire-charts": "^3.0",
-        "biscolab/laravel-recaptcha": "^6.1",
         "guzzlehttp/guzzle": "^7.9",
         "laravel/breeze": "^2.0",
         "laravel/framework": "^11.0",
@@ -27,8 +26,7 @@
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/",
-            "Modules\\": "Modules/"
+            "Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
