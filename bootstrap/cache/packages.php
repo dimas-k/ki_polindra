@@ -20,17 +20,6 @@
       0 => 'Asantibanez\\LivewireCharts\\LivewireChartsServiceProvider',
     ),
   ),
-  'biscolab/laravel-recaptcha' => 
-  array (
-    'aliases' => 
-    array (
-      'ReCaptcha' => 'Biscolab\\ReCaptcha\\Facades\\ReCaptcha',
-    ),
-    'providers' => 
-    array (
-      0 => 'Biscolab\\ReCaptcha\\ReCaptchaServiceProvider',
-    ),
-  ),
   'laravel/breeze' => 
   array (
     'providers' => 
