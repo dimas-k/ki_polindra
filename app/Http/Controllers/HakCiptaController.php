@@ -176,17 +176,35 @@ class HakCiptaController extends Controller
         $hc->alamat = $request->alamat;
         $hc->no_telepon = $request->no_telepon;
         $hc->tanggal_lahir = $request->tanggal_lahir;
-        $hc->ktp_inventor = $request->file('ktp_inventor')->store('dokumen-hc');
         $hc->email = $request->email;
         $hc->kewarganegaraan = $request->kewarganegaraan;
         $hc->kode_pos = $request->kode_pos;
         $hc->jenis_ciptaan = $request->jenis_ciptaan;
         $hc->judul_ciptaan = $request->judul_ciptaan;
         $hc->uraian_singkat = $request->uraian_singkat;
-        $hc->dokumen_invensi = $request->file('dokumen_invensi')->store('dokumen-hc');
-        $hc->surat_pengalihan = $request->file('surat_pengalihan')->store('dokumen-hc');
-        $hc->surat_pernyataan = $request->file('surat_pernyataan')->store('dokumen-hc');
         $hc->tanggal_permohonan = $request->tanggal_permohonan;
+
+        // File sensitif (data pribadi) disimpan di disk private
+        $privateFiles = [
+            'ktp_inventor'    => 'ktp_inventor',
+            'surat_pengalihan' => 'surat_pengalihan',
+            'surat_pernyataan' => 'surat_pernyataan',
+        ];
+        foreach ($privateFiles as $field => $storageName) {
+            if ($request->hasFile($field)) {
+                $file = $request->file($field);
+                $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+                $hc->{$storageName} = $file->storeAs('dokumen-hc', $filename, 'private');
+            }
+        }
+
+        // Dokumen invensi disimpan di disk public
+        if ($request->hasFile('dokumen_invensi')) {
+            $file = $request->file('dokumen_invensi');
+            $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+            $hc->dokumen_invensi = $file->storeAs('dokumen-hc', $filename, 'public');
+        }
+
         $hc->save($validasidata);
 
         return redirect('/pengajuan-hak-cipta')->with('success', 'Data hak cipta berhasil Disimpan!');

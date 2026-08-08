@@ -63,9 +63,9 @@ Route::post('/simpandi', [DesainIndustriController::class, 'store']);
 Route::get('/paten', [PatenController::class, 'index']);
 Route::get('/paten/show/{id}', [PatenController::class, 'show'])->name('paten.show');
 
-Route::get('/public/guest/dokumen-paten/{filename}', [PatenController::class, 'viewPublicFilesPatenGuest'])->name('public_paten_guest');    
-Route::get('/public/guest/dokumen-di/{filename}', [PatenController::class, 'viewPublicFilesDiGuest'])->name('public_di_guest');    
-Route::get('/public/guest/dokumen-hc/{filename}', [PatenController::class, 'viewPublicFilesHcGuest'])->name('public_hc_guest');    
+Route::get('/public/guest/dokumen-paten/{filename}', [PatenController::class, 'viewPublicFilesPatenGuest'])->name('public_paten_guest');
+Route::get('/public/guest/dokumen-di/{filename}', [PatenController::class, 'viewPublicFilesDiGuest'])->name('public_di_guest');
+Route::get('/public/guest/dokumen-hc/{filename}', [PatenController::class, 'viewPublicFilesHcGuest'])->name('public_hc_guest');
 
 Route::get('/paten/pemeriksaan-formalitas', [PatenController::class, 'pemeriksaanFormalitas']);
 Route::get('/paten/menunggu-tanggapan-formalitas', [PatenController::class, 'menungguTanggapan']);

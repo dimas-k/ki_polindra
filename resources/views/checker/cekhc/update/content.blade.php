@@ -34,10 +34,10 @@
                                     <table class="table table-borderless p-1">
 
                                         <tr>
-                                            <th>Nilai Desain INdustri</th>
+                                            <th>Nilai Hak Cipta</th>
                                             <td>
                                                 <select class="form-select @error('cek_data') is-invalid @enderror" name="cek_data" required>
-                                                    <option value="">Pilih Status Paten</option>
+                                                    <option value="">Pilih Status Hak Cipta</option>
                                                     <option value="Valid" @if((old('cek_data') ?? $check->cek_data ?? '') == 'Valid') selected @endif>Valid</option>
                                                     <option value="Tidak valid" @if((old('cek_data') ?? $check->cek_data ?? '') == 'Tidak Valid') selected @endif>Tidak Valid</option>
                                                     <option value="Menunggu Pemeriksaan" @if((old('cek_data') ?? $check->cek_data ?? '') == 'Menunggu Pemeriksaan') selected @endif>Menunggu Pemeriksaan</option>

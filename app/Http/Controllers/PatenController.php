@@ -264,20 +264,37 @@ class PatenController extends Controller
         $paten->alamat = $request->alamat;
         $paten->no_telepon = $request->no_telepon;
         $paten->tanggal_lahir = $request->tanggal_lahir;
-        $paten->ktp_inventor = $request->file('ktp_inventor')->store('dokumen-paten');
+        // File sensitif (data pribadi) disimpan di disk private
+        $privateFiles = [
+            'ktp_inventor'           => 'ktp_inventor',
+            'pengalihan_hak'         => 'pengalihan_hak',
+            'klaim'                  => 'klaim',
+            'pernyataan_kepemilikan' => 'pernyataan_kepemilikan',
+            'surat_kuasa'            => 'surat_kuasa',
+        ];
+        foreach ($privateFiles as $field => $storageName) {
+            if ($request->hasFile($field)) {
+                $file = $request->file($field);
+                $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+                $paten->{$storageName} = $file->storeAs('dokumen-paten', $filename, 'private');
+            }
+        }
+
+        // File dokumen invensi disimpan di disk public
+        $publicFiles = ['abstrak_paten', 'deskripsi_paten', 'gambar_paten', 'gambar_tampilan'];
+        foreach ($publicFiles as $field) {
+            if ($request->hasFile($field)) {
+                $file = $request->file($field);
+                $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+                $paten->{$field} = $file->storeAs('dokumen-paten', $filename, 'public');
+            }
+        }
+
         $paten->email = $request->email;
         $paten->kewarganegaraan = $request->kewarganegaraan;
         $paten->kode_pos = $request->kode_pos;
         $paten->jenis_paten = $request->jenis_paten;
         $paten->judul_paten = $request->judul_paten;
-        $paten->abstrak_paten = $request->file('abstrak_paten')->store('dokumen-paten');
-        $paten->deskripsi_paten = $request->file('deskripsi_paten')->store('dokumen-paten');
-        $paten->pengalihan_hak = $request->file('pengalihan_hak')->store('dokumen-paten');
-        $paten->klaim = $request->file('klaim')->store('dokumen-paten');
-        $paten->pernyataan_kepemilikan = $request->file('pernyataan_kepemilikan')->store('dokumen-paten');
-        $paten->surat_kuasa = $request->file('surat_kuasa')->store('dokumen-paten');
-        $paten->gambar_paten = $request->file('gambar_paten')->store('dokumen-paten');
-        $paten->gambar_tampilan = $request->file('gambar_tampilan')->store('dokumen-paten');
         $paten->tanggal_permohonan = $request->tanggal_permohonan;
 
         $paten->save($validasidata);
@@ -295,26 +312,67 @@ class PatenController extends Controller
     }
     public function viewPublicFilesPatenGuest($filename)
     {
-        // Path file di disk 'private'
         $filePaten = storage_path('app/public/dokumen-paten/' . $filename);
 
-        // Pastikan file ada
         if (!file_exists($filePaten)) {
             abort(404, 'File tidak ditemukan.');
         }
-        // Cari data paten berdasarkan salah satu kolom file
+
+        // Pastikan file termasuk kolom publik yang diizinkan
         $paten = Paten::where(function ($query) use ($filename) {
-            $query
-                ->Where('abstrak_paten', 'dokumen-paten/' . $filename)
+            $query->Where('abstrak_paten', 'dokumen-paten/' . $filename)
                 ->orWhere('deskripsi_paten', 'dokumen-paten/' . $filename)
                 ->orWhere('gambar_paten', 'dokumen-paten/' . $filename)
                 ->orWhere('gambar_tampilan', 'dokumen-paten/' . $filename)
                 ->orWhere('sertifikat_paten', 'dokumen-paten/' . $filename);
         })->first();
 
+        if (!$paten) {
+            abort(404, 'File tidak ditemukan.');
+        }
 
-        // Kirim file sebagai respons
         return response()->file($filePaten);
+    }
+
+    public function viewPublicFilesHcGuest($filename)
+    {
+        $fileHc = storage_path('app/public/dokumen-hc/' . $filename);
+
+        if (!file_exists($fileHc)) {
+            abort(404, 'File tidak ditemukan.');
+        }
+
+        $hc = HakCipta::where(function ($query) use ($filename) {
+            $query->where('dokumen_invensi', 'dokumen-hc/' . $filename)
+                ->orWhere('sertifikat_hakcipta', 'dokumen-hc/' . $filename);
+        })->first();
+
+        if (!$hc) {
+            abort(404, 'File tidak ditemukan.');
+        }
+
+        return response()->file($fileHc);
+    }
+
+    public function viewPublicFilesDiGuest($filename)
+    {
+        $fileDi = storage_path('app/public/dokumen-di/' . $filename);
+
+        if (!file_exists($fileDi)) {
+            abort(404, 'File tidak ditemukan.');
+        }
+
+        $di = DesainIndustri::where(function ($query) use ($filename) {
+            $query->where('uraian_di', 'dokumen-di/' . $filename)
+                ->orWhere('gambar_di', 'dokumen-di/' . $filename)
+                ->orWhere('sertifikat_desain', 'dokumen-di/' . $filename);
+        })->first();
+
+        if (!$di) {
+            abort(404, 'File tidak ditemukan.');
+        }
+
+        return response()->file($fileDi);
     }
     /**
      * Show the form for editing the specified resource.

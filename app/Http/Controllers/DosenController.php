@@ -854,17 +854,16 @@ class DosenController extends Controller
 
     public function viewPublicFilesHc($filename)
     {
-        // Path file di disk 'private'
+        // Path file di disk 'public'
         $filehc = storage_path('app/public/dokumen-hc/' . $filename);
 
         // Pastikan file ada
         if (!file_exists($filehc)) {
             abort(404, 'File tidak ditemukan.');
         }
-        // Cari data paten berdasarkan salah satu kolom file
+        // Hanya kolom yang disimpan di disk public
         $hc = HakCipta::where(function ($query) use ($filename) {
-            $query
-                ->Where('dokumen_invensi', 'dokumen-hc/' . $filename)
+            $query->where('dokumen_invensi', 'dokumen-hc/' . $filename)
                 ->orWhere('sertifikat_hakcipta', 'dokumen-hc/' . $filename);
         })->first();
         if (!$hc || $hc->user_id !== auth()->id()) {
@@ -889,8 +888,6 @@ class DosenController extends Controller
         $di = DesainIndustri::where(function ($query) use ($filename) {
             $query->where('ktp_inventor', 'dokumen-di/' . $filename)
                 ->orWhere('data_pengaju2', 'dokumen-di/' . $filename)
-                ->orWhere('uraian_di', 'dokumen-di/' . $filename)
-                ->orWhere('gambar_di', 'dokumen-di/' . $filename)
                 ->orWhere('surat_kepemilikan', 'dokumen-di/' . $filename)
                 ->orWhere('surat_pengalihan', 'dokumen-di/' . $filename);
         })->first();

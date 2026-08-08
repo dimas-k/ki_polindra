@@ -87,9 +87,9 @@ class CheckerController extends Controller
                 ->orWhere('surat_kuasa', 'dokumen-paten/' . $filename);
         })->first();
 
-        // Validasi akses: hanya pemilik file atau role Checker
-        if (!$paten || ($paten->user_id !== auth()->id() && auth()->user()->role !== 'Checker')) {
-            abort(403, 'Anda tidak memiliki akses ke file ini.');
+        // Validasi: file harus ada di database (kolom vital)
+        if (!$paten) {
+            abort(404, 'File tidak ditemukan.');
         }
 
         // Kirim file sebagai response
@@ -111,16 +111,14 @@ class CheckerController extends Controller
         $hc = HakCipta::where(function ($query) use ($filename) {
             $query->where('ktp_inventor', 'dokumen-hc/' . $filename)
                 ->orWhere('data_pengaju2', 'dokumen-hc/' . $filename)
-                ->orWhere('dokumen_invensi', 'dokumen-hc/' . $filename)
                 ->orWhere('surat_pengalihan', 'dokumen-hc/' . $filename)
                 ->orWhere('surat_pernyataan', 'dokumen-hc/' . $filename);
         })->first();
 
-        // Validasi akses: hanya pemilik atau admin/verifikator yang bisa melihat
-        if (!$hc || ($hc->user_id !== auth()->id() && auth()->user()->role !== 'Checker')) {
-            abort(403, 'Anda tidak memiliki akses ke file ini.');
+        // Validasi akses: hanya Checker yang bisa melihat file vital (tanpa perlu jadi pemilik)
+        if (!$hc) {
+            abort(404, 'File tidak ditemukan.');
         }
-
 
         // Kirim file sebagai respons
         return response()->file($fileHc);
@@ -140,15 +138,13 @@ class CheckerController extends Controller
         $di = DesainIndustri::where(function ($query) use ($filename) {
             $query->where('ktp_inventor', 'dokumen-di/' . $filename)
                 ->orWhere('data_pengaju2', 'dokumen-di/' . $filename)
-                ->orWhere('uraian_di', 'dokumen-di/' . $filename)
-                ->orWhere('gambar_di', 'dokumen-di/' . $filename)
                 ->orWhere('surat_kepemilikan', 'dokumen-di/' . $filename)
                 ->orWhere('surat_pengalihan', 'dokumen-di/' . $filename);
         })->first();
 
-        // Validasi akses: hanya pemilik atau admin/verifikator yang bisa melihat
-        if (!$di || ($di->user_id !== auth()->id() && auth()->user()->role !== 'Checker')) {
-            abort(403, 'Anda tidak memiliki akses ke file ini.');
+        // Validasi akses: Checker bisa melihat semua file vital
+        if (!$di) {
+            abort(404, 'File tidak ditemukan.');
         }
 
         // Kirim file sebagai respons
@@ -186,7 +182,7 @@ class CheckerController extends Controller
 
     public function viewPublicFilesHc($filename)
     {
-        // Path file di disk 'private'
+        // Path file di disk 'public'
         $fileHc = storage_path('app/public/dokumen-hc/' . $filename);
 
         // Pastikan file ada
@@ -194,18 +190,16 @@ class CheckerController extends Controller
             abort(404, 'File tidak ditemukan.');
         }
 
-        // Cari data paten berdasarkan salah satu kolom file
+        // Hanya kolom yang disimpan di disk public
         $hc = HakCipta::where(function ($query) use ($filename) {
             $query->where('dokumen_invensi', 'dokumen-hc/' . $filename)
                 ->orWhere('sertifikat_hakcipta', 'dokumen-hc/' . $filename);
-
         })->first();
 
-        // Validasi akses: hanya pemilik atau admin/verifikator yang bisa melihat
-        if (!$hc || ($hc->user_id !== auth()->id() && auth()->user()->role !== 'Checker')) {
-            abort(403, 'Anda tidak memiliki akses ke file ini.');
+        // Checker bisa melihat semua file public
+        if (!$hc) {
+            abort(404, 'File tidak ditemukan.');
         }
-
 
         // Kirim file sebagai respons
         return response()->file($fileHc);
@@ -213,27 +207,24 @@ class CheckerController extends Controller
 
     public function viewPublicFilesDi($filename)
     {
-        // Path file di disk 'private'
-        $fileDi = storage_path('app/private/dokumen-di/' . $filename);
+        // Path file di disk 'public'
+        $fileDi = storage_path('app/public/dokumen-di/' . $filename);
 
         // Pastikan file ada
         if (!file_exists($fileDi)) {
             abort(404, 'File tidak ditemukan.');
         }
 
-        // Cari data paten berdasarkan salah satu kolom file
+        // Hanya kolom yang disimpan di disk public
         $di = DesainIndustri::where(function ($query) use ($filename) {
-            $query->where('ktp_inventor', 'dokumen-di/' . $filename)
-                ->orWhere('data_pengaju2', 'dokumen-di/' . $filename)
-                ->orWhere('uraian_di', 'dokumen-di/' . $filename)
+            $query->where('uraian_di', 'dokumen-di/' . $filename)
                 ->orWhere('gambar_di', 'dokumen-di/' . $filename)
-                ->orWhere('surat_kepemilikan', 'dokumen-di/' . $filename)
-                ->orWhere('surat_pengalihan', 'dokumen-di/' . $filename);
+                ->orWhere('sertifikat_desain', 'dokumen-di/' . $filename);
         })->first();
 
-        // Validasi akses: hanya pemilik atau admin/verifikator yang bisa melihat
-        if (!$di || ($di->user_id !== auth()->id() && auth()->user()->role !== 'Checker')) {
-            abort(403, 'Anda tidak memiliki akses ke file ini.');
+        // Checker bisa melihat semua file public tanpa perlu jadi pemilik
+        if (!$di) {
+            abort(404, 'File tidak ditemukan.');
         }
 
         // Kirim file sebagai respons

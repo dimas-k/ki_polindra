@@ -315,7 +315,11 @@ class AdminDesainIndustriController extends Controller
         if ($request->file('sertifikat_desain') == null) {
             $di->sertifikat_desain = "";
         }else{
-           $di->sertifikat_desain = $request->file('sertifikat_desain')->store('dokumen-di');  
+           if ($request->hasFile('sertifikat_desain')) {
+                $file = $request->file('sertifikat_desain');
+                $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+                $di->sertifikat_desain = $file->storeAs('dokumen-di', $filename, 'public');
+            }
         }
         $di->save($validasidata);
         return redirect('/admin/desain-industri')->with('success', 'Data desain industri berhasil di update');

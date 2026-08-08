@@ -118,15 +118,13 @@ class AdminHaKCiptaController extends Controller
         $hc = HakCipta::where(function ($query) use ($filename) {
             $query->where('ktp_inventor', 'dokumen-hc/' . $filename)
                 ->orWhere('data_pengaju2', 'dokumen-hc/' . $filename)
-                ->orWhere('dokumen_invensi', 'dokumen-hc/' . $filename)
                 ->orWhere('surat_pengalihan', 'dokumen-hc/' . $filename)
                 ->orWhere('surat_pernyataan', 'dokumen-hc/' . $filename);
-
         })->first();
 
-        // Validasi akses: hanya pemilik atau admin/verifikator yang bisa melihat
-        if (!$hc || ($hc->user_id !== auth()->id() && auth()->user()->role !== 'Admin')) {
-            abort(403, 'Anda tidak memiliki akses ke file ini.');
+        // Admin bisa melihat semua file vital
+        if (!$hc) {
+            abort(404, 'File tidak ditemukan.');
         }
 
         // Kirim file sebagai respons
@@ -317,7 +315,11 @@ class AdminHaKCiptaController extends Controller
         if ($request->file('sertifikat_hakcipta') == null) {
             $hc->sertifikat_hakcipta = "";
         }else{
-           $hc->sertifikat_hakcipta = $request->file('sertifikat_hakcipta')->store('dokumen-hc');  
+           if ($request->hasFile('sertifikat_hakcipta')) {
+                $file = $request->file('sertifikat_hakcipta');
+                $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+                $hc->sertifikat_hakcipta = $file->storeAs('dokumen-hc', $filename, 'public');
+            }
         }
         $hc->save($validasidata);
         return redirect('/admin/hak-cipta')->with('success','Data hak cipta berhasil di update')

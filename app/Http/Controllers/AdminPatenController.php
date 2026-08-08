@@ -333,8 +333,11 @@ class AdminPatenController extends Controller
                 ->orWhere('pernyataan_kepemilikan', 'dokumen-paten/' . $filename)
                 ->orWhere('surat_kuasa', 'dokumen-paten/' . $filename);
         })->first();
-        // Validasi akses: hanya pemilik atau admin/verifikator yang bisa melihat
-        if ($paten->user_id !== auth()->id() && !in_array(auth()->user()->role, ['Checker', 'Admin'])) {
+        // Validasi akses: hanya pemilik atau Admin yang bisa melihat file vital
+        if (!$paten) {
+            abort(404, 'File tidak ditemukan.');
+        }
+        if ($paten->user_id !== auth()->id() && auth()->user()->role !== 'Admin') {
             abort(403, 'Anda tidak memiliki akses ke file ini.');
         }
         // Kirim file sebagai respons

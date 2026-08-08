@@ -204,17 +204,37 @@ class DesainIndustriController extends Controller
         $di->alamat = $request->alamat;
         $di->no_telepon = $request->no_telepon;
         $di->tanggal_lahir = $request->tanggal_lahir;
-        $di->ktp_inventor = $request->file('ktp_inventor')->store('dokumen-di');
         $di->email = $request->email;
         $di->kewarganegaraan = $request->kewarganegaraan;
         $di->kode_pos = $request->kode_pos;
         $di->jenis_di = $request->jenis_di;
         $di->judul_di = $request->judul_di;
-        $di->uraian_di = $request->file('uraian_di')->store('dokumen-di');
-        $di->gambar_di = $request->file('gambar_di')->store('dokumen-di');
-        $di->surat_kepemilikan = $request->file('surat_kepemilikan')->store('dokumen-di');
-        $di->surat_pengalihan = $request->file('surat_pengalihan')->store('dokumen-di');
         $di->tanggal_permohonan = $request->tanggal_permohonan;
+
+        // File sensitif (data pribadi) disimpan di disk private
+        $privateFiles = [
+            'ktp_inventor'     => 'ktp_inventor',
+            'surat_kepemilikan' => 'surat_kepemilikan',
+            'surat_pengalihan'  => 'surat_pengalihan',
+        ];
+        foreach ($privateFiles as $field => $storageName) {
+            if ($request->hasFile($field)) {
+                $file = $request->file($field);
+                $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+                $di->{$storageName} = $file->storeAs('dokumen-di', $filename, 'private');
+            }
+        }
+
+        // Dokumen invensi (uraian & gambar) disimpan di disk public
+        $publicFiles = ['uraian_di', 'gambar_di'];
+        foreach ($publicFiles as $field) {
+            if ($request->hasFile($field)) {
+                $file = $request->file($field);
+                $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+                $di->{$field} = $file->storeAs('dokumen-di', $filename, 'public');
+            }
+        }
+
         $di->save($validasidata);
 
         return redirect('/pengajuan-desain-industri')->with('success', 'Data desain industri berhasil Disimpan!');

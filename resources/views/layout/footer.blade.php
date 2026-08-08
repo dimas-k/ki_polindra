@@ -1,7 +1,7 @@
 <!-- Footer -->
 <style>
     .footer-gradient {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #5f79f0);
     }
 
     .footer-content {
@@ -16,7 +16,7 @@
     }
 
     .footer-link:hover {
-        color: #667eea !important;
+        color: #526eea !important;
         transform: translateX(5px);
     }
 
@@ -27,7 +27,7 @@
         height: 2px;
         bottom: -2px;
         left: 0;
-        background-color: #667eea;
+        background-color: #526eea;
         transition: width 0.3s ease;
     }
 
@@ -42,12 +42,12 @@
         align-items: center;
         justify-content: center;
         transition: all 0.3s ease;
-        border: 2px solid #667eea;
-        color: #667eea;
+        border: 2px solid #526eea;
+        color: #526eea;
     }
 
     .footer-icon-btn:hover {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #5975f3);
         color: white;
         transform: translateY(-5px) scale(1.1);
         box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
@@ -77,7 +77,7 @@
         height: 3px;
         bottom: 0;
         left: 0;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #526eea);
         border-radius: 2px;
     }
 
@@ -88,7 +88,7 @@
 
     .footer-contact-item:hover {
         transform: translateX(5px);
-        color: #667eea;
+        color: #526eea;
     }
 
     .footer-copyright {

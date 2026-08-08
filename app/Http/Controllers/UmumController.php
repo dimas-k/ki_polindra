@@ -271,10 +271,7 @@ class UmumController extends Controller
 
         // Validasi akses file (hanya pemilik file yang bisa mengaksesnya)
         $di = DesainIndustri::where('ktp_inventor', 'dokumen-di/' . $filename)
-            // ->orWhere('data_pengaju2', 'dokumen-di/' . $filename)
-            // ->orWhere('dokumen_invensi', 'dokumen-di/' . $filename)
-            ->orWhere('uraian_di', 'dokumen-di/' . $filename)
-            ->orWhere('gambar_di', 'dokumen-di/' . $filename)
+            ->orWhere('data_pengaju2', 'dokumen-di/' . $filename)
             ->orWhere('surat_kepemilikan', 'dokumen-di/' . $filename)
             ->orWhere('surat_pengalihan', 'dokumen-di/' . $filename)
             ->first();
@@ -492,7 +489,6 @@ class UmumController extends Controller
 
         // Validasi apakah file dimiliki oleh user yang sedang login
         $hc = HakCipta::where('ktp_inventor', 'dokumen-hc/' . $filename)
-            ->orWhere('dokumen_invensi', 'dokumen-hc/' . $filename)
             ->orWhere('surat_pengalihan', 'dokumen-hc/' . $filename)
             ->orWhere('surat_pernyataan', 'dokumen-hc/' . $filename)
             ->first();
@@ -552,24 +548,32 @@ class UmumController extends Controller
             $di->judul_di = $request->judul_di;
             $di->tanggal_permohonan = $request->tanggal_permohonan;
 
-            $files = [
-                'ktp_inventor' => 'ktp_inventor',
-                'uraian_di' => 'uraian_di',
-                'gambar_di' => 'gambar_di',
+            $privateFiles = [
+                'ktp_inventor'      => 'ktp_inventor',
                 'surat_kepemilikan' => 'surat_kepemilikan',
-                'surat_pengalihan' => 'surat_pengalihan',
+                'surat_pengalihan'  => 'surat_pengalihan',
             ];
-
-            foreach ($files as $field => $storageName) {
+            foreach ($privateFiles as $field => $storageName) {
                 if ($request->hasFile($field)) {
                     if ($di->{$storageName}) {
-                        Storage::delete($di->{$storageName});
+                        Storage::disk('private')->delete($di->{$storageName});
                     }
-
                     $filename = time() . '_' . str_replace(' ', '_', $request->file($field)->getClientOriginalName());
-                    $di->{$storageName} = $request->file($field)->storeAs('private/umum/dokumen-di', $filename);
+                    $di->{$storageName} = $request->file($field)->storeAs('dokumen-di', $filename, 'private');
                 }
             }
+
+            $publicFiles = ['uraian_di', 'gambar_di'];
+            foreach ($publicFiles as $field) {
+                if ($request->hasFile($field)) {
+                    if ($di->{$field}) {
+                        Storage::disk('public')->delete($di->{$field});
+                    }
+                    $filename = time() . '_' . str_replace(' ', '_', $request->file($field)->getClientOriginalName());
+                    $di->{$field} = $request->file($field)->storeAs('dokumen-di', $filename, 'public');
+                }
+            }
+
             $di->save($validasidata);
             return redirect('/umum/desain-industri')->with('success', 'Data Desain Industri berhasil diperbarui!');
         } catch (\Exception $e) {
@@ -617,22 +621,28 @@ class UmumController extends Controller
             $hc->uraian_singkat = $request->uraian_singkat;
             $hc->tanggal_permohonan = $request->tanggal_permohonan;
 
-            $files = [
-                'ktp_inventor' => 'ktp_inventor',
-                'dokumen_invensi' => 'dokumen_invensi',
+            $privateFiles = [
+                'ktp_inventor'    => 'ktp_inventor',
                 'surat_pengalihan' => 'surat_pengalihan',
                 'surat_pernyataan' => 'surat_pernyataan',
             ];
-
-            foreach ($files as $field => $storageName) {
+            foreach ($privateFiles as $field => $storageName) {
                 if ($request->hasFile($field)) {
                     if ($hc->{$storageName}) {
-                        Storage::delete($hc->{$storageName});
+                        Storage::disk('private')->delete($hc->{$storageName});
                     }
-
                     $filename = time() . '_' . str_replace(' ', '_', $request->file($field)->getClientOriginalName());
-                    $hc->{$storageName} = $request->file($field)->storeAs('private/umum/dokumen-hc', $filename);
+                    $hc->{$storageName} = $request->file($field)->storeAs('dokumen-hc', $filename, 'private');
                 }
+            }
+
+            // dokumen_invensi disimpan di disk public
+            if ($request->hasFile('dokumen_invensi')) {
+                if ($hc->dokumen_invensi) {
+                    Storage::disk('public')->delete($hc->dokumen_invensi);
+                }
+                $filename = time() . '_' . str_replace(' ', '_', $request->file('dokumen_invensi')->getClientOriginalName());
+                $hc->dokumen_invensi = $request->file('dokumen_invensi')->storeAs('dokumen-hc', $filename, 'public');
             }
 
             $hc->save($validasidata);
@@ -768,22 +778,25 @@ class UmumController extends Controller
             // Proses upload file
 
             $privateFiles = [
-                'ktp_inventor' => 'ktp_inventor',
-                'dokumen_invensi' => 'dokumen_invensi',
+                'ktp_inventor'    => 'ktp_inventor',
                 'surat_pengalihan' => 'surat_pengalihan',
-                'surat_pernyataan' => 'surat_pernyataan'
+                'surat_pernyataan' => 'surat_pernyataan',
             ];
-
-            // Proses unggahan file ke private storage
             foreach ($privateFiles as $field => $storageName) {
                 if ($request->hasFile($field)) {
                     $file = $request->file($field);
                     $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
-                    // Simpan di disk 'private' dalam folder '/dokumen-hc'
-                    $path = $file->storeAs('dokumen-hc', $filename, 'private');
-                    $hc->{$storageName} = $path;
+                    $hc->{$storageName} = $file->storeAs('dokumen-hc', $filename, 'private');
                 }
             }
+
+            // dokumen_invensi disimpan di disk public
+            if ($request->hasFile('dokumen_invensi')) {
+                $file = $request->file('dokumen_invensi');
+                $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+                $hc->dokumen_invensi = $file->storeAs('dokumen-hc', $filename, 'public');
+            }
+
             // Simpan data ke database
             $hc->save($validasidata);
 
@@ -836,24 +849,27 @@ class UmumController extends Controller
             $di->judul_di = $request->judul_di;
             $di->tanggal_permohonan = $request->tanggal_permohonan;
 
-            // Proses upload file
             $privateFiles = [
-                'ktp_inventor' => 'ktp_inventor',
-                'data_pengaju2' => 'data_pengaju2',
-                'uraian_di' => 'uraian_di',
-                'gambar_di' => 'gambar_di',
+                'ktp_inventor'      => 'ktp_inventor',
+                'data_pengaju2'     => 'data_pengaju2',
                 'surat_kepemilikan' => 'surat_kepemilikan',
-                'surat_pengalihan' => 'surat_pengalihan'
+                'surat_pengalihan'  => 'surat_pengalihan',
             ];
-
-            // Proses unggahan file ke private storage
             foreach ($privateFiles as $field => $storageName) {
                 if ($request->hasFile($field)) {
                     $file = $request->file($field);
                     $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
-                    // Simpan di disk 'private' dalam folder '/dokumen-hc'
-                    $path = $file->storeAs('dokumen-di', $filename, 'private');
-                    $di->{$storageName} = $path;
+                    $di->{$storageName} = $file->storeAs('dokumen-di', $filename, 'private');
+                }
+            }
+
+            // uraian_di & gambar_di disimpan di disk public
+            $publicFiles = ['uraian_di', 'gambar_di'];
+            foreach ($publicFiles as $field) {
+                if ($request->hasFile($field)) {
+                    $file = $request->file($field);
+                    $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+                    $di->{$field} = $file->storeAs('dokumen-di', $filename, 'public');
                 }
             }
 

@@ -352,7 +352,7 @@
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-outline-danger"
                                                         data-bs-dismiss="modal">Tidak</button>
-                                                    <button type="submit" class="btn btn-primary">Yakin</button>
+                                                    <button type="button" class="btn btn-primary" onclick="document.getElementById('uploadForm').submit()">Yakin</button>
                                                 </div>
                                             </div>
                                         </div>
