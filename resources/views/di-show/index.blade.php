@@ -21,7 +21,7 @@
         }
 
         .detail-card-header {
-            background: linear-gradient(135deg, #11998e);
+            background: linear-gradient(135deg, rgba(255, 206, 86, 1), rgba(255, 181, 86, 1));
             padding: 28px 32px;
             color: #fff;
         }
@@ -52,12 +52,12 @@
             width: 36px;
             height: 36px;
             border-radius: 10px;
-            background: #11998e18;
+            background: linear-gradient(135deg, rgba(255, 206, 86, 0.12), rgba(255, 181, 86, 0.12));
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            color: #11998e;
+            color: rgba(255, 150, 20, 1);
             font-size: 1rem;
         }
 
@@ -89,8 +89,8 @@
             padding: 6px 16px;
             border-radius: 20px;
             font-weight: 500;
-            border: 1.5px solid #11998e;
-            color: #11998e;
+            border: 1.5px solid rgba(255, 181, 86, 1);
+            color: rgba(255, 150, 20, 1);
             text-decoration: none;
             display: inline-flex;
             align-items: center;
@@ -101,7 +101,7 @@
         }
 
         .btn-doc:hover {
-            background: linear-gradient(135deg, #11998e, #38ef7d);
+            background: linear-gradient(135deg, rgba(255, 206, 86, 1), rgba(255, 181, 86, 1));
             color: #fff;
             border-color: transparent;
         }
@@ -112,19 +112,19 @@
             gap: 6px;
             font-size: .9rem;
             font-weight: 500;
-            color: #11998e;
+            color: rgba(255, 150, 20, 1);
             text-decoration: none;
             padding: 8px 16px;
             border-radius: 10px;
-            border: 1.5px solid #11998e22;
+            border: 1.5px solid rgba(255, 181, 86, 0.18);
             background: #fff;
             transition: all .2s;
         }
 
         .back-btn:hover {
-            background: #11998e;
+            background: rgba(255, 181, 86, 1);
             color: #fff;
-            border-color: #11998e;
+            border-color: rgba(255, 150, 20, 1);
         }
 
         @media (max-width: 576px) {
@@ -180,7 +180,7 @@
                     <div>
                         <div class="detail-label">Email</div>
                         <div class="detail-value">
-                            <a href="mailto:{{ $di->email }}" class="text-decoration-none" style="color:#11998e">{{ $di->email }}</a>
+                            <a href="mailto:{{ $di->email }}" class="text-decoration-none" style="color:rgba(255, 150, 20, 1)">{{ $di->email }}</a>
                         </div>
                     </div>
                 </div>

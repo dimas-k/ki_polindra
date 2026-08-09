@@ -21,7 +21,7 @@
         }
 
         .detail-card-header {
-            background: linear-gradient(135deg, #f7971e);
+            background: linear-gradient(135deg, rgb(255, 99, 132), #f83600);
             padding: 28px 32px;
             color: #1f2937;
         }
@@ -52,12 +52,12 @@
             width: 36px;
             height: 36px;
             border-radius: 10px;
-            background: #f7971e18;
+            background: linear-gradient(135deg, rgba(255, 99, 132, 0.12), rgba(248, 54, 0, 0.12));
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            color: #f7971e;
+            color: #f83600;
             font-size: 1rem;
         }
 
@@ -89,8 +89,8 @@
             padding: 5px 14px;
             border-radius: 20px;
             font-weight: 500;
-            border: 1.5px solid #f7971e;
-            color: #f7971e;
+            border: 1.5px solid rgb(255, 99, 132);
+            color: #f83600;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
@@ -100,7 +100,7 @@
         }
 
         .btn-doc:hover {
-            background: linear-gradient(135deg, #f7971e, #ffd200);
+            background: linear-gradient(135deg, rgb(255, 99, 132), #f83600);
             color: #1f2937;
             border-color: transparent;
         }
@@ -118,19 +118,19 @@
             gap: 6px;
             font-size: .9rem;
             font-weight: 500;
-            color: #f7971e;
+            color: #f83600;
             text-decoration: none;
             padding: 8px 16px;
             border-radius: 10px;
-            border: 1.5px solid #f7971e22;
+            border: 1.5px solid rgba(255, 99, 132, 0.13);
             background: #fff;
             transition: all .2s;
         }
 
         .back-btn:hover {
-            background: #f7971e;
+            background: rgb(255, 99, 132);
             color: #fff;
-            border-color: #f7971e;
+            border-color: #f83600;
         }
 
         @media (max-width: 576px) {
@@ -186,7 +186,7 @@
                     <div>
                         <div class="detail-label">Email</div>
                         <div class="detail-value">
-                            <a href="mailto:{{ $paten->email }}" class="text-decoration-none" style="color:#f7971e">{{ $paten->email }}</a>
+                            <a href="mailto:{{ $paten->email }}" class="text-decoration-none" style="color:#f83600">{{ $paten->email }}</a>
                         </div>
                     </div>
                 </div>
