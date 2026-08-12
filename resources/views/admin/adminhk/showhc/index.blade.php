@@ -176,6 +176,13 @@
                         </table>
                     </div>
                 </div>
+
+                @include('admin.layout.tagihan-card', [
+                    'pembayaran' => $hc->payment,
+                    'jenisSlug' => 'hak-cipta',
+                    'pengajuanId' => $hc->id,
+                    'namaPengaju' => $hc->nama_lengkap,
+                ])
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"

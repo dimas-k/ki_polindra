@@ -69,5 +69,9 @@ class Paten extends Model
         return $this->hasMany(Jurusan::class);
     }
 
-    
+    public function payment(): \Illuminate\Database\Eloquent\Relations\MorphOne
+    {
+        return $this->morphOne(Payment::class, 'payable')->latestOfMany();
+    }
+
 }

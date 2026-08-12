@@ -47,4 +47,9 @@ class HakCipta extends Model
     {
         return $this->hasOne(CheckHc::class);
     }
+
+    public function payment(): \Illuminate\Database\Eloquent\Relations\MorphOne
+    {
+        return $this->morphOne(\App\Models\Payment::class, 'payable')->latestOfMany();
+    }
 }

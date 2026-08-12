@@ -50,4 +50,9 @@ class DesainIndustri extends Model
     {
         return $this->hasOne(CheckDi::class);
     }
+
+    public function payment(): \Illuminate\Database\Eloquent\Relations\MorphOne
+    {
+        return $this->morphOne(\App\Models\Payment::class, 'payable')->latestOfMany();
+    }
 }

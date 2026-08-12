@@ -171,6 +171,13 @@
                         </table>
                     </div>
                 </div>
+
+                @include('admin.layout.tagihan-card', [
+                    'pembayaran' => $di->payment,
+                    'jenisSlug' => 'desain-industri',
+                    'pengajuanId' => $di->id,
+                    'namaPengaju' => $di->nama_lengkap,
+                ])
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"

@@ -18,6 +18,7 @@ use App\Http\Controllers\AdminHaKCiptaController;
 use App\Http\Controllers\DesainIndustriController;
 use App\Http\Controllers\AdminDesainIndustriController;
 use App\Http\Controllers\AdminVerifController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UmumPageController;
 
 
@@ -143,6 +144,9 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::post('/admin/paten/umum/update/{id}', [AdminPatenController::class, 'updateDataUmum'])->name('adm.updatepaten.umum');
     Route::post('/admin/paten/update/{id}', [AdminPatenController::class, 'update'])->name('admin_paten.update');
     Route::get('/admin/paten/show/{id}', [AdminPatenController::class, 'show'])->name('admin_paten.show');
+
+    // Buat/kirim tagihan pembayaran (Admin) untuk Paten, Hak Cipta, Desain Industri
+    Route::post('/admin/{jenis}/{id}/tagihan', [PaymentController::class, 'store'])->name('admin_payment.store');
 
     Route::get('/paten/{file}', [AdminPatenController::class, 'viewSensitifFilesPaten'])
     ->middleware(['auth', 'role:Admin'])
@@ -373,3 +377,11 @@ Route::get("/reset-password/{token}", [ForgetPasswordManager::class, "resetPassw
     ->name("reset.password");
 Route::post("/reset-password", [ForgetPasswordManager::class, "resetPasswordPost"])
     ->name("reset.password.post");
+
+// ==== Pembayaran (Midtrans) ====
+Route::middleware(['auth'])->group(function () {
+    Route::get('/pembayaran/{order_id}', [PaymentController::class, 'show'])->name('payment.show');
+});
+
+// Webhook Midtrans - tanpa auth, CSRF di-exclude lewat bootstrap/app.php / VerifyCsrfToken
+Route::post('/midtrans/notification', [PaymentController::class, 'notification'])->name('payment.notification');
