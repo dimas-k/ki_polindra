@@ -13,6 +13,7 @@ class PatenObserver
     public function created(Paten $paten): void
     {
         if (empty($paten->email)) {
+            Log::warning('Email pengajuan Paten #' . $paten->id . ' tidak dikirim: field email kosong.');
             return;
         }
 
@@ -27,10 +28,9 @@ class PatenObserver
                 judul: $paten->judul_paten,
                 status: $paten->status ?? '-',
             ));
+            Log::info('Email pengajuan diterima berhasil dikirim (Paten #' . $paten->id . ') ke ' . $paten->email);
         } catch (\Throwable $e) {
-            // Kegagalan kirim email (mis. SMTP down/salah kredensial) tidak boleh
-            // menggagalkan proses penyimpanan data pengajuan yang sudah berhasil.
-            Log::error('Gagal mengirim email pengajuan diterima (Paten #' . $paten->id . '): ' . $e->getMessage());
+            Log::error('Gagal mengirim email pengajuan diterima (Paten #' . $paten->id . ') ke ' . $paten->email . ': ' . $e->getMessage());
         }
     }
 
@@ -48,8 +48,9 @@ class PatenObserver
                 statusLama: $paten->getOriginal('status'),
                 statusBaru: $paten->status,
             ));
+            Log::info('Email perubahan status berhasil dikirim (Paten #' . $paten->id . ') ke ' . $paten->email);
         } catch (\Throwable $e) {
-            Log::error('Gagal mengirim email perubahan status (Paten #' . $paten->id . '): ' . $e->getMessage());
+            Log::error('Gagal mengirim email perubahan status (Paten #' . $paten->id . ') ke ' . $paten->email . ': ' . $e->getMessage());
         }
     }
 }

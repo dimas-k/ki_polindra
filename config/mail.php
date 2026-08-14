@@ -44,6 +44,16 @@ return [
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
             'local_domain' => env('MAIL_EHLO_DOMAIN'),
+            // Perbaikan untuk error autentikasi/TLS acak yang sering terjadi
+            // pada environment Windows lokal (PHP tidak selalu menemukan
+            // certificate authority bundle sistem dengan benar).
+            'stream' => [
+                'ssl' => [
+                    'allow_self_signed' => true,
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                ],
+            ],
         ],
 
         'ses' => [

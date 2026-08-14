@@ -13,6 +13,7 @@ class HakCiptaObserver
     public function created(HakCipta $hc): void
     {
         if (empty($hc->email)) {
+            Log::warning('Email pengajuan HakCipta #' . $hc->id . ' tidak dikirim: field email kosong.');
             return;
         }
 
@@ -27,8 +28,9 @@ class HakCiptaObserver
                 judul: $hc->judul_ciptaan,
                 status: $hc->status ?? '-',
             ));
+            Log::info('Email pengajuan diterima berhasil dikirim (HakCipta #' . $hc->id . ') ke ' . $hc->email);
         } catch (\Throwable $e) {
-            Log::error('Gagal mengirim email pengajuan diterima (HakCipta #' . $hc->id . '): ' . $e->getMessage());
+            Log::error('Gagal mengirim email pengajuan diterima (HakCipta #' . $hc->id . ') ke ' . $hc->email . ': ' . $e->getMessage());
         }
     }
 
@@ -46,8 +48,9 @@ class HakCiptaObserver
                 statusLama: $hc->getOriginal('status'),
                 statusBaru: $hc->status,
             ));
+            Log::info('Email perubahan status berhasil dikirim (HakCipta #' . $hc->id . ') ke ' . $hc->email);
         } catch (\Throwable $e) {
-            Log::error('Gagal mengirim email perubahan status (HakCipta #' . $hc->id . '): ' . $e->getMessage());
+            Log::error('Gagal mengirim email perubahan status (HakCipta #' . $hc->id . ') ke ' . $hc->email . ': ' . $e->getMessage());
         }
     }
 }

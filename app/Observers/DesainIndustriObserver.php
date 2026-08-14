@@ -13,6 +13,7 @@ class DesainIndustriObserver
     public function created(DesainIndustri $di): void
     {
         if (empty($di->email)) {
+            Log::warning('Email pengajuan DesainIndustri #' . $di->id . ' tidak dikirim: field email kosong.');
             return;
         }
 
@@ -27,8 +28,9 @@ class DesainIndustriObserver
                 judul: $di->judul_di,
                 status: $di->status ?? '-',
             ));
+            Log::info('Email pengajuan diterima berhasil dikirim (DesainIndustri #' . $di->id . ') ke ' . $di->email);
         } catch (\Throwable $e) {
-            Log::error('Gagal mengirim email pengajuan diterima (DesainIndustri #' . $di->id . '): ' . $e->getMessage());
+            Log::error('Gagal mengirim email pengajuan diterima (DesainIndustri #' . $di->id . ') ke ' . $di->email . ': ' . $e->getMessage());
         }
     }
 
@@ -46,8 +48,9 @@ class DesainIndustriObserver
                 statusLama: $di->getOriginal('status'),
                 statusBaru: $di->status,
             ));
+            Log::info('Email perubahan status berhasil dikirim (DesainIndustri #' . $di->id . ') ke ' . $di->email);
         } catch (\Throwable $e) {
-            Log::error('Gagal mengirim email perubahan status (DesainIndustri #' . $di->id . '): ' . $e->getMessage());
+            Log::error('Gagal mengirim email perubahan status (DesainIndustri #' . $di->id . ') ke ' . $di->email . ': ' . $e->getMessage());
         }
     }
 }
