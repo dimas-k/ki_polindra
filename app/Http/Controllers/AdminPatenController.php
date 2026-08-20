@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Paten;
+use App\Models\Prodi;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -143,8 +144,8 @@ class AdminPatenController extends Controller
             'kode_pos' => 'required|integer',
             'data_pengaju2' => 'mimes:xlsx',
             'institusi' => 'required',
-            'jurusan' => 'required',
-            'prodi' => 'required',
+            'jurusan' => 'required|exists:jurusan,nama_jurusan',
+            'prodi' => 'required|exists:prodi,nama_prodi',
             'jenis_paten' => 'required',
             'judul_paten' => 'required',
             'deskripsi_paten' => 'required|mimes:pdf|max:2028',
@@ -169,6 +170,7 @@ class AdminPatenController extends Controller
         $paten->institusi = $request->institusi;
         $paten->jurusan = $request->jurusan;
         $paten->prodi = $request->prodi;
+        $paten->prodi_id = Prodi::findIdByName($request->prodi);
         $paten->jenis_paten = $request->jenis_paten;
         $paten->judul_paten = $request->judul_paten;
         $paten->tanggal_permohonan = $request->tanggal_permohonan;
@@ -530,8 +532,8 @@ class AdminPatenController extends Controller
             'kode_pos'                  => 'required|integer',
             'data_pengaju2'             => 'nullable|mimes:xlsx',
             'institusi'                 => 'required|string',
-            'jurusan'                   => 'required',
-            'prodi'                     => 'required',
+            'jurusan'                   => 'required|exists:jurusan,nama_jurusan',
+            'prodi'                     => 'required|exists:prodi,nama_prodi',
             'jenis_paten'               => 'required',
             'judul_paten'               => 'required',
             'deskripsi_paten'           => 'nullable|mimes:pdf|max:2028',

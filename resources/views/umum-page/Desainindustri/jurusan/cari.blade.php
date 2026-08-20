@@ -60,11 +60,11 @@
                 <label for="" class="form-label me-3">Jurusan</label>
                 <select id="jurusan" class="form-select form-select-sm select2 flex-grow-1" name="jurusan"
                     style="width: 100%;" title="Pilih Jurusan">
-                    <option></option>
-                    <option value="Teknik Informatika">Teknik Informatika</option>
-                    <option value="Teknik">Teknik</option>
-                    <option value="Keperawatan">Keperawatan</option>
-                </select>
+                <option></option>
+                @foreach($jurusanOptions as $j)
+                    <option value="{{ $j->nama_jurusan }}">{{ $j->nama_jurusan }}</option>
+                @endforeach
+            </select>
                 <span class="ms-3"></span>
                 <button type="submit" class="btn btn-sm btn-primary">Cari</button>
             </form>

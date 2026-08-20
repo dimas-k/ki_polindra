@@ -1,19 +1,8 @@
 
 <select class="form-select" aria-label="Default select example" name="prodi"
     id="prodi">
-    <option value="">Pilih Prodi</option>
-    <option value="D3 Teknik Informatika">D3 Teknik Informatika</option>
-    <option value="D4 Rekayasa Perangkat Lunak">D4 Rekayasa Perangkat Lunak
-    </option>
-    <option value="D4 Sistem Informasi Kota Cerdas">D4 Sistem Informasi Kota
-        Cerdas
-    </option>
-    <option value="D3 Teknik Mesin">D3 Teknik Mesin</option>
-    <option value="D4 Perancangan Manufaktur">D4 Perancangan Manufaktur
-    </option>
-    <option value="D3 Teknik Pendingin dan Tata Udara">D3 Teknik Pendingin dan
-        Tata Udara</option>
-    <option value="D4 Teknik Instrimentasi Kontrol">D4 Teknik Instrimentasi
-        Kontrol</option>
-    <option value="D3 Keperawatan">D3 Keperawatan</option>
-</select>
+                <option value="">Pilih Prodi</option>
+                @foreach($prodiOptions as $pr)
+                    <option value="{{ $pr->nama_prodi }}">{{ $pr->nama_prodi }}</option>
+                @endforeach
+            </select>

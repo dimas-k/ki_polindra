@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\HakCipta;
+use App\Models\Prodi;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -156,8 +157,8 @@ class AdminHaKCiptaController extends Controller
             'kode_pos' => 'required|integer',
             'institusi' => 'required|string',
             'data_pengaju2' => 'nullable|mimes:xlsx',
-            'jurusan' => 'required',
-            'prodi' => 'required',
+            'jurusan' => 'required|exists:jurusan,nama_jurusan',
+            'prodi' => 'required|exists:prodi,nama_prodi',
             'jenis_ciptaan' => 'required',
             'judul_ciptaan' => 'required',
             'uraian_singkat' => 'required|max:60000',
@@ -180,6 +181,7 @@ class AdminHaKCiptaController extends Controller
             $hc->institusi = $request->institusi;
             $hc->jurusan = $request->jurusan;
             $hc->prodi = $request->prodi;
+            $hc->prodi_id = Prodi::findIdByName($request->prodi);
             $hc->jenis_ciptaan = $request->jenis_ciptaan;
             $hc->judul_ciptaan = $request->judul_ciptaan;
             $hc->uraian_singkat = $request->uraian_singkat;
@@ -411,8 +413,8 @@ class AdminHaKCiptaController extends Controller
             'kode_pos' => 'required',
             'institusi' => 'required',
             'data_pengaju2' => 'mimes:xlsx',
-            'jurusan' => 'required',
-            'prodi' => 'required',
+            'jurusan' => 'required|exists:jurusan,nama_jurusan',
+            'prodi' => 'required|exists:prodi,nama_prodi',
             'jenis_ciptaan' => 'required',
             'judul_ciptaan' => 'required',
             'uraian_singkat' => 'required|max:60000',
@@ -435,6 +437,7 @@ class AdminHaKCiptaController extends Controller
         $hc->institusi = $request->institusi;
         $hc->jurusan = $request->jurusan;
         $hc->prodi = $request->prodi;
+        $hc->prodi_id = Prodi::findIdByName($request->prodi);
         $hc->jenis_ciptaan = $request->jenis_ciptaan;
         $hc->judul_ciptaan = $request->judul_ciptaan;
         $hc->uraian_singkat = $request->uraian_singkat;

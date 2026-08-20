@@ -6,6 +6,7 @@ use App\Models\CheckHc;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class HakCipta extends Model
@@ -13,6 +14,14 @@ class HakCipta extends Model
     use HasFactory;
     protected $table = 'hak_cipta';
     protected $guarded = 'id';
+
+    /**
+     * Prodi asal pengaju hak cipta (relasi FK prodi_id).
+     */
+    public function prodi() : BelongsTo
+    {
+        return $this->belongsTo(Prodi::class);
+    }
     protected static function booted()
     {
         static::deleting(function ($hc) {

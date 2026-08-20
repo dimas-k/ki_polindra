@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\DesainIndustri;
+use App\Models\Prodi;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -163,8 +164,8 @@ class AdminDesainIndustriController extends Controller
             'kode_pos' => 'required',
             'institusi' => 'required',
             'data_pengaju2' => 'mimes:xlsx',
-            'jurusan' => 'required',
-            'prodi' => 'required',
+            'jurusan' => 'required|exists:jurusan,nama_jurusan',
+            'prodi' => 'required|exists:prodi,nama_prodi',
             'jenis_di' => 'required',
             'judul_di' => 'required',
             'uraian_di' => 'nullable|mimes:pdf',
@@ -184,6 +185,7 @@ class AdminDesainIndustriController extends Controller
         $di->institusi = $request->institusi;
         $di->jurusan = $request->jurusan;
         $di->prodi = $request->prodi;
+        $di->prodi_id = Prodi::findIdByName($request->prodi);
         $di->jenis_di = $request->jenis_di;
         $di->judul_di = $request->judul_di;
         $di->tanggal_permohonan = $request->tanggal_permohonan;
@@ -371,8 +373,8 @@ class AdminDesainIndustriController extends Controller
             'kode_pos' => 'required',
             'institusi' => 'required',
             'data_pengaju2' => 'mimes:xlsx',
-            'jurusan' => 'required',
-            'prodi' => 'required',
+            'jurusan' => 'required|exists:jurusan,nama_jurusan',
+            'prodi' => 'required|exists:prodi,nama_prodi',
             'jenis_di' => 'required',
             'judul_di' => 'required',
             'uraian_di' => 'required|mimes:pdf',
@@ -395,6 +397,7 @@ class AdminDesainIndustriController extends Controller
         $di->institusi = $request->institusi;
         $di->jurusan = $request->jurusan;
         $di->prodi = $request->prodi;
+        $di->prodi_id = Prodi::findIdByName($request->prodi);
         $di->jenis_di = $request->jenis_di;
         $di->judul_di = $request->judul_di;
         $di->tanggal_permohonan = $request->tanggal_permohonan;

@@ -161,17 +161,11 @@
                                     <td>
                                         <select class="form-select" aria-label="Default select example"
                                             name="jurusan" id="jurusan">
-                                            <option value="">Pilih Jurusan</option>
-                                            <option value="Teknik Informatika"
-                                                {{ old('jurusan', $di->jurusan) == 'Teknik Informatika' ? 'selected' : '' }}>
-                                                Teknik Informatika</option>
-                                            <option value="Teknik"
-                                                {{ old('jurusan', $di->jurusan) == 'Teknik' ? 'selected' : '' }}>Teknik
-                                            </option>
-                                            <option value="Kesehatan"
-                                                {{ old('jurusan', $di->jurusan) == 'Kesehatan' ? 'selected' : '' }}>
-                                                Kesehatan</option>
-                                        </select>
+                <option value="">Pilih Jurusan</option>
+                @foreach($jurusanOptions as $j)
+                    <option value="{{ $j->nama_jurusan }}" {{ old('jurusan', $di->jurusan) == $j->nama_jurusan ? 'selected' : '' }}>{{ $j->nama_jurusan }}</option>
+                @endforeach
+            </select>
                                     </td>
                                 </tr>
                                 {{-- @error('jurusan')
@@ -187,32 +181,11 @@
                                     <td>
                                         <select class="form-select" aria-label="Default select example"
                                             name="prodi" id="prodi">
-                                            <option value="">Pilih Prodi</option>
-                                            <option value="D3 Teknik Informatika"
-                                                {{ old('prodi', $di->prodi) == 'D3 Teknik Informatika' ? 'selected' : '' }}>
-                                                D3 Teknik Informatika</option>
-                                            <option value="D4 Rekayasa Perangkat Lunak"
-                                                {{ old('prodi', $di->prodi) == 'D4 Rekayasa Perangkat Lunak' ? 'selected' : '' }}>
-                                                D4 Rekayasa Perangkat Lunak</option>
-                                            <option value="D4 Sistem Informasi Kota Cerdas"
-                                                {{ old('prodi', $di->prodi) == 'D4 Sistem Informasi Kota Cerdas' ? 'selected' : '' }}>
-                                                D4 Sistem Informasi Kota Cerdas</option>
-                                            <option value="D3 Teknik Mesin"
-                                                {{ old('prodi', $di->prodi) == 'D3 Teknik Mesin' ? 'selected' : '' }}>
-                                                D3 Teknik Mesin</option>
-                                            <option value="D4 Perancangan Manufaktur"
-                                                {{ old('prodi', $di->prodi) == 'D4 Perancangan Manufaktur' ? 'selected' : '' }}>
-                                                D4 Perancangan Manufaktur</option>
-                                            <option value="D3 Teknik Pendingin dan Tata Udara"
-                                                {{ old('prodi', $di->prodi) == 'D3 Teknik Pendingin dan Tata Udara' ? 'selected' : '' }}>
-                                                D3 Teknik Pendingin dan Tata Udara</option>
-                                            <option value="D4 Teknologi Rekayasa Instrumentasi dan Kontrol"
-                                                {{ old('prodi', $di->prodi) == 'D4 Teknologi Rekayasa Instrumentasi dan Kontrol' ? 'selected' : '' }}>
-                                                D4 Teknologi Rekayasa Instrumentasi dan Kontrol</option>
-                                            <option value="D3 Keperawatan"
-                                                {{ old('prodi', $di->prodi) == 'D3 Keperawatan' ? 'selected' : '' }}>D3
-                                                Keperawatan</option>
-                                        </select>
+                <option value="">Pilih Prodi</option>
+                @foreach($prodiOptions as $pr)
+                    <option value="{{ $pr->nama_prodi }}" {{ old('prodi', $di->prodi) == $pr->nama_prodi ? 'selected' : '' }}>{{ $pr->nama_prodi }}</option>
+                @endforeach
+            </select>
                                     </td>
                                 </tr>
                                 {{-- @error('prodi')

@@ -60,18 +60,11 @@
                 <label for="" class="form-label me-3">Prodi</label>
                 <select class="form-select form-select-sm select2 flex-grow-1" id="prodi" name="prodi"
                     style="width: 100%;" title="Pilih Prodi">
-                    <option></option>
-                    <option value="D3 Teknik Informatika"
-                        {{ old('prodi', $prodi) == 'D3 Teknik Informatika' ? 'selected' : '' }}>D3 Teknik Informatika
-                    </option>
-                    <option value="D4 Rekayasa Perangkat Lunak">D4 Rekayasa Perangkat Lunak</option>
-                    <option value="D4 Sistem Informasi Kota Cerdas">D4 Sistem Informasi Kota Cerdas</option>
-                    <option value="D3 Teknik Mesin">D3 Teknik Mesin</option>
-                    <option value="D4 Perancangan Manufaktur">D4 Perancangan Manufaktur</option>
-                    <option value="D3 Teknik Pendingin dan Tata Udara">D3 Teknik Pendingin dan Tata Udara</option>
-                    <option value="D4 Teknik instrumentasi Kontrol">D4 Teknik instrumentasi Kontrol</option>
-                    <option value="D3 Keperawatan">D3 Keperawatan</option>
-                </select>
+                <option></option>
+                @foreach($prodiOptions as $pr)
+                    <option value="{{ $pr->nama_prodi }}">{{ $pr->nama_prodi }}</option>
+                @endforeach
+            </select>
                 <button type="submit" class="btn btn-sm btn-primary ms-3">Cari</button>
             </form>
         </div>

@@ -167,16 +167,11 @@
                                 <label for="jurusan" class="form-label">Jurusan</label>
                                 <select class="form-select" aria-label="Default select example" name="jurusan"
                                     id="jurusan">
-                                    <option value="">Pilih Jurusan</option>
-                                    <option value="Teknik Informatika"
-                                        {{ old('jurusan', $p->jurusan) == 'Teknik Informatika' ? 'selected' : '' }}>
-                                        Teknik Informatika</option>
-                                    <option value="Teknik"
-                                        {{ old('jurusan', $p->jurusan) == 'Teknik' ? 'selected' : '' }}>Teknik</option>
-                                    <option value="Kesehatan"
-                                        {{ old('jurusan', $p->jurusan) == 'Kesehatan' ? 'selected' : '' }}>Kesehatan
-                                    </option>
-                                </select>
+                <option value="">Pilih Jurusan</option>
+                @foreach($jurusanOptions as $j)
+                    <option value="{{ $j->nama_jurusan }}" {{ old('jurusan', $p->jurusan) == $j->nama_jurusan ? 'selected' : '' }}>{{ $j->nama_jurusan }}</option>
+                @endforeach
+            </select>
 
                                 {{-- @error('jurusan')
                                             <div class="invalid-feedback">
@@ -189,32 +184,11 @@
                                 <label for="prodi" class="form-label">Prodi</label>
                                 <select class="form-select" aria-label="Default select example" name="prodi"
                                     id="prodi">
-                                    <option value="">Pilih Prodi</option>
-                                    <option value="D3 Teknik Informatika"
-                                        {{ old('prodi', $p->prodi) == 'D3 Teknik Informatika' ? 'selected' : '' }}>D3
-                                        Teknik Informatika</option>
-                                    <option value="D4 Rekayasa Perangkat Lunak"
-                                        {{ old('prodi', $p->prodi) == 'D4 Rekayasa Perangkat Lunak' ? 'selected' : '' }}>
-                                        D4 Rekayasa Perangkat Lunak</option>
-                                    <option value="D4 Sistem Informasi Kota Cerdas"
-                                        {{ old('prodi', $p->prodi) == 'D4 Sistem Informasi Kota Cerdas' ? 'selected' : '' }}>
-                                        D4 Sistem Informasi Kota Cerdas</option>
-                                    <option value="D3 Teknik Mesin"
-                                        {{ old('prodi', $p->prodi) == 'D3 Teknik Mesin' ? 'selected' : '' }}>D3 Teknik
-                                        Mesin</option>
-                                    <option value="D4 Perancangan Manufaktur"
-                                        {{ old('prodi', $p->prodi) == 'D4 Perancangan Manufaktur' ? 'selected' : '' }}>
-                                        D4 Perancangan Manufaktur</option>
-                                    <option value="D3 Teknik Pendingin dan Tata Udara"
-                                        {{ old('prodi', $p->prodi) == 'D3 Teknik Pendingin dan Tata Udara' ? 'selected' : '' }}>
-                                        D3 Teknik Pendingin dan Tata Udara</option>
-                                    <option value="D4 Teknologi Rekayasa Instrumentasi dan Kontrol"
-                                        {{ old('prodi', $p->prodi) == 'D4 Teknologi Rekayasa Instrumentasi dan Kontrol' ? 'selected' : '' }}>
-                                        D4 Teknologi Rekayasa Instrumentasi dan Kontrol</option>
-                                    <option value="D3 Keperawatan"
-                                        {{ old('prodi', $p->prodi) == 'D3 Keperawatan' ? 'selected' : '' }}>D3
-                                        Keperawatan</option>
-                                </select>
+                <option value="">Pilih Prodi</option>
+                @foreach($prodiOptions as $pr)
+                    <option value="{{ $pr->nama_prodi }}" {{ old('prodi', $p->prodi) == $pr->nama_prodi ? 'selected' : '' }}>{{ $pr->nama_prodi }}</option>
+                @endforeach
+            </select>
                                 {{-- @error('prodi')
                                             <div class="invalid-feedback">
                                                 {{ $message }}

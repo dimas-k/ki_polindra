@@ -18,6 +18,8 @@ use App\Http\Controllers\AdminHaKCiptaController;
 use App\Http\Controllers\DesainIndustriController;
 use App\Http\Controllers\AdminDesainIndustriController;
 use App\Http\Controllers\AdminVerifController;
+use App\Http\Controllers\AdminJurusanController;
+use App\Http\Controllers\AdminProdiController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UmumPageController;
 
@@ -169,6 +171,18 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
 
     Route::get('admin/paten/tambah/umum/', [AdminPatenController::class, 'tambahPatenUmum'])->name('admin_paten.tambah_umum');
     Route::post('/admin/paten/tambah/umum/store/', [AdminPatenController::class, 'storeTambahPatenUmum'])->name('admin_paten.store_umum');
+
+    // Master data Jurusan (CRUD)
+    Route::get('/admin/jurusan', [AdminJurusanController::class, 'index'])->name('admin_jurusan.index');
+    Route::post('/admin/jurusan', [AdminJurusanController::class, 'store'])->name('admin_jurusan.store');
+    Route::put('/admin/jurusan/{id}', [AdminJurusanController::class, 'update'])->name('admin_jurusan.update');
+    Route::delete('/admin/jurusan/{id}', [AdminJurusanController::class, 'destroy'])->name('admin_jurusan.delete');
+
+    // Master data Prodi (CRUD)
+    Route::get('/admin/prodi', [AdminProdiController::class, 'index'])->name('admin_prodi.index');
+    Route::post('/admin/prodi', [AdminProdiController::class, 'store'])->name('admin_prodi.store');
+    Route::put('/admin/prodi/{id}', [AdminProdiController::class, 'update'])->name('admin_prodi.update');
+    Route::delete('/admin/prodi/{id}', [AdminProdiController::class, 'destroy'])->name('admin_prodi.delete');
 
     Route::get('/admin/listadmin', [AdminController::class, 'lihat'])->middleware('auth');
     Route::get('/admin/listadmin/edit/{id}', [AdminController::class, 'edit'])->name('admin.edit');

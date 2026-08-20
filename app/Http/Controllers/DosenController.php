@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Paten;
+use App\Models\Prodi;
 use App\Models\HakCipta;
 use Illuminate\Http\Request;
 use App\Models\DesainIndustri;
@@ -371,8 +372,8 @@ class DosenController extends Controller
             'kode_pos' => 'required|integer',
             'data_pengaju2' => 'nullable|mimes:xlsx',
             'institusi' => 'required|string',
-            'jurusan' => 'required',
-            'prodi' => 'required',
+            'jurusan' => 'required|exists:jurusan,nama_jurusan',
+            'prodi' => 'required|exists:prodi,nama_prodi',
             'jenis_paten' => 'required',
             'judul_paten' => 'required',
             'deskripsi_paten' => 'required|mimes:pdf|max:2028',
@@ -400,6 +401,7 @@ class DosenController extends Controller
             $paten->institusi = $request->institusi;
             $paten->jurusan = $request->jurusan;
             $paten->prodi = $request->prodi;
+            $paten->prodi_id = Prodi::findIdByName($request->prodi);
             $paten->jenis_paten = $request->jenis_paten;
             $paten->judul_paten = $request->judul_paten;
             $paten->tanggal_permohonan = $request->tanggal_permohonan;
@@ -567,8 +569,8 @@ class DosenController extends Controller
             'kode_pos'                  => 'required|integer',
             'data_pengaju2'             => 'nullable|mimes:xlsx',
             'institusi'                 => 'required|string',
-            'jurusan'                   => 'required',
-            'prodi'                     => 'required',
+            'jurusan'                   => 'required|exists:jurusan,nama_jurusan',
+            'prodi'                     => 'required|exists:prodi,nama_prodi',
             'jenis_paten'               => 'required',
             'judul_paten'               => 'required',
             'deskripsi_paten'           => 'nullable|mimes:pdf|max:2028',
@@ -596,6 +598,7 @@ class DosenController extends Controller
         $paten->institusi            = $request->institusi;
         $paten->jurusan              = $request->jurusan;
         $paten->prodi                = $request->prodi;
+        $paten->prodi_id              = Prodi::findIdByName($request->prodi);
         $paten->jenis_paten          = $request->jenis_paten;
         $paten->judul_paten          = $request->judul_paten;
         $paten->tanggal_permohonan   = $request->tanggal_permohonan;
@@ -669,8 +672,8 @@ class DosenController extends Controller
             'kode_pos' => 'required|integer',
             'institusi' => 'required|string',
             'data_pengaju2' => 'nullable|mimes:xlsx',
-            'jurusan' => 'required',
-            'prodi' => 'required',
+            'jurusan' => 'required|exists:jurusan,nama_jurusan',
+            'prodi' => 'required|exists:prodi,nama_prodi',
             'jenis_ciptaan' => 'required',
             'judul_ciptaan' => 'required',
             'uraian_singkat' => 'required|max:60000',
@@ -692,6 +695,7 @@ class DosenController extends Controller
             $hc->institusi = $request->institusi;
             $hc->jurusan = $request->jurusan;
             $hc->prodi = $request->prodi;
+            $hc->prodi_id = Prodi::findIdByName($request->prodi);
             $hc->jenis_ciptaan = $request->jenis_ciptaan;
             $hc->judul_ciptaan = $request->judul_ciptaan;
             $hc->uraian_singkat = $request->uraian_singkat;
@@ -755,8 +759,8 @@ class DosenController extends Controller
             'kode_pos' => 'required',
             'institusi' => 'required',
             'data_pengaju2' => 'mimes:xlsx|max:10240', // Max size 10 MB
-            'jurusan' => 'required',
-            'prodi' => 'required',
+            'jurusan' => 'required|exists:jurusan,nama_jurusan',
+            'prodi' => 'required|exists:prodi,nama_prodi',
             'jenis_ciptaan' => 'required',
             'judul_ciptaan' => 'required',
             'uraian_singkat' => 'required|max:60000',
@@ -779,6 +783,7 @@ class DosenController extends Controller
             $hc->institusi = $request->institusi;
             $hc->jurusan = $request->jurusan;
             $hc->prodi = $request->prodi;
+            $hc->prodi_id = Prodi::findIdByName($request->prodi);
             $hc->jenis_ciptaan = $request->jenis_ciptaan;
             $hc->judul_ciptaan = $request->judul_ciptaan;
             $hc->uraian_singkat = $request->uraian_singkat;
@@ -949,8 +954,8 @@ class DosenController extends Controller
             'kode_pos' => 'required|integer',
             'institusi' => 'required|string',
             'data_pengaju2' => 'nullable|mimes:xlsx',
-            'jurusan' => 'required',
-            'prodi' => 'required',
+            'jurusan' => 'required|exists:jurusan,nama_jurusan',
+            'prodi' => 'required|exists:prodi,nama_prodi',
             'jenis_di' => 'required',
             'judul_di' => 'required',
             'uraian_di' => 'nullable|mimes:pdf|max:2028',
@@ -974,6 +979,7 @@ class DosenController extends Controller
             $di->institusi = $request->institusi;
             $di->jurusan = $request->jurusan;
             $di->prodi = $request->prodi;
+            $di->prodi_id = Prodi::findIdByName($request->prodi);
             $di->jenis_di = $request->jenis_di;
             $di->judul_di = $request->judul_di;
             $di->tanggal_permohonan = $request->tanggal_permohonan;
@@ -1037,8 +1043,8 @@ class DosenController extends Controller
             'kode_pos' => 'required',
             'institusi' => 'required',
             'data_pengaju2' => 'mimes:xlsx|max:10240', // Max size 10 MB
-            'jurusan' => 'required',
-            'prodi' => 'required',
+            'jurusan' => 'required|exists:jurusan,nama_jurusan',
+            'prodi' => 'required|exists:prodi,nama_prodi',
             'jenis_di' => 'required',
             'judul_di' => 'required',
             'uraian_di' => 'required|mimes:pdf|max:10240', // Max size 10 MB
@@ -1062,6 +1068,7 @@ class DosenController extends Controller
             $di->institusi = $request->institusi;
             $di->jurusan = $request->jurusan;
             $di->prodi = $request->prodi;
+            $di->prodi_id = Prodi::findIdByName($request->prodi);
             $di->jenis_di = $request->jenis_di;
             $di->judul_di = $request->judul_di;
             $di->tanggal_permohonan = $request->tanggal_permohonan;

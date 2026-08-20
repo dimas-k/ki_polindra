@@ -6,6 +6,7 @@ use App\Models\CheckDi;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class DesainIndustri extends Model
@@ -13,6 +14,14 @@ class DesainIndustri extends Model
     use HasFactory;
     protected $table = 'desain_industri';
     protected $guarded = 'id';
+
+    /**
+     * Prodi asal pengaju desain industri (relasi FK prodi_id).
+     */
+    public function prodi() : BelongsTo
+    {
+        return $this->belongsTo(Prodi::class);
+    }
 
     protected static function booted()
     {
