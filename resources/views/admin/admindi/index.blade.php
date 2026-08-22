@@ -12,16 +12,23 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <!-- Custom styles for this template -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href={{ asset('assets/css/admin-theme.css') }} rel="stylesheet">
 </head>
 
 <body>
     {{-- Top nav bar --}}
     <div class="container-fluid border">
-        <nav class="navbar navbar-expand bg-body-tertiary">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
                 <img class="navbar-brand" src={{ asset('assets/polindra2.jpg') }}>
-                <a class="navbar-brand fs-6 fw-normal font-family-Kokoro" href="#">Sistem Informasi Kekayaan
-                    Intelektual<br>Politeknik Negeri Indramayu</a>
+                <a class="navbar-brand fs-6 fw-normal font-family-Kokoro brand-text-responsive" href="#">
+                    <span class="d-inline d-md-none">SIKI POLINDRA</span>
+                    <span class="d-none d-md-inline">Sistem Informasi Kekayaan
+                        Intelektual<br>Politeknik Negeri Indramayu</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
@@ -45,16 +52,16 @@
             {{-- Side bar --}}
             @include('admin.layout.sidenav')
             {{-- end of sidebar --}}
-            <div class="col-lg-10 mt-2">
+            <div class="col-12 col-lg-10 mt-2">
                 <div class="container bg-light rounded border pt-3">
                     <div class="card mb-3">
                         <div class="card-header text-center">
                             Rincian Desain Industri
                         </div>
                         <div class="card-body">
-                            <div class="d-flex flex-row">
+                            <div class="row g-3">
                                 <div class="col-xl-3 col-sm-6 col-12">
-                                    <div class="card shadow-sm p-2" style="width: 18rem;">
+                                    <div class="card shadow-sm p-2 h-100">
                                         <a href="/admin/desain-industri/diberi"
                                             class="link-dark link-underline link-underline-opacity-0">
                                             <div class="card-body">
@@ -75,7 +82,7 @@
                                 </div>
 
                                 <div class="col-xl-3 col-sm-6 col-12">
-                                    <div class="card shadow-sm " style="width: 18rem;">
+                                    <div class="card shadow-sm  h-100">
                                         <a href="/admin/desain-industri/dalam-proses-usulan"
                                             class="link-dark link-underline link-underline-opacity-0">
                                             <div class="card-body">
@@ -97,7 +104,7 @@
                                 </div>
 
                                 <div class="col-xl-3 col-sm-6 col-12">
-                                    <div class="card shadow-sm p-2" style="width: 18rem;">
+                                    <div class="card shadow-sm p-2 h-100">
                                         <a href="/admin/desain-industri/pemeriksaan"
                                             class="link-dark link-underline link-underline-opacity-0">
                                             <div class="card-body">
@@ -118,7 +125,7 @@
                                 </div>
 
                                 <div class="col-xl-3 col-sm-6 col-12">
-                                    <div class="card shadow-sm" style="width: 18rem;">
+                                    <div class="card shadow-sm h-100">
                                         <a href="/admin/desain-industri/keterangan-belum-lengkap"
                                             class="link-dark link-underline link-underline-opacity-0">
                                             <div class="card-body">
@@ -139,9 +146,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="d-flex flex-row">
+                            <div class="row g-3">
                                 <div class="col-xl-4 col-sm-6 col-12 mt-3">
-                                    <div class="card shadow-sm p-2" style="width: 25rem;">
+                                    <div class="card shadow-sm p-2 h-100">
                                         <a href="/admin/desain-industri/ditolak"
                                             class="link-dark link-underline link-underline-opacity-0">
                                             <div class="card-body">
@@ -162,7 +169,7 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-sm-6 col-12 mt-3 ms-3">
-                                    <div class="card shadow-sm p-2" style="width: 18rem;">
+                                    <div class="card shadow-sm p-2 h-100">
                                         <a href="/admin/desain-industri/ditolak"
                                             class="link-dark link-underline link-underline-opacity-0">
                                             <div class="card-body">

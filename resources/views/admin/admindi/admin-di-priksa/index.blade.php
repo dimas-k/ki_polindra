@@ -12,16 +12,23 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <!-- Custom styles for this template -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href={{ asset('assets/css/admin-theme.css') }} rel="stylesheet">
 </head>
 
 <body>
     {{-- Top nav bar --}}
     <div class="container-fluid border">
-        <nav class="navbar navbar-expand bg-body-tertiary">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
                 <img class="navbar-brand" src={{ asset('assets/polindra2.jpg') }}>
-                <a class="navbar-brand fs-6 fw-normal font-family-Kokoro" href="#">Sistem Informasi Kekayaan
-                    Intelektual<br>Politeknik Negeri Indramayu</a>
+                <a class="navbar-brand fs-6 fw-normal font-family-Kokoro brand-text-responsive" href="#">
+                    <span class="d-inline d-md-none">SIKI POLINDRA</span>
+                    <span class="d-none d-md-inline">Sistem Informasi Kekayaan
+                        Intelektual<br>Politeknik Negeri Indramayu</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
@@ -42,7 +49,7 @@
     {{-- end of top naavbar --}}
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-2 bg-light border mt-2 rounded">
+            <div class="col-12 col-lg-2 bg-light border mt-2 rounded">
                 {{-- Side bar --}}
                 <nav class="navbar navbar-expand-lg bg-light">
                     <div class="container-fluid">
@@ -88,7 +95,7 @@
                 </nav>
             </div>
             {{-- end of sidebar --}}
-            <div class="col-lg-10 mt-2">
+            <div class="col-12 col-lg-10 mt-2">
                 <div class="container bg-light rounded border pt-3">
                     <a href="/admin/desain-industri" class="link-dark link-underline link-underline-opacity-0 mb-3 "><i
                             class="bi bi-arrow-left-circle mb-3" style="font-size: 30px;"></i></a>
@@ -101,7 +108,8 @@
                     @endif
                     <h3 class="fw-normal font-family-Kokoro mb-3 mt-3"><i class="bi bi-table me-3"></i>Daftar Desain
                         Industri</h3>
-                    <table class="table table-hover font-family-Kokoro">
+                    <div class="table-responsive">
+<table class="table table-hover font-family-Kokoro">
                         <thead>
                             <tr>
                                 <th scope="col">No</th>
@@ -255,6 +263,7 @@
                             @endforeach
                         </tbody>
                     </table>
+</div>
                 </div>
             </div>
         </div>

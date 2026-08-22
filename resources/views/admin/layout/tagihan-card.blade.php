@@ -24,7 +24,8 @@
         @endif
 
         @if ($pembayaran)
-            <table class="table table-borderless mb-3">
+            <div class="table-responsive">
+<table class="table table-borderless mb-3">
                 <tr>
                     <th style="width:220px;">Nominal</th>
                     <td>: Rp{{ number_format($pembayaran->nominal, 0, ',', '.') }}</td>
@@ -62,6 +63,7 @@
                     </td>
                 </tr>
             </table>
+</div>
         @else
             <p class="text-muted">Belum ada tagihan pembayaran untuk pengajuan ini.</p>
         @endif

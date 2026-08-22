@@ -1,4 +1,4 @@
-<div class="col-lg-2 bg-light border mt-2 rounded">
+<div class="col-12 col-lg-2 bg-light border mt-2 rounded">
     <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
@@ -14,56 +14,67 @@
                 <div class="offcanvas-body">
                     <ul class="navbar-nav flex-column justify-content-end flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="/admin/dashboard"><i
-                                    class="bi bi-house me-4"></i>Dasboard</a>
+                            <a class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}"
+                                href="/admin/dashboard"><i class="bi bi-house me-4"></i>Dasboard</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/admin/listadmin"><i class="bi bi-person me-4"></i>Admin</a>
+                            <a class="nav-link {{ request()->is('admin/listadmin') ? 'active' : '' }}"
+                                href="/admin/listadmin"><i class="bi bi-person me-4"></i>Admin</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/admin/verif"><i class="bi bi-person me-4"></i>Verifikator</a>
+                            <a class="nav-link {{ request()->is('admin/verif') ? 'active' : '' }}"
+                                href="/admin/verif"><i class="bi bi-person me-4"></i>Verifikator</a>
                         </li>
                         <li class="nav-item list-unstyled">
-                            <a class="nav-link btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" href="#"
-                                data-bs-toggle="collapse" data-bs-target="#masterdata-collapse" aria-expanded="false"><i class="bi bi-building me-4"></i>
+                            <a class="nav-link btn-toggle d-inline-flex align-items-center rounded border-0 {{ request()->is('admin/jurusan', 'admin/prodi') ? '' : 'collapsed' }}"
+                                href="#" data-bs-toggle="collapse" data-bs-target="#masterdata-collapse"
+                                aria-expanded="{{ request()->is('admin/jurusan', 'admin/prodi') ? 'true' : 'false' }}"><i
+                                    class="bi bi-building me-4"></i>
                                 Data Jurusan/Prodi
                             </a>
-                            <div class="collapse" id="masterdata-collapse">
+                            <div class="collapse {{ request()->is('admin/jurusan', 'admin/prodi') ? 'show' : '' }}"
+                                id="masterdata-collapse">
                                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                                     <li><a href="/admin/jurusan"
-                                            class="link-body-emphasis d-inline-flex text-decoration-none rounded ms-5 mb-2">Jurusan</a>
+                                            class="link-body-emphasis d-inline-flex text-decoration-none rounded ms-5 mb-2 {{ request()->is('admin/jurusan') ? 'fw-bold' : '' }}">Jurusan</a>
                                     </li>
                                     <li><a href="/admin/prodi"
-                                            class="link-body-emphasis d-inline-flex text-decoration-none rounded ms-5">Prodi</a>
+                                            class="link-body-emphasis d-inline-flex text-decoration-none rounded ms-5 {{ request()->is('admin/prodi') ? 'fw-bold' : '' }}">Prodi</a>
                                     </li>
                                 </ul>
                             </div>
                         </li>
                         <li class="nav-item list-unstyled">
-                            <a class="nav-link btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" href="#"
-                                data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false"><i class="bi bi-person me-4"></i>
+                            <a class="nav-link btn-toggle d-inline-flex align-items-center rounded border-0 {{ request()->is('admin/pengguna/*') ? '' : 'collapsed' }}"
+                                href="#" data-bs-toggle="collapse" data-bs-target="#home-collapse"
+                                aria-expanded="{{ request()->is('admin/pengguna/*') ? 'true' : 'false' }}"><i
+                                    class="bi bi-person me-4"></i>
                                 Pengguna
                             </a>
-                            <div class="collapse" id="home-collapse">
+                            <div class="collapse {{ request()->is('admin/pengguna/*') ? 'show' : '' }}"
+                                id="home-collapse">
                                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                                     <li><a href="/admin/pengguna/dosen"
-                                            class="link-body-emphasis d-inline-flex text-decoration-none rounded ms-5 mb-2">Dosen</a>
+                                            class="link-body-emphasis d-inline-flex text-decoration-none rounded ms-5 mb-2 {{ request()->is('admin/pengguna/dosen') ? 'fw-bold' : '' }}">Dosen</a>
                                     </li>
                                     <li><a href="/admin/pengguna/umum"
-                                            class="link-body-emphasis d-inline-flex text-decoration-none rounded ms-5">Umum / Non POLINDRA</a>
+                                            class="link-body-emphasis d-inline-flex text-decoration-none rounded ms-5 {{ request()->is('admin/pengguna/umum') ? 'fw-bold' : '' }}">Umum / Non POLINDRA</a>
                                     </li>
                                 </ul>
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/admin/paten"><i class="bi bi-table me-4"></i></i>Paten</a>
+                            <a class="nav-link {{ request()->is('admin/paten*') ? 'active' : '' }}"
+                                href="/admin/paten"><i class="bi bi-table me-4"></i>Paten</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/admin/desain-industri"><i class="bi bi-table me-4"></i>Desain
+                            <a class="nav-link {{ request()->is('admin/desain-industri*') ? 'active' : '' }}"
+                                href="/admin/desain-industri"><i class="bi bi-table me-4"></i>Desain
                                 Industri</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/admin/hak-cipta"><i class="bi bi-table me-4"></i></i>Hak
+                            <a class="nav-link {{ request()->is('admin/hak-cipta*') ? 'active' : '' }}"
+                                href="/admin/hak-cipta"><i class="bi bi-table me-4"></i>Hak
                                 Cipta</a>
                         </li>
 

@@ -8,17 +8,24 @@
     <link href={{ asset('assets/bootstrap/css/bootstrap.min.css') }} rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href={{ asset('assets/css/admin-theme.css') }} rel="stylesheet">
     <title>SIKI POLINDRA-Admin | Dashboard</title>
     </head>
     
     <body>
     {{-- Top nav bar --}}
     <div class="container-fluid border">
-        <nav class="navbar navbar-expand bg-body-tertiary">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
                 <img class="navbar-brand" src={{ asset('assets/polindra2.jpg') }}>
-                <a class="navbar-brand fs-6 fw-normal font-family-Kokoro" href="#">Sistem Informasi Kekayaan
-                    Intelektual<br>Politeknik Negeri Indramayu</a>
+                <a class="navbar-brand fs-6 fw-normal font-family-Kokoro brand-text-responsive" href="#">
+                    <span class="d-inline d-md-none">SIKI POLINDRA</span>
+                    <span class="d-none d-md-inline">Sistem Informasi Kekayaan
+                        Intelektual<br>Politeknik Negeri Indramayu</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
@@ -43,15 +50,15 @@
             @include('admin.layout.sidenav')
             {{-- end of sidebar --}}
             {{-- ki --}}
-            <div class="col-lg-10 mt-2">
+            <div class="col-12 col-lg-10 mt-2">
                 <div class="card">
                     <div class="card-header text-center">
                         List Kekayaan Intelektual
                     </div>
                     <div class="card-body">
-                        <div class="d-flex flex-row justify-content-center">
+                        <div class="row g-3 justify-content-center">
                             <div class="col-xl-3 col-sm-6 col-12">
-                                <div class="card shadow-sm" style="width: 18rem;">
+                                <div class="card shadow-sm h-100">
                                     <div class="card-body">
                                         <div class="d-flex">
                                             <div class="align-self-center">
@@ -67,7 +74,7 @@
                                 </div>
                             </div>
                             <div class="col-xl-3 col-sm-6 col-12">
-                                <div class="card shadow-sm" style="width: 18rem;">
+                                <div class="card shadow-sm h-100">
                                     <div class="card-body">
                                         <div class="d-flex">
                                             <div class="align-self-center">
@@ -83,7 +90,7 @@
                                 </div>
                             </div>
                             <div class="col-xl-3 col-sm-6 col-12">
-                                <div class="card shadow-sm" style="width: 18rem;">
+                                <div class="card shadow-sm h-100">
                                     <div class="card-body">
                                         <div class="d-flex">
                                             <div class="align-self-center">
