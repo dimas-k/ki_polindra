@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\DesainIndustri;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 
 class ApiDiController extends Controller
 {
@@ -26,6 +27,9 @@ class ApiDiController extends Controller
     /**
      * Daftar desain industri yang sudah "Diberi" (granted).
      * Field dibatasi ke data non-sensitif.
+     *
+     * Catatan: uraian_di dan gambar_di semuanya berupa file PDF
+     * (bukan gambar biasa), jadi yang dikirim adalah URL dokumennya.
      */
     public function getDataDiberi(): JsonResponse
     {
@@ -40,6 +44,10 @@ class ApiDiController extends Controller
                     'nama_pengaju' => $di->nama_lengkap,
                     'prodi' => $di->prodi->nama_prodi ?? $di->prodi ?? null,
                     'jurusan' => $di->prodi->jurusan->nama_jurusan ?? $di->jurusan ?? null,
+                    'dokumen' => [
+                        'uraian_di' => $di->uraian_di ? Storage::disk('public')->url($di->uraian_di) : null,
+                        'gambar_di' => $di->gambar_di ? Storage::disk('public')->url($di->gambar_di) : null,
+                    ],
                 ];
             });
 
