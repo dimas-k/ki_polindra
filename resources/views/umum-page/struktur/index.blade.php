@@ -13,20 +13,67 @@
 </head>
 
 <body>
+    <style>
+        :root {
+            --polindra-navy: #002a57;
+            --polindra-blue: #003d7a;
+            --polindra-line: #dde5ee;
+        }
+
+        body {
+            background-color: #fff;
+        }
+
+        .page-header {
+            background-color: var(--polindra-navy);
+            padding: 130px 0 40px;
+            color: #fff;
+        }
+
+        @media (max-width: 991px) {
+            .page-header {
+                padding-top: 150px;
+            }
+        }
+
+        .page-header .eyebrow {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: #9fb8d6;
+            margin-bottom: 6px;
+        }
+
+        .page-header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+
+        .ki-card {
+            background: #fff;
+            border: 1px solid var(--polindra-line);
+            border-radius: 10px;
+            padding: 24px;
+        }
+    </style>
+
     {{-- nav --}}
     @include('layout.nav')
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
     {{-- end of nav --}}
 
-    <div class="container text-center">
-        <span class="">Struktur Organisasi</span>
-        <h2 class="mb-2">SIKI POLINDRA</h2>
-        <br>
-        <img class="img-fluid" src="{{ asset('assets/struktur.png') }}" alt="" width="800px" style="align-self: center">
+    <section class="page-header">
+        <div class="container">
+            <div class="eyebrow">Tentang SIKI</div>
+            <h1>Struktur Organisasi SIKI POLINDRA</h1>
+        </div>
+    </section>
+
+    <div class="container my-5">
+        <div class="ki-card text-center">
+            <img class="img-fluid" src="{{ asset('assets/struktur.png') }}" alt="Struktur Organisasi SIKI POLINDRA">
+        </div>
     </div>
 
     {{-- footer --}}
