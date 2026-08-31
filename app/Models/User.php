@@ -28,6 +28,8 @@ class User extends Authenticatable
         'kerjaan',
         'jabatan',
         'nip',
+        'pas_foto',
+        'kbk_id',
         'username',
         'password',
         'role',
@@ -60,6 +62,9 @@ class User extends Authenticatable
     }
     public function apakahUmum(){
         return $this->role === 'Umum';
+    }
+    public function apakahKetuaKbk(){
+        return $this->role === 'Ketua KBK';
     }
 
     // protected static function booted()
