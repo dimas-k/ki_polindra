@@ -119,7 +119,8 @@ Route::post('/autentikasi', [AdminController::class, 'authenticate']);
 Route::get('/logout', [LoginUserController::class, 'logout']);
 
 Route::middleware(['auth', 'role:Admin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboardAdmin']);
+    Route::get('/admin/dashboard', [AdminController::class, 'portal']);
+    Route::get('/admin/dashboard/kekayaan-intelektual', [AdminController::class, 'dashboardAdmin']);
 
     // Buat/kirim tagihan pembayaran (Admin) untuk Paten, Hak Cipta, Desain Industri
     Route::post('/admin/{jenis}/{id}/tagihan', [PaymentController::class, 'store'])->name('admin_payment.store');

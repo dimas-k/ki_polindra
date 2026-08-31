@@ -12,8 +12,8 @@
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "twbs/bootstrap-icons": "^1.11",
-        "nwidart/laravel-modules": "^11.0"
+        "nwidart/laravel-modules": "10.0",
+        "twbs/bootstrap-icons": "^1.11"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -54,11 +54,7 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true,
-        "allow-plugins": {
-            "php-http/discovery": true,
-            "wikimedia/composer-merge-plugin": true
-        }
+        "sort-packages": true
     },
     "minimum-stability": "stable",
     "prefer-stable": true

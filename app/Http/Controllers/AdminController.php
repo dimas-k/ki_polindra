@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Paten;
 
 use App\Models\HakCipta;
@@ -22,20 +23,23 @@ class AdminController extends Controller
 
     public function authenticate(Request $request)
     {
-        $credentials = $request-> validate([
+        $credentials = $request->validate([
             'username' => 'required',
             'password' => 'required',
         ]);
         // dd($request);
-        if(Auth::attempt($credentials))
-        {
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
             return redirect()->intended('/admin/dashboard');
         }
 
         return back()->with('loginError', 'Login Gagal!');
+    }
 
+    public function portal()
+    {
+        return view('admin.portal.index');
     }
     public function dashboardAdmin()
     {
@@ -66,8 +70,10 @@ class AdminController extends Controller
         $hcTerima = HakCipta::where('status', 'Diterima')->count();
         $hcKet = HakCipta::where('status', 'Keterangan belum lengkap')->count();
         $hcmvdov = HakCipta::where('status', 'Menunggu Verifikasi Data Oleh Verifikator')->count();
-        return view('admin.dashboard.index', compact('paten','hc','di','patenPF','patenMTF','patenMP','patenMPS','patenSTAW','patenSTL','patenSTAK','patenMTS','patenDI','patenDK','desainDi','desainDK','desainP','desainKBL','desainDPU','hcTolak','hcTerima','hcKet','patenmvdov', 'dmvdov', 'hcmvdov'));
+        return view('admin.dashboard.index', compact('paten', 'hc', 'di', 'patenPF', 'patenMTF', 'patenMP', 'patenMPS', 'patenSTAW', 'patenSTL', 'patenSTAK', 'patenMTS', 'patenDI', 'patenDK', 'desainDi', 'desainDK', 'desainP', 'desainKBL', 'desainDPU', 'hcTolak', 'hcTerima', 'hcKet', 'patenmvdov', 'dmvdov', 'hcmvdov'));
     }
+
+
 
     public function logout(request $request)
     {
@@ -76,7 +82,7 @@ class AdminController extends Controller
         return redirect('/login-admin');
     }
 
-   
+
 
     public function lihat()
     {
@@ -86,7 +92,7 @@ class AdminController extends Controller
     public function lihatDosen()
     {
         $dosen = User::where('role', 'Dosen')->orderBy('nama_lengkap', 'asc')->get();
-        
+
         return view('admin.dosen-page.index', compact('dosen'));
     }
     public function detailDosen($id)
@@ -97,18 +103,18 @@ class AdminController extends Controller
     public function detailUmum($id)
     {
         $um = User::find($id);
-        
+
         return view('admin.umum.lihat.index', compact('um'));
     }
-    
+
     public function dosenNew(Request $request)
     {
         $validasidata = $request->validate([
             'email' => 'required|email|unique:users',
-            'username'=>'required|min:3',
-            'password'=> 'required|max:10',
-            'nip'=> 'required|unique:users'
-           
+            'username' => 'required|min:3',
+            'password' => 'required|max:10',
+            'nip' => 'required|unique:users'
+
         ]);
         $user = new User;
         $user->nama_lengkap = $request->nama_lengkap;
@@ -123,16 +129,16 @@ class AdminController extends Controller
         $user->role = $request->role;
         $user->save($validasidata);
 
-        return redirect('/admin/pengguna/dosen')->with('success','Data dosen telah ditambahkan');
+        return redirect('/admin/pengguna/dosen')->with('success', 'Data dosen telah ditambahkan');
     }
     public function editDosen(Request $request, string $id)
     {
         $validasidata = $request->validate([
-            'nama_lengkap'=>'required|string',
+            'nama_lengkap' => 'required|string',
             'email' => 'required|email|unique:users',
-            'username'=>'required|min:3',
-            'password'=> 'required|max:10',
-            'nip'=> 'required|unique:users',
+            'username' => 'required|min:3',
+            'password' => 'required|max:10',
+            'nip' => 'required|unique:users',
         ]);
         $user = User::find($id);
         $user->nama_lengkap = $request->nama_lengkap;
@@ -145,7 +151,7 @@ class AdminController extends Controller
         $user->role = $request->role;
         $user->save($validasidata);
 
-        return redirect('/admin/pengguna/dosen')->with('success','Data dosen telah diubah');
+        return redirect('/admin/pengguna/dosen')->with('success', 'Data dosen telah diubah');
     }
     public function hapusDosen(string $id)
     {
@@ -161,9 +167,9 @@ class AdminController extends Controller
     {
         $validasidata = $request->validate([
             'email' => 'required|email|unique:users',
-            'username'=>'required|min:3',
-            'password'=> 'required|max:10'
-            
+            'username' => 'required|min:3',
+            'password' => 'required|max:10'
+
         ]);
         $user = new User;
         $user->nama_lengkap = $request->nama_lengkap;
@@ -178,14 +184,14 @@ class AdminController extends Controller
         $user->role = $request->role;
         $user->save($validasidata);
 
-        return redirect('/admin/pengguna/umum')->with('success','Data umum telah ditambahkan');
+        return redirect('/admin/pengguna/umum')->with('success', 'Data umum telah ditambahkan');
     }
     public function updateUmum(Request $request, string $id)
     {
         $validasidata = $request->validate([
             'email' => 'required|email|unique:users',
-            'username'=>'required|min:3',
-            'password'=> 'required|max:10',
+            'username' => 'required|min:3',
+            'password' => 'required|max:10',
             // 'ktp'=>'required|mimes:pdf|max:2028',
         ]);
         $user = User::find($id);
@@ -202,7 +208,7 @@ class AdminController extends Controller
         $user->role = $request->role;
         $user->save($validasidata);
 
-        return redirect('/admin/pengguna/umum')->with('success','Data akun umum telah diubah');
+        return redirect('/admin/pengguna/umum')->with('success', 'Data akun umum telah diubah');
     }
 
 
@@ -221,8 +227,8 @@ class AdminController extends Controller
     public function store(Request $request)
     {
         $validasidata = $request->validate([
-            'username'=>'required|min:3',
-            'password'=> 'required|max:10'
+            'username' => 'required|min:3',
+            'password' => 'required|max:10'
         ]);
         $user = new User;
         $user->nama_lengkap = $request->nama_lengkap;
@@ -233,7 +239,7 @@ class AdminController extends Controller
         $user->password = Hash::make($request->password);
         $user->save($validasidata);
 
-        return redirect('/admin/listadmin')->with('success','Data admin telah ditabahkan');
+        return redirect('/admin/listadmin')->with('success', 'Data admin telah ditabahkan');
     }
 
     /**
