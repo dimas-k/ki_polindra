@@ -9,21 +9,132 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="shortcut icon" href="{{ asset('assets/logo-polindra.png') }}">
-    <link rel="stylesheet" href="{{ asset('assets-login-user/login.css') }}">
     <title>SIKI POLINDRA || Register Dosen</title>
     <style>
-        body {
-            background: linear-gradient(135deg, #6e8efb, #a777e3);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        :root {
+            --polindra-navy: #002a57;
+            --polindra-blue: #003d7a;
+            --polindra-blue-light: #0066cc;
+            --polindra-line: #dde5ee;
         }
 
-        .card {
-            border-radius: 1rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .auth-wrap {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .auth-side {
+            background-color: var(--polindra-navy);
+            color: #fff;
+            width: 38%;
+            padding: 48px 44px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .auth-side-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .auth-side-brand img {
+            height: 42px;
+            width: 42px;
+        }
+
+        .auth-side-brand span {
+            font-size: 0.85rem;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .auth-side h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1.4;
+            margin: 40px 0 14px;
+        }
+
+        .auth-side p {
+            font-size: 0.9rem;
+            line-height: 1.75;
+            color: #b9c9dd;
+            max-width: 320px;
+        }
+
+        .auth-side-foot {
+            font-size: 0.78rem;
+            color: #8098b8;
+        }
+
+        @media (max-width: 900px) {
+            .auth-side {
+                display: none;
+            }
+        }
+
+        .auth-form-panel {
+            flex: 1;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 48px 20px;
+            background-color: #fff;
+        }
+
+        .auth-form-box {
+            width: 100%;
+            max-width: 460px;
+        }
+
+        .auth-form-box h4 {
+            font-weight: 700;
+            color: var(--polindra-navy);
+            margin-bottom: 4px;
+        }
+
+        .auth-form-box .subtitle {
+            font-size: 0.88rem;
+            color: #6c7a89;
+            margin-bottom: 24px;
+        }
+
+        .form-control {
+            border-color: var(--polindra-line);
+            font-size: 0.9rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--polindra-blue-light);
+            box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.15);
+        }
+
+        .btn-primary {
+            background-color: var(--polindra-blue);
+            border-color: var(--polindra-blue);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--polindra-navy);
+            border-color: var(--polindra-navy);
+        }
+
+        .auth-form-box a {
+            color: var(--polindra-blue);
         }
 
         .password-wrapper {
@@ -33,15 +144,29 @@
 </head>
 
 <body>
-    <div class="container text-center mt-4">
-        <img class="navbar-brand" src="{{ asset('assets/logo-polindra.png') }}" style="height: 50px;">
-        <h5 class="text-white mt-2">Sistem Informasi Kekayaan Intelektual <br> Politeknik Negeri Indramayu</h5>
-    </div>
-    <div class="container d-flex justify-content-center align-items-center mb-5 mt-5" style="min-height: 80vh;">
-        <div class="col-12 col-md-8 col-lg-5">
-            <div class="card bg-light p-4">
-                <h2 class="fw-bold text-uppercase text-center">Registrasi Dosen</h2>
-                <p class="text-center text-black-50">Masukkan data anda dengan benar!</p>
+    <div class="auth-wrap">
+        <div class="auth-side">
+            <div class="auth-side-brand">
+                <img src="{{ asset('assets/logo-polindra.png') }}" alt="Logo Polindra">
+                <span>Sistem Informasi<br>Kekayaan Intelektual</span>
+            </div>
+            <div>
+                <h1>Registrasi Dosen / Tendik</h1>
+                <p>
+                    Lengkapi data kepegawaian Anda untuk membuat akun SIKI POLINDRA sebagai Dosen atau Tenaga
+                    Kependidikan.
+                </p>
+            </div>
+            <div class="auth-side-foot">
+                &copy; {{ date('Y') }} Politeknik Negeri Indramayu
+            </div>
+        </div>
+
+        <div class="auth-form-panel">
+            <div class="auth-form-box">
+                <h4>Registrasi Dosen</h4>
+                <p class="subtitle">Masukkan data Anda dengan benar.</p>
+
                 <form method="post" action="/simpan/akun" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
@@ -51,7 +176,8 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">No Telepon</label>
-                        <input type="number" name="no_telepon" class="form-control" value="{{ old('no_telepon') }}">
+                        <input type="number" name="no_telepon" class="form-control"
+                            value="{{ old('no_telepon') }}">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Email</label>
@@ -75,25 +201,26 @@
                     </div>
 
                     <div class="mb-3 password-wrapper">
-                      <label class="form-label" for="pass">Password</label>
-                      <div class="input-group">
-                          <input type="password" id="pass" name="password" class="form-control" required>
-                          <span class="input-group-text toggle-password" onclick="togglePassword()">
-                              <i class="bi bi-eye-slash" id="toggle-icon"></i>
-                          </span>
-                      </div>
-                      @error('password')
-                          <div class="invalid-feedback">{{ $message }}</div>
-                      @enderror
+                        <label class="form-label" for="pass">Password</label>
+                        <div class="input-group">
+                            <input type="password" id="pass" name="password" class="form-control" required>
+                            <span class="input-group-text toggle-password" onclick="togglePassword()">
+                                <i class="bi bi-eye-slash" id="toggle-icon"></i>
+                            </span>
+                        </div>
+                        @error('password')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="d-grid">
-                        <button class="btn btn-dark btn-lg text-white" type="submit">Register</button>
+                        <button class="btn btn-primary btn-lg" type="submit">Register</button>
                     </div>
                 </form>
                 <p class="text-center mt-3">Ingin login? <a href="/login" class="fw-bold">Login</a></p>
             </div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function togglePassword() {
