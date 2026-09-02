@@ -37,6 +37,15 @@ class User extends Authenticatable
 
 
     /**
+     * Relasi ke Kelompok Bidang Keahlian (KBK) yang dipimpin/diikuti
+     * oleh user ini (khususnya untuk role Ketua KBK).
+     */
+    public function kelompokKeahlian()
+    {
+        return $this->belongsTo(\Modules\ProdukInovasi\app\Models\KelompokKeahlian::class, 'kbk_id');
+    }
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>

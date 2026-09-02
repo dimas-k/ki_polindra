@@ -24,7 +24,7 @@
                     <h6 class="section-title bg-white text-center text-primary px-3">Penelitian Kelompok Bidang Keahlian
                     </h6>
                     <h1 class="display-6 mb-5">{{ $penelitian->judul }}</h1>
-                    <img src="{{ asset('storage/' . $penelitian->gambar) }}" class=" img-fluid mt-5 mb-3" alt="gambar"
+                    <img src="{{ ($penelitian->gambar ? asset('storage/' . $penelitian->gambar) : asset('assets/gedung.jpg')) }}" class=" img-fluid mt-5 mb-3" alt="gambar"
                         style="width: 50%; height:auto">
                 </div>
             </div>

@@ -16,7 +16,7 @@
             <div class="col-lg-3 col-md-6">
                 <h5 class="text-light mb-4">Link lainnya</h5>
                 <a class="btn btn-link" href="https://p3m.polindra.ac.id/">P3M Polindra</a>
-                <a class="btn btn-link" href="/dashboard/kontak">Kontak Kami</a>
+                <a class="btn btn-link" href="/dproin-polindra/kontak">Kontak Kami</a>
                 <a class="btn btn-link" href="https://siki.polindra.ac.id/">Sentra KI POLINDRA</a>
             </div>
             <div class="col-lg-6 col-md-2">

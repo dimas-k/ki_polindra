@@ -203,6 +203,18 @@
                                 </td>
                             </tr>
                         </table>
+
+                        <div class="mt-3">
+                            @if ($p->dikirim_ke)
+                                <span class="badge bg-success">
+                                    Sudah dikirim ke {{ ucfirst($p->dikirim_ke) }}
+                                </span>
+                            @else
+                                <a href="{{ route('admin_paten.form_kirim', $p->id) }}" class="btn btn-primary btn-sm">
+                                    Kirim ke Dashboard (Produk Inovasi / Penelitian)
+                                </a>
+                            @endif
+                        </div>
                     </div>
                 </div>
 

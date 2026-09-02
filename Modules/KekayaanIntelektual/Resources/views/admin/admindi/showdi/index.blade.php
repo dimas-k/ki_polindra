@@ -176,6 +176,18 @@
                                 </td>
                             </tr>
                         </table>
+
+                        <div class="mt-3">
+                            @if ($di->dikirim_ke)
+                                <span class="badge bg-success">
+                                    Sudah dikirim ke {{ ucfirst($di->dikirim_ke) }}
+                                </span>
+                            @else
+                                <a href="{{ route('admin_desainindustri.form_kirim', $di->id) }}" class="btn btn-primary btn-sm">
+                                    Kirim ke Dashboard (Produk Inovasi / Penelitian)
+                                </a>
+                            @endif
+                        </div>
                     </div>
                 </div>
 

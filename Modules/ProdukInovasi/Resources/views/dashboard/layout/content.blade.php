@@ -9,7 +9,7 @@
             @foreach ($produk->take(3)->merge($pusat_penelitian->take(3)) as $index => $item)
                 <button type="button" data-bs-target="#header-carousel" data-bs-slide-to="{{ $index + 1 }}"
                     aria-label="Slide {{ $index + 2 }}">
-                    <img class="img-fluid" src="{{ asset('storage/' . $item->gambar) }}" alt="Image">
+                    <img class="img-fluid" src="{{ ($item->gambar ? asset('storage/' . $item->gambar) : asset('assets/gedung.jpg')) }}" alt="Image">
                 </button>
             @endforeach
         </div>
@@ -27,7 +27,7 @@
             </div>
             @foreach ($produk->take(3)->merge($pusat_penelitian->take(3)) as $index => $item)
                 <div class="carousel-item {{ $index + 1 }}">
-                    <img class="w-100" src="{{ asset('storage/' . $item->gambar) }}" alt="Image">
+                    <img class="w-100" src="{{ ($item->gambar ? asset('storage/' . $item->gambar) : asset('assets/gedung.jpg')) }}" alt="Image">
                     <div class="carousel-caption">
                         <div class="p-3" style="max-width: 900px;">
                             <h4 class="text-white text-uppercase mb-4 animated zoomIn">Dashboard Produk Inovasi dan
@@ -99,7 +99,7 @@
                 <a href="{{ route('detail.produk', $p->nama_produk) }}">
                     <div class="project-item-new border rounded h-100 p-4" data-dot="{{ $loop->iteration }}">
                         <div class="position-relative mb-4">
-                            <img class="img-fluid rounded" src="{{ asset('storage/' . $p->gambar) }}"
+                            <img class="img-fluid rounded" src="{{ ($p->gambar ? asset('storage/' . $p->gambar) : asset('assets/gedung.jpg')) }}"
                                 alt="Gambar Produk {{ $p->id }}">
                         </div>
                         <h6>{{ $p->nama_produk }}</h6>
@@ -124,7 +124,7 @@
                 <a href="{{ route('detail.penelitian', $p->judul) }}">
                     <div class="project-item-new border rounded h-100 p-4" data-dot="{{ $loop->iteration }}">
                         <div class="position-relative mb-4">
-                            <img class="img-fluid rounded" src="{{ asset('storage/' . $p->gambar) }}"
+                            <img class="img-fluid rounded" src="{{ ($p->gambar ? asset('storage/' . $p->gambar) : asset('assets/gedung.jpg')) }}"
                                 alt="Gambar Produk {{ $p->id }}">
                         </div>
                         <h6>{{ $p->judul }}</h6>

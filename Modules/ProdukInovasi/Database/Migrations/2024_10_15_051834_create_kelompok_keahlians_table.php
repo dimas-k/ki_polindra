@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id'); // Primary key
             $table->string('nama_kbk');
             $table->string('jurusan')->nullable();
-            $table->text('deskripsi');
+            $table->text('deskripsi')->nullable();
             $table->timestamps();
         });
 

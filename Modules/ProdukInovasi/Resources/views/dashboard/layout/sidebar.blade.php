@@ -5,33 +5,32 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav d-flex w-100 p-3 p-lg-0">
-            <a href="/" class="nav-item nav-link {{ Request::is('/') ? 'active' : '' }}">Home</a>
+            <a href="{{ url('/dproin-polindra') }}" class="nav-item nav-link {{ Request::is('dproin-polindra') ? 'active' : '' }}">Home</a>
             <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle {{ Request::is('dashboard/kelompok-bidang-keahlian/*') ? 'active' : '' }}" data-bs-toggle="dropdown">Kelompok Bidang Keahlian</a>
+                <a href="#" class="nav-link dropdown-toggle {{ Request::is('dproin-polindra/kelompok-bidang-keahlian/*') ? 'active' : '' }}" data-bs-toggle="dropdown">Kelompok Bidang Keahlian</a>
                 <div class="dropdown-menu border-0 rounded-0 rounded-bottom m-0">
                     @foreach ($kbk as $i)
                     <a href="{{ route('dashboard.penelitian', $i->nama_kbk) }}" 
-                       class="dropdown-item {{ Request::is('dashboard/kelompok-bidang-keahlian/' . $i->nama_kbk) ? 'active' : '' }}">
+                       class="dropdown-item {{ Request::is('dproin-polindra/kelompok-bidang-keahlian/' . $i->nama_kbk) ? 'active' : '' }}">
                         {{ $i->nama_kbk }}
                     </a>
                     @endforeach
                 </div>
             </div>
             <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle {{ Request::is('dashboard/katalog/*') ? 'active' : '' }}" data-bs-toggle="dropdown">Katalog Produk & Penelitian</a>
+                <a href="#" class="nav-link dropdown-toggle {{ Request::is('dproin-polindra/katalog/*') ? 'active' : '' }}" data-bs-toggle="dropdown">Katalog Produk & Penelitian</a>
                 <div class="dropdown-menu border-0 rounded-0 rounded-bottom m-0">
-                    <a href="/dashboard/katalog/produk-inovasi" class="dropdown-item {{ Request::is('dashboard/katalog/produk-inovasi') ? 'active' : '' }}">
+                    <a href="/dproin-polindra/katalog/produk-inovasi" class="dropdown-item {{ Request::is('dproin-polindra/katalog/produk-inovasi') ? 'active' : '' }}">
                         Produk Inovasi
                     </a>
-                    <a href="/dashboard/katalog/penelitian" class="dropdown-item {{ Request::is('dashboard/katalog/penelitian') ? 'active' : '' }}">
+                    <a href="/dproin-polindra/katalog/penelitian" class="dropdown-item {{ Request::is('dproin-polindra/katalog/penelitian') ? 'active' : '' }}">
                         Penelitian
                     </a>
                 </div>
             </div>
-            <a href="{{ route('karya-intelektual.index') }}" class="nav-item nav-link {{ Request::is('dashboard/karya-intelektual') ? 'active' : '' }}">Karya Kekayaan Intelektual</a>
-            <a href="/dashboard/kontak" class="nav-item nav-link {{ Request::is('dashboard/kontak') ? 'active' : '' }}">Kontak Kami</a>
+            <a href="{{ route('karya-intelektual.index') }}" class="nav-item nav-link {{ Request::is('dproin-polindra/karya-intelektual') ? 'active' : '' }}">Karya Kekayaan Intelektual</a>
+            <a href="/dproin-polindra/kontak" class="nav-item nav-link {{ Request::is('dproin-polindra/kontak') ? 'active' : '' }}">Kontak Kami</a>
             <a href="/login" class="nav-item nav-link {{ Request::is('login') ? 'active' : '' }}" target="_blank">Login</a>
         </div>
     </div>
 </nav>
-

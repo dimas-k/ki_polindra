@@ -44,7 +44,7 @@
                         <div class="col-md-4 col-sm-12 mb-4">
                             <a href="{{ route('detail.penelitian', $p->judul) }}"
                                 class="link-underline link-underline-opacity-0">
-                                <img src="{{ asset('storage/' . $p->gambar) }}"
+                                <img src="{{ ($p->gambar ? asset('storage/' . $p->gambar) : asset('assets/gedung.jpg')) }}"
                                     alt="gambar penelitian {{ $p->judul }}" style="width:100%; height:auto;">
                             </a>
                         </div>

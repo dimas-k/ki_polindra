@@ -49,6 +49,14 @@
                         <div class="dropdown-divider my-1"></div>
                     </li>
                     <li>
+                        <a class="dropdown-item" href="/ketua-kbk/portal">
+                            <i class="bx bx-grid-alt bx-md me-3"></i><span>Pilih Aplikasi</span>
+                        </a>
+                    </li>
+                    <li>
+                        <div class="dropdown-divider my-1"></div>
+                    </li>
+                    <li>
                         <a class="dropdown-item" href="/logout">
                             <i class="bx bx-power-off bx-md me-3"></i><span>Log Out</span>
                         </a>

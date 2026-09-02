@@ -84,7 +84,6 @@ class DashboardController extends Controller
         // $data_produk = Produk::where('kbk_id', $id)->get();
         $data_produk = DB::table('produks')
             ->join('kelompok_keahlians', 'produks.kbk_id', '=', 'kelompok_keahlians.id')
-            ->join('users', 'users.kbk_id', '=', 'kelompok_keahlians.id')
             ->select(
                 'produks.id as id_produks',
                 'produks.nama_produk as nama_produks',
@@ -92,8 +91,8 @@ class DashboardController extends Controller
                 'produks.gambar'
             )
             ->where('kelompok_keahlians.nama_kbk', '=', $nama_kbk)
-            ->where('status', 'Tervalidasi')
-            ->groupBy('produks.nama_produk')  // Group by product ID to remove duplicates
+            ->where('produks.status', 'Tervalidasi')
+            ->groupBy('produks.id')  // group by primary key, bukan nama_produk, supaya kompatibel dgn only_full_group_by
             ->latest('produks.created_at')
             ->get();
 
@@ -106,7 +105,7 @@ class DashboardController extends Controller
                 'users.nama_lengkap',
                 'users.nip',
                 'users.jabatan',
-                'users.no_hp',
+                'users.no_telepon',
                 'users.email',
                 'kelompok_keahlians.nama_kbk',
                 'kelompok_keahlians.jurusan',

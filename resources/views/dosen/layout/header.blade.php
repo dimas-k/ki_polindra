@@ -53,6 +53,11 @@
                                     <a class="dropdown-item" href="/dosen/user/lihat/">
                                         <i class="dropdown-icon fe fe-user"></i> Profile
                                     </a>
+                                    @if (auth()->user()->role == 'Ketua KBK')
+                                        <a class="dropdown-item" href="/ketua-kbk/portal">
+                                            <i class="dropdown-icon fe fe-grid"></i> Pilih Aplikasi
+                                        </a>
+                                    @endif
                                     {{-- <a class="dropdown-item" href="email-inbox.html">
                                         <i class="dropdown-icon fe fe-mail"></i> Inbox
                                         <span class="badge bg-danger rounded-pill float-end">5</span>

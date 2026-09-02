@@ -88,7 +88,7 @@
                 <a href="{{ route('detail.produk', $p->nama_produks) }}">
                     <div class="project-item-new border rounded h-100 p-4" data-dot="{{ $loop->iteration }}">
                         <div class="position-relative mb-4">
-                            <img class="img-fluid rounded" src="{{ asset('storage/' . $p->gambar) }}"
+                            <img class="img-fluid rounded" src="{{ ($p->gambar ? asset('storage/' . $p->gambar) : asset('assets/gedung.jpg')) }}"
                                 alt="Gambar Produk">
 
                         </div>
@@ -111,7 +111,7 @@
                 <a href="{{ route('detail.penelitian', $plt->judul) }}">
                     <div class="project-item-new border rounded h-100 p-4" data-dot="{{ $loop->iteration }}">
                         <div class="position-relative mb-4">
-                            <img class="img-fluid rounded" src="{{ asset('storage/' . $plt->gambar) }}"
+                            <img class="img-fluid rounded" src="{{ ($plt->gambar ? asset('storage/' . $plt->gambar) : asset('assets/gedung.jpg')) }}"
                                 alt="Gambar Produk">
                         </div>
                         <h6>{{ $plt->judul }}</h6>

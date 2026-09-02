@@ -36,6 +36,8 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::post('/admin/paten/umum/update/{id}', [AdminPatenController::class, 'updateDataUmum'])->name('adm.updatepaten.umum');
     Route::post('/admin/paten/update/{id}', [AdminPatenController::class, 'update'])->name('admin_paten.update');
     Route::get('/admin/paten/show/{id}', [AdminPatenController::class, 'show'])->name('admin_paten.show');
+    Route::get('/admin/paten/kirim-ke-dashboard/{id}', [AdminPatenController::class, 'formKirimKeDashboard'])->name('admin_paten.form_kirim');
+    Route::post('/admin/paten/kirim-ke-dashboard/{id}', [AdminPatenController::class, 'kirimKeDashboard'])->name('admin_paten.kirim');
     Route::get('/paten/{file}', [AdminPatenController::class, 'viewSensitifFilesPaten']);
     Route::get('public/paten/{file}', [AdminPatenController::class, 'viewPublicFilesPaten']);
     Route::get('/desain-industri/{file}', [AdminDesainIndustriController::class, 'viewSensitifFilesDi'])->middleware(['auth', 'role:Admin'])->name('private_di');
@@ -60,6 +62,8 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::post('/admin/hak-cipta/umum/update/{id}', [AdminHaKCiptaController::class, 'updateHcUmum'])->name('admin_hakcipta.update_umum');
     Route::post('/admin/hak-cipta/update/{id}', [AdminHaKCiptaController::class, 'update'])->name('admin_hakcipta.update');
     Route::get('/admin/hak-cipta/show/{id}', [AdminHaKCiptaController::class, 'show'])->name('admin_hakcipta.show');
+    Route::get('/admin/hak-cipta/kirim-ke-dashboard/{id}', [AdminHaKCiptaController::class, 'formKirimKeDashboard'])->name('admin_hakcipta.form_kirim');
+    Route::post('/admin/hak-cipta/kirim-ke-dashboard/{id}', [AdminHaKCiptaController::class, 'kirimKeDashboard'])->name('admin_hakcipta.kirim');
     Route::get('/admin/hak-cipta/tercatat', [AdminHaKCiptaController::class, 'listTercatat']);
     Route::get('/admin/hak-cipta/ditolak', [AdminHaKCiptaController::class, 'tolak']);
     Route::get('/admin/hak-cipta/keterangan-belum-lengkap', [AdminHaKCiptaController::class, 'belumLengkap']);
@@ -81,6 +85,8 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::post('/admin/desain-industri/umum/update/{id}', [AdminDesainIndustriController::class, 'upateDiUmum'])->name('adm.update-di.umum');
     Route::post('/admin/desain-industri/update/{id}', [AdminDesainIndustriController::class, 'update'])->name('admin_desainindustri.update');
     Route::get('/admin/desain-industri/show/{id}', [AdminDesainIndustriController::class, 'show'])->name('admin_desainindustri.show');
+    Route::get('/admin/desain-industri/kirim-ke-dashboard/{id}', [AdminDesainIndustriController::class, 'formKirimKeDashboard'])->name('admin_desainindustri.form_kirim');
+    Route::post('/admin/desain-industri/kirim-ke-dashboard/{id}', [AdminDesainIndustriController::class, 'kirimKeDashboard'])->name('admin_desainindustri.kirim');
     Route::get('/admin/desain-industri/cari', [AdminDesainIndustriController::class, 'cariDI']);
     Route::get('/admin/desain-industri/tambah/dosen/', [AdminDesainIndustriController::class, 'tambahDiDosen']);
     Route::post('/admin/desain-industri/tambah/dosen/store', [AdminDesainIndustriController::class, 'storeDiDosen']);

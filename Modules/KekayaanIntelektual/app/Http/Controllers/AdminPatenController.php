@@ -5,6 +5,7 @@ namespace Modules\KekayaanIntelektual\app\Http\Controllers;
 use App\Models\User;
 use App\Models\Paten;
 use App\Models\Prodi;
+use App\Services\KirimKeDashboardService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -744,5 +745,40 @@ class AdminPatenController extends Controller
         $paten = Paten::with('cek')->findOrFail($id);
         $paten->delete();
         return redirect()->back()->with('success', 'Data paten dan file-file terkait berhasil dihapus');
+    }
+
+    /**
+     * Tampilkan form pilih tujuan (Produk Inovasi / Penelitian) + KBK,
+     * untuk mengirim data paten yang sudah selesai ke Dashboard.
+     */
+    public function formKirimKeDashboard(string $id)
+    {
+        $paten = Paten::findOrFail($id);
+        $kbk = DB::table('kelompok_keahlians')->get();
+
+        return view('kekayaanintelektual::admin.adminpaten.kirim-ke-dashboard', compact('paten', 'kbk'));
+    }
+
+    /**
+     * Proses pengiriman data paten ke tabel produks/penelitians.
+     */
+    public function kirimKeDashboard(Request $request, string $id, KirimKeDashboardService $service)
+    {
+        $request->validate([
+            'tujuan' => 'required|in:produk,penelitian',
+            'kbk_id' => 'required|exists:kelompok_keahlians,id',
+        ]);
+
+        $paten = Paten::findOrFail($id);
+
+        if ($paten->dikirim_ke) {
+            return back()->with('error', 'Data ini sudah pernah dikirim ke ' . $paten->dikirim_ke . '.');
+        }
+
+        $service->kirim('paten', $paten, $request->tujuan, (int) $request->kbk_id);
+
+        return redirect()
+            ->route('admin_paten.show', $id)
+            ->with('success', 'Data berhasil dikirim ke ' . ucfirst($request->tujuan) . '.');
     }
 }

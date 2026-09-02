@@ -25,7 +25,7 @@ use Modules\ProdukInovasi\app\Http\Controllers\AdminProdukInovasiController;
 */
 
 // ===== Halaman publik (etalase Produk Inovasi & Penelitian) =====
-Route::prefix('produk-inovasi')->group(function () {
+Route::prefix('dproin-polindra')->group(function () {
     Route::get('/', [DashboardController::class, 'index']);
     Route::get('/kontak', [DashboardController::class, 'contact']);
     Route::get('/kelompok-bidang-keahlian/{nama_kbk}', [DashboardController::class, 'penelitian'])->name('dashboard.penelitian');

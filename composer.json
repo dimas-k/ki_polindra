@@ -13,6 +13,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "nwidart/laravel-modules": "10.0",
+        "phpoffice/phpspreadsheet": "^5.9",
         "twbs/bootstrap-icons": "^1.11"
     },
     "require-dev": {

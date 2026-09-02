@@ -5,6 +5,7 @@ namespace Modules\KekayaanIntelektual\app\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\DesainIndustri;
 use App\Models\Prodi;
+use App\Services\KirimKeDashboardService;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -504,5 +505,40 @@ class AdminDesainIndustriController extends Controller
         $di->save($validasidata);
 
         return redirect('/admin/desain-industri')->with('success', 'Data desain industri berhasil di tambahkan');
+    }
+
+    /**
+     * Tampilkan form pilih tujuan (Produk Inovasi / Penelitian) + KBK,
+     * untuk mengirim data desain industri yang sudah selesai ke Dashboard.
+     */
+    public function formKirimKeDashboard(string $id)
+    {
+        $desainIndustri = DesainIndustri::findOrFail($id);
+        $kbk = DB::table('kelompok_keahlians')->get();
+
+        return view('kekayaanintelektual::admin.admindi.kirim-ke-dashboard', compact('desainIndustri', 'kbk'));
+    }
+
+    /**
+     * Proses pengiriman data desain industri ke tabel produks/penelitians.
+     */
+    public function kirimKeDashboard(Request $request, string $id, KirimKeDashboardService $service)
+    {
+        $request->validate([
+            'tujuan' => 'required|in:produk,penelitian',
+            'kbk_id' => 'required|exists:kelompok_keahlians,id',
+        ]);
+
+        $desainIndustri = DesainIndustri::findOrFail($id);
+
+        if ($desainIndustri->dikirim_ke) {
+            return back()->with('error', 'Data ini sudah pernah dikirim ke ' . $desainIndustri->dikirim_ke . '.');
+        }
+
+        $service->kirim('desain_industri', $desainIndustri, $request->tujuan, (int) $request->kbk_id);
+
+        return redirect()
+            ->route('admin_desainindustri.show', $id)
+            ->with('success', 'Data berhasil dikirim ke ' . ucfirst($request->tujuan) . '.');
     }
 }

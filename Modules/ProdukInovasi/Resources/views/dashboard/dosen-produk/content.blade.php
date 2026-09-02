@@ -49,7 +49,7 @@
                             <div class="col-md-4 col-sm-12 mb-4">
                                 <a href="{{ route('detail.produk', $g_produk->nama_produk) }}"
                                     class="link-underline link-underline-opacity-0">
-                                    <img src="{{ asset('storage/' . $g_produk->gambar) }}"
+                                    <img src="{{ $g_produk->gambar ? asset('storage/' . $g_produk->gambar) : asset('assets/gedung.jpg') }}"
                                         alt="gambar produk {{ $g_produk->nama_produk }}"
                                         style="width:100%; height:auto;">
                                 </a>
@@ -107,7 +107,7 @@
                             <div class="col-md-4 col-sm-12 mb-4">
                                 <a href="{{ route('detail.penelitian', $g_penelitian->judul) }}"
                                     class="link-underline link-underline-opacity-0">
-                                    <img src="{{ asset('storage/' . $g_penelitian->gambar) }}"
+                                    <img src="{{ $g_penelitian->gambar ? asset('storage/' . $g_penelitian->gambar) : asset('assets/gedung.jpg') }}"
                                         alt="gambar penelitian {{ $g_penelitian->judul }}"
                                         style="width:100%; height:auto;">
                                 </a>

@@ -181,6 +181,18 @@
                             </tr>
 
                         </table>
+
+                        <div class="mt-3">
+                            @if ($hc->dikirim_ke)
+                                <span class="badge bg-success">
+                                    Sudah dikirim ke {{ ucfirst($hc->dikirim_ke) }}
+                                </span>
+                            @else
+                                <a href="{{ route('admin_hakcipta.form_kirim', $hc->id) }}" class="btn btn-primary btn-sm">
+                                    Kirim ke Dashboard (Produk Inovasi / Penelitian)
+                                </a>
+                            @endif
+                        </div>
                     </div>
                 </div>
 

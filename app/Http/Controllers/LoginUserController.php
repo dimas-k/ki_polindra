@@ -51,7 +51,7 @@ class LoginUserController extends Controller
             } elseif (Auth::user()->role == 'Checker') {
                 return redirect('/verifikator/dashboard');
             } elseif (Auth::user()->role == 'Ketua KBK') {
-                return redirect('/k-kbk/dashboard');
+                return redirect('/ketua-kbk/portal');
             }
         }
         return back()->with('loginError', 'Login Gagal!');

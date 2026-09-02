@@ -163,7 +163,11 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/autentikasi/user', [LoginUserController::class, 'autentikasi'])->name('autentikasi.user');
 });
 
-Route::middleware(['auth', 'role:Dosen'])->group(function () {
+Route::middleware(['auth', 'role:Ketua KBK'])->group(function () {
+    Route::get('/ketua-kbk/portal', [AdminController::class, 'portalKetuaKbk']);
+});
+
+Route::middleware(['auth', 'role:Dosen,Ketua KBK'])->group(function () {
     Route::get('/dosen/dashboard', [DosenController::class, 'index']);
 
     Route::get('/dosen/paten', [DosenController::class, 'paten']);
@@ -182,13 +186,13 @@ Route::middleware(['auth', 'role:Dosen'])->group(function () {
     Route::get('/dosen/hak-cipta/pengajuan', [DosenController::class, 'pengajuanHc']);
     Route::post('/dosen/hak-cipta/pengajuan/simpan', [DosenController::class, 'storeHc']);
 
-    Route::get('/private/dokumen-hc/{filename}', [DosenController::class, 'viewSensitifFilesHc'])->middleware(['auth', 'role:Dosen'])->name('private_hc_dosen');
-    Route::get('/private/dokumen-di/{file}', [DosenController::class, 'viewSensitifFilesDi'])->middleware(['auth', 'role:Dosen'])->name('private_di_dosen');
-    Route::get('/private/dokumen-paten/{filename}', [DosenController::class, 'viewSensitifFilesPaten'])->middleware('auth', 'role:Dosen')->name('private_paten_dosen');
+    Route::get('/private/dokumen-hc/{filename}', [DosenController::class, 'viewSensitifFilesHc'])->middleware(['auth', 'role:Dosen,Ketua KBK'])->name('private_hc_dosen');
+    Route::get('/private/dokumen-di/{file}', [DosenController::class, 'viewSensitifFilesDi'])->middleware(['auth', 'role:Dosen,Ketua KBK'])->name('private_di_dosen');
+    Route::get('/private/dokumen-paten/{filename}', [DosenController::class, 'viewSensitifFilesPaten'])->middleware('auth', 'role:Dosen,Ketua KBK')->name('private_paten_dosen');
 
-    Route::get('/public/dokumen-paten/{filename}', [DosenController::class, 'viewPublicFilesPaten'])->middleware('auth', 'role:Dosen')->name('public_paten_dosen');
-    Route::get('/public/dokumen-di/{filename}', [DosenController::class, 'viewPublicFilesDi'])->middleware('auth', 'role:Dosen')->name('public_di_dosen');
-    Route::get('/public/dokumen-hc/{filename}', [DosenController::class, 'viewPublicFilesHc'])->middleware('auth', 'role:Dosen')->name('public_hc_dosen');
+    Route::get('/public/dokumen-paten/{filename}', [DosenController::class, 'viewPublicFilesPaten'])->middleware('auth', 'role:Dosen,Ketua KBK')->name('public_paten_dosen');
+    Route::get('/public/dokumen-di/{filename}', [DosenController::class, 'viewPublicFilesDi'])->middleware('auth', 'role:Dosen,Ketua KBK')->name('public_di_dosen');
+    Route::get('/public/dokumen-hc/{filename}', [DosenController::class, 'viewPublicFilesHc'])->middleware('auth', 'role:Dosen,Ketua KBK')->name('public_hc_dosen');
 
     Route::get('/hak-cipta/cari', [DosenController::class, 'cariHc']);
     Route::get('/dosen/desain-industri', [DosenController::class, 'desainIndustri']);

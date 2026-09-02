@@ -4,6 +4,7 @@ namespace Modules\KekayaanIntelektual\app\Http\Controllers;
 
 use App\Models\HakCipta;
 use App\Models\Prodi;
+use App\Services\KirimKeDashboardService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -543,5 +544,40 @@ class AdminHaKCiptaController extends Controller
         }
         $hc->save($validasidata);
         return redirect('/admin/hak-cipta')->with('success', 'Data hak cipta berhasil ditambahkan');
+    }
+
+    /**
+     * Tampilkan form pilih tujuan (Produk Inovasi / Penelitian) + KBK,
+     * untuk mengirim data hak cipta yang sudah selesai ke Dashboard.
+     */
+    public function formKirimKeDashboard(string $id)
+    {
+        $hakCipta = HakCipta::findOrFail($id);
+        $kbk = DB::table('kelompok_keahlians')->get();
+
+        return view('kekayaanintelektual::admin.adminhk.kirim-ke-dashboard', compact('hakCipta', 'kbk'));
+    }
+
+    /**
+     * Proses pengiriman data hak cipta ke tabel produks/penelitians.
+     */
+    public function kirimKeDashboard(Request $request, string $id, KirimKeDashboardService $service)
+    {
+        $request->validate([
+            'tujuan' => 'required|in:produk,penelitian',
+            'kbk_id' => 'required|exists:kelompok_keahlians,id',
+        ]);
+
+        $hakCipta = HakCipta::findOrFail($id);
+
+        if ($hakCipta->dikirim_ke) {
+            return back()->with('error', 'Data ini sudah pernah dikirim ke ' . $hakCipta->dikirim_ke . '.');
+        }
+
+        $service->kirim('hak_cipta', $hakCipta, $request->tujuan, (int) $request->kbk_id);
+
+        return redirect()
+            ->route('admin_hakcipta.show', $id)
+            ->with('success', 'Data berhasil dikirim ke ' . ucfirst($request->tujuan) . '.');
     }
 }

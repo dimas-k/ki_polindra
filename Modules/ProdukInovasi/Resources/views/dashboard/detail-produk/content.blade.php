@@ -25,7 +25,7 @@
                     <h6 class="section-title bg-white text-center text-primary px-3"> Produk Kelompok Bidang Keahlian
                     </h6>
                     <h1 class="display-6 mb-5">{{ $produk->nama_produk }}</h1>
-                    <img src="{{ asset('storage/' . $produk->gambar) }}" class=" img-fluid mt-5 mb-3 responsive-img" alt="gambar">
+                    <img src="{{ $produk->gambar ? asset('storage/' . $produk->gambar) : asset('assets/gedung.jpg') }}" class=" img-fluid mt-5 mb-3 responsive-img" alt="gambar">
                 </div>
             </div>
             <!-- Kolom Kiri -->

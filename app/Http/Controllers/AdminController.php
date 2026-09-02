@@ -41,6 +41,10 @@ class AdminController extends Controller
     {
         return view('admin.portal.index');
     }
+    public function portalKetuaKbk()
+    {
+        return view('kkbk.portal.index');
+    }
     public function dashboardAdmin()
     {
         $paten = Paten::all();
