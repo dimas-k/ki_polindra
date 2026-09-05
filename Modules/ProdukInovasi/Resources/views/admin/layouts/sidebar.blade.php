@@ -29,33 +29,20 @@
                 <div class="text-truncate" data-i18n="KBK">Kelompok Bidang Keahlian</div>
             </a>
         </li>
-        <li class="menu-item">
+        {{-- <li class="menu-item">
             <a href="/admin/klasifikasi-ki" class="menu-link {{ Request::is('admin/klasifikasi-ki') ? 'active bg-light' : '' }}">
                 <i class='menu-icon tf-icons bx bx-transfer'></i>
                 <div class="text-truncate" data-i18n="KlasifikasiKI">Klasifikasi Data KI</div>
             </a>
-        </li>
+        </li> --}}
         <!-- Layouts -->
 
         <!-- Front Pages -->
         <li class="menu-item">
-            <a href="#" class="menu-link menu-toggle {{ (Request::is('admin/admin-page') || Request::is('admin/ketua-kbk')) ? 'active bg-light' : '' }}">
+            <a href="/admin/ketua-kbk" class="menu-link {{ Request::is('admin/ketua-kbk') ? 'active bg-light' : '' }}">
                 <i class='menu-icon tf-icons bx bxs-user-circle'></i>
-                <div class="text-truncate" data-i18n="Pengguna">Pengguna</div>
-                
+                <div class="text-truncate" data-i18n="KetuaKBK">Ketua KBK</div>
             </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="/admin/admin-page" class="menu-link {{ Request::is('admin/admin-page') ? 'active bg-light' : '' }}">
-                        <div class="text-truncate" data-i18n="Admin">Admin</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="/admin/ketua-kbk" class="menu-link {{ Request::is('admin/ketua-kbk') ? 'active bg-light' : '' }}">
-                        <div class="text-truncate" data-i18n="KetuaKBK">Ketua KBK</div>
-                    </a>
-                </li>
-            </ul>
         </li>
 
         <li class="menu-item">
@@ -91,7 +78,3 @@
         <!-- Apps & Pages -->
     </ul>
 </aside>
-
-
-
-

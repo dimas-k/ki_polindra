@@ -64,9 +64,9 @@
                                 <div class="row">
                                     <div class="col mb-6">
                                         <label for="nameBasic" class="form-label">No Handphone</label>
-                                        <input type="number" id="no_hp" class="form-control"
-                                            placeholder="Masukkan no hanphone" name="no_hp" />
-                                        @error('no_hp')
+                                        <input type="number" id="no_telepon" class="form-control"
+                                            placeholder="Masukkan no telepon" name="no_telepon" />
+                                        @error('no_telepon')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>
@@ -273,9 +273,9 @@
                                             <div class="row">
                                                 <div class="col mb-6">
                                                     <label for="nameBasic" class="form-label">No Handphone</label>
-                                                    <input type="number" id="no_hp_{{ $k->id }}" class="form-control"
-                                                        value="{{ $k->no_hp }}" name="no_hp" />
-                                                    @error('no_hp')
+                                                    <input type="number" id="no_telepon_{{ $k->id }}" class="form-control"
+                                                        value="{{ $k->no_telepon }}" name="no_telepon" />
+                                                    @error('no_telepon')
                                                         <div class="invalid-feedback">
                                                             {{ $message }}
                                                         </div>
