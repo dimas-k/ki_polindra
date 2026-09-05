@@ -73,6 +73,7 @@
 
     <!-- Template Stylesheet -->
     <link rel="stylesheet" href={{ asset('css/dashboard.css') }}>
+    <link rel="stylesheet" href={{ asset('css/dashboard-polindra-theme.css') }}>
     <link rel="icon" type="image/x-icon" href="{{ asset('assets-admin/img/logo-polindra.png') }}" />
 
     <title>Dashboard Produk Inovasi dan Penelitian || Katalog Penelitian</title>
