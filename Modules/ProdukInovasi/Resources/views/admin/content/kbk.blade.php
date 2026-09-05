@@ -27,9 +27,13 @@
                                 </div>
                                 <div class="row">
                                     <div class="col mb-6">
-                                        <label for="nameBasic" class="form-label">Jurusan</label>
-                                        <input type="text" id="jurusan" class="form-control"
-                                            placeholder="Masukkan jurusan" name="jurusan" />
+                                        <label for="jurusan" class="form-label">Jurusan</label>
+                                        <select id="jurusan" class="form-select" name="jurusan">
+                                            <option value="" selected disabled>-- Pilih Jurusan --</option>
+                                            @foreach ($jurusanList as $j)
+                                                <option value="{{ $j->nama_jurusan }}">{{ $j->nama_jurusan }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -111,9 +115,17 @@
                                                         </div>
                                                         <div class="form-outline form-white mb-3">
                                                             <label class="form-label" for="">Jurusan</label>
-                                                            <input type="text" id="jurusan_{{ $k->id }}"
-                                                                class="form-control" name="jurusan"
-                                                                value="{{ $k->jurusan }}">
+                                                            <select id="jurusan_{{ $k->id }}" class="form-select"
+                                                                name="jurusan">
+                                                                <option value="" disabled
+                                                                    {{ $k->jurusan ? '' : 'selected' }}>-- Pilih
+                                                                    Jurusan --</option>
+                                                                @foreach ($jurusanList as $j)
+                                                                    <option value="{{ $j->nama_jurusan }}"
+                                                                        {{ $k->jurusan === $j->nama_jurusan ? 'selected' : '' }}>
+                                                                        {{ $j->nama_jurusan }}</option>
+                                                                @endforeach
+                                                            </select>
                                                         </div>
                                                         <div class="form-outline form-white mb-3">
                                                             <label for="deskripsi"

@@ -26,6 +26,10 @@
             <div class="col-md-6">
                 <div class="resume-item mb-4 shadow">
                     <strong>Deskripsi {{ $kkbk->nama_kbk }}</strong><br>
+                    {{-- Aman: nilai $kkbk->deskripsi sudah disanitasi (strip_tags +
+                         penghapusan atribut event handler) saat disimpan di
+                         KelompokBidangController@storeKelompokKeahlian / @update,
+                         sehingga aman ditampilkan sebagai HTML mentah di sini. --}}
                     <p>{!! $kkbk->deskripsi ?? '' !!}</p>
                     <br>
                     <strong>Anggota {{ $kkbk->nama_kbk }}</strong><br>

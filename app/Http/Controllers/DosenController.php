@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 
 
 class DosenController extends Controller
@@ -279,17 +280,34 @@ class DosenController extends Controller
     {
         $di = DesainIndustri::with('cekDi')->find($id);
 
+        // Cegah dosen/ketua KBK melihat desain industri milik user lain (IDOR)
+        if (!$di || $di->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses ke data desain industri ini.');
+        }
 
         return view('dosen.desainindustri.lihat.index', compact('di'));
     }
     public function hapusPaten(string $id)
     {
-        Paten::findOrFail($id)->delete();
+        $paten = Paten::findOrFail($id);
+
+        // Cegah dosen/ketua KBK menghapus paten milik user lain (IDOR)
+        if ($paten->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses untuk menghapus data paten ini.');
+        }
+
+        $paten->delete();
         return redirect()->back();
     }
     public function lihatPaten(string $id)
     {
         $paten = Paten::with('cek')->find($id);
+
+        // Cegah dosen/ketua KBK melihat paten milik user lain (IDOR)
+        if (!$paten || $paten->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses ke data paten ini.');
+        }
+
         return view('dosen.paten.lihat.index', compact('paten'));
     }
 
@@ -349,6 +367,11 @@ class DosenController extends Controller
     public function editPaten(string $id)
     {
         $p = Paten::find($id);
+
+        // Cegah dosen/ketua KBK membuka form edit paten milik user lain (IDOR)
+        if (!$p || $p->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses untuk mengedit data paten ini.');
+        }
 
         return view('dosen.paten.edit.index', compact('p'));
     }
@@ -587,6 +610,11 @@ class DosenController extends Controller
         // Temukan data Paten yang akan diupdate
         $paten = Paten::findOrFail($id);
 
+        // Cegah dosen/ketua KBK mengubah paten milik user lain (IDOR)
+        if ($paten->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses untuk mengubah data paten ini.');
+        }
+
         // Update field yang tidak terkait file
         $paten->nama_lengkap         = $request->nama_lengkap;
         $paten->alamat               = $request->alamat;
@@ -651,11 +679,22 @@ class DosenController extends Controller
     {
         $hc = HakCipta::with('cekhc')->find($id);
 
+        // Cegah dosen/ketua KBK melihat hak cipta milik user lain (IDOR)
+        if (!$hc || $hc->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses ke data hak cipta ini.');
+        }
+
         return view('dosen.hakcipta.lihat.index', compact('hc'));
     }
     public function editHc(string $id)
     {
         $hc = HakCipta::find($id);
+
+        // Cegah dosen/ketua KBK membuka form edit hak cipta milik user lain (IDOR)
+        if (!$hc || $hc->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses untuk mengedit data hak cipta ini.');
+        }
+
         return view('dosen.hakcipta.edit.index', compact('hc'));
     }
 
@@ -685,6 +724,12 @@ class DosenController extends Controller
 
         try {
             $hc = HakCipta::findOrFail($id);
+
+            // Cegah dosen/ketua KBK mengubah hak cipta milik user lain (IDOR)
+            if ($hc->user_id !== Auth::id()) {
+                abort(403, 'Anda tidak memiliki akses untuk mengubah data hak cipta ini.');
+            }
+
             $hc->nama_lengkap = $request->nama_lengkap;
             $hc->alamat = $request->alamat;
             $hc->no_telepon = $request->no_telepon;
@@ -937,6 +982,12 @@ class DosenController extends Controller
     public function editDi(string $id)
     {
         $di = DesainIndustri::find($id);
+
+        // Cegah dosen/ketua KBK membuka form edit desain industri milik user lain (IDOR)
+        if (!$di || $di->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses untuk mengedit data desain industri ini.');
+        }
+
         return view('dosen.desainindustri.edit.index', compact('di'));
     }
 
@@ -968,7 +1019,13 @@ class DosenController extends Controller
         try {
             $di = DesainIndustri::findOrFail($id);
 
-            $di->user_id = Auth::user()->id;
+            // Cegah dosen/ketua KBK mengubah desain industri milik user lain (IDOR).
+            // Sekaligus mencegah "pembajakan kepemilikan" karena baris ini
+            // sebelumnya menimpa user_id dengan user yang sedang login.
+            if ($di->user_id !== Auth::id()) {
+                abort(403, 'Anda tidak memiliki akses untuk mengubah data desain industri ini.');
+            }
+
             $di->nama_lengkap = $request->nama_lengkap;
             $di->alamat = $request->alamat;
             $di->no_telepon = $request->no_telepon;
@@ -1122,25 +1179,44 @@ class DosenController extends Controller
     }
     public function editProfil(string $id)
     {
-        $user = User::find($id);
-        // dd($user->ktp);
+        // Paksa hanya boleh membuka form profil sendiri (IDOR)
+        if ((int) $id !== (int) Auth::id()) {
+            abort(403, 'Anda hanya dapat mengedit profil Anda sendiri.');
+        }
+
+        $user = User::find(Auth::id());
 
         return view('dosen.profil.edit.index', compact('user'));
     }
     public function updateProfil(Request $request, string $id)
     {
+        // PENTING: paksa update ke akun yang sedang login (Auth::id()),
+        // jangan pakai $id dari URL. Kalau tidak, Dosen/Ketua KBK bisa
+        // mengedit profil user lain hanya dengan mengganti angka ID
+        // di URL (IDOR).
+        if ((int) $id !== (int) Auth::id()) {
+            abort(403, 'Anda hanya dapat mengubah profil Anda sendiri.');
+        }
+
         $validasidata = $request->validate([
             'email' => 'required|email',
             'username' => 'required|min:3',
+            'password' => 'nullable|string|min:6|confirmed',
         ]);
-        $user = User::find($id);
+        $user = User::find(Auth::id());
         $user->nama_lengkap = $request->nama_lengkap;
         $user->no_telepon = $request->no_telepon;
         $user->email = $request->email;
         $user->alamat = $request->alamat;
         $user->nip = $request->nip;
         $user->username = $request->username;
-        $user->password = $request->password;
+
+        // Hanya update password kalau diisi, dan WAJIB di-hash.
+        // Sebelumnya password disimpan mentah (plaintext) tanpa Hash::make().
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
         $user->save($validasidata);
         return redirect('/dosen/user/lihat/')->with('success', 'Data berhasil Diupdate!');
     }

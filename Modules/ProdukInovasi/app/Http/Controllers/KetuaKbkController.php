@@ -74,27 +74,37 @@ class KetuaKbkController extends Controller
     public function storeAnggota(Request $request)
     {
         try {
+            // Paksa kbk_id dari KBK milik user yang sedang login.
+            // JANGAN percaya kbk_id yang dikirim client, supaya Ketua KBK
+            // tidak bisa menambahkan anggota ke KBK milik ketua lain (IDOR).
+            $kbkId = Auth::user()->kelompokKeahlian->id ?? null;
+
+            if (!$kbkId) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Akun Anda tidak terhubung ke KBK manapun.'
+                ], 403);
+            }
+
             $request->validate(
                 [
                     'nama_lengkap' => 'required|string|max:255',
                     'jabatan' => 'required|string|max:255',
-                    'kbk_id' => 'required|exists:kelompok_keahlians,id',
                     'email' => 'required|email',
                 ],
                 [
                     'nama_lengkap.required' => 'Nama Lengkap anggota harus diisi',
                     'jabatan.required' => 'Jabatan anggota harus diisi',
-                    'kbk_id.required' => 'KBK harus diisi',
                     'email.required' => 'Email harus diisi',
                     'email.email' => 'Masukkan email yang valid'
                 ]
             );
 
             // Cek apakah nama dan email sudah ada dalam KBK yang sama
-            $exist_nama = AnggotaKelompokKeahlian::where('kbk_id', $request->input('kbk_id'))
+            $exist_nama = AnggotaKelompokKeahlian::where('kbk_id', $kbkId)
                 ->where('nama_lengkap', $request->input('nama_lengkap'))
                 ->exists();
-            $exist_email = AnggotaKelompokKeahlian::where('kbk_id', $request->input('kbk_id'))
+            $exist_email = AnggotaKelompokKeahlian::where('kbk_id', $kbkId)
                 ->where('email', $request->input('email'))
                 ->exists();
 
@@ -113,7 +123,7 @@ class KetuaKbkController extends Controller
 
             // Jika tidak ada, simpan data anggota baru
             $anggota = new AnggotaKelompokKeahlian();
-            $anggota->kbk_id = $request->input('kbk_id');
+            $anggota->kbk_id = $kbkId;
             $anggota->nama_lengkap = $request->input('nama_lengkap');
             $anggota->jabatan = $request->input('jabatan');
             $anggota->email = $request->input('email');
@@ -148,7 +158,17 @@ class KetuaKbkController extends Controller
                 ]
             );
 
+            $kbkId = Auth::user()->kelompokKeahlian->id ?? null;
             $anggota = AnggotaKelompokKeahlian::findOrFail($id);
+
+            // Cegah Ketua KBK mengubah anggota milik KBK lain (IDOR)
+            if (!$kbkId || $anggota->kbk_id != $kbkId) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Anda tidak memiliki akses untuk mengubah anggota KBK ini.'
+                ], 403);
+            }
+
             $anggota->nama_lengkap = $request->input('nama_lengkap');
             $anggota->jabatan = $request->input('jabatan');
             $anggota->email = $request->input('email');
@@ -167,7 +187,14 @@ class KetuaKbkController extends Controller
 
     public function hapusAnggota($id)
     {
+        $kbkId = Auth::user()->kelompokKeahlian->id ?? null;
         $anggota = AnggotaKelompokKeahlian::findOrFail($id);
+
+        // Cegah Ketua KBK menghapus anggota milik KBK lain (IDOR)
+        if (!$kbkId || $anggota->kbk_id != $kbkId) {
+            return redirect('/k-kbk/anggota-kbk')->with('error', 'Anda tidak memiliki akses untuk menghapus anggota KBK ini.');
+        }
+
         $anggota->delete();
 
         return redirect('/k-kbk/anggota-kbk')->with('success', 'Data anggota berhasil dihapus!');
@@ -204,7 +231,7 @@ class KetuaKbkController extends Controller
                 'users.nama_lengkap',
                 'kelompok_keahlians.nama_kbk as nama_kbk'
             )
-            ->where('users.role', '=', 'ketua_kbk')
+            ->where('users.role', '=', 'Ketua KBK')
             ->get();
 
 
@@ -229,14 +256,19 @@ class KetuaKbkController extends Controller
     public function showProduk($id)
     {
         try {
+            $kbkId = Auth::user()->kelompokKeahlian->id ?? null;
+
             $produk = Produk::with([
                 'kelompokKeahlian',
                 'anggota.detail' => function ($query) {
                     // Tambahkan pengecekan atau kustomisasi jika diperlukan
                 }
             ])->findOrFail($id);
-            // dd($produk);
 
+            // Cegah Ketua KBK melihat produk milik KBK lain (IDOR)
+            if (!$kbkId || $produk->kbk_id != $kbkId) {
+                abort(403, 'Anda tidak memiliki akses ke produk ini.');
+            }
 
             return view('produkinovasi::k_kbk.produk.show.index', compact('produk'));
         } catch (\Exception $e) {
@@ -250,11 +282,20 @@ class KetuaKbkController extends Controller
     {
         // dd($request);
         try {
+            // Paksa kbk_id dari KBK milik user yang login, jangan percaya
+            // kbk_id kiriman client (IDOR: bisa buat produk atas nama KBK lain).
+            $kbkId = Auth::user()->kelompokKeahlian->id ?? null;
+            if (!$kbkId) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Akun Anda tidak terhubung ke KBK manapun.'
+                ], 403);
+            }
+
             // Validasi input
             $request->validate([
                 'nama_produk' => 'required|string|max:255',
                 'deskripsi' => 'required|string',
-                'kbk_id' => 'required|exists:kelompok_keahlians,id',
                 'inventor' => 'nullable|string|max:255',
                 'inventor_lainnya' => 'nullable|string|max:255',
                 'anggota_inventor' => 'array',
@@ -268,7 +309,7 @@ class KetuaKbkController extends Controller
             ]);
             DB::beginTransaction();
             $produk = new Produk();
-            $produk->kbk_id = $request->kbk_id;
+            $produk->kbk_id = $kbkId;
             $produk->nama_produk = $request->nama_produk;
             $produk->deskripsi = $request->deskripsi;
             $produk->inventor = $request->inventor;
@@ -347,10 +388,18 @@ class KetuaKbkController extends Controller
         ]);
 
         try {
+            $kbkId = Auth::user()->kelompokKeahlian->id ?? null;
+
             DB::beginTransaction();
 
             // Ambil data produk berdasarkan ID
             $produk = Produk::findOrFail($id);
+
+            // Cegah Ketua KBK mengubah produk milik KBK lain (IDOR)
+            if (!$kbkId || $produk->kbk_id != $kbkId) {
+                DB::rollBack();
+                abort(403, 'Anda tidak memiliki akses untuk mengubah produk ini.');
+            }
 
             // Update data produk
             $produk->nama_produk = $request->nama_produk;
@@ -429,7 +478,14 @@ class KetuaKbkController extends Controller
 
     public function hapusProduk($id)
     {
+        $kbkId = Auth::user()->kelompokKeahlian->id ?? null;
         $produk = Produk::findOrFail($id);
+
+        // Cegah Ketua KBK menghapus produk milik KBK lain (IDOR)
+        if (!$kbkId || $produk->kbk_id != $kbkId) {
+            return redirect('/k-kbk/produk')->with('error', 'Anda tidak memiliki akses untuk menghapus produk ini.');
+        }
+
         // Hapus gambar jika ada
         if ($produk->gambar && Storage::exists($produk->gambar)) {
             Storage::delete($produk->gambar);
@@ -465,7 +521,7 @@ class KetuaKbkController extends Controller
         $penelitian = Penelitian::with(['kelompokKeahlian', 'anggotaPenelitian.detailAnggota'])->find($userId);
         $penulisU = DB::table('users')
             ->select('id', 'nama_lengkap', 'jabatan')
-            ->where('role', '=', 'ketua_kbk')
+            ->where('role', '=', 'Ketua KBK')
             ->get();
 
         $penulisK = DB::table('anggota_kelompok_keahlians')
@@ -486,8 +542,13 @@ class KetuaKbkController extends Controller
 
     public function showPenelitian($id)
     {
+        $kbkId = Auth::user()->kelompokKeahlian->id ?? null;
         $penelitian = Penelitian::with(['kelompokKeahlian', 'anggotaPenelitian.detailAnggota'])->findOrFail($id);
-        // dd($penelitian->anggotaPenelitian);
+
+        // Cegah Ketua KBK melihat penelitian milik KBK lain (IDOR)
+        if (!$kbkId || $penelitian->kbk_id != $kbkId) {
+            abort(403, 'Anda tidak memiliki akses ke penelitian ini.');
+        }
 
         return view('produkinovasi::k_kbk.penelitian.show.index', compact('penelitian'));
     }
@@ -496,12 +557,20 @@ class KetuaKbkController extends Controller
     public function storePenelitian(Request $request)
     {
         try {
+            // Paksa kbk_id dari KBK milik user yang login, jangan percaya
+            // kbk_id kiriman client (IDOR: bisa buat penelitian atas nama KBK lain).
+            $kbkId = Auth::user()->kelompokKeahlian->id ?? null;
+            if (!$kbkId) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Akun Anda tidak terhubung ke KBK manapun.'
+                ], 403);
+            }
 
             // Validasi input
             $validatedData = $request->validate([
                 'judul' => 'required|string|max:255',
                 'abstrak' => 'required|string|max:5000',
-                'kbk_id' => 'required|integer|exists:kelompok_keahlians,id',
                 'penulis' => 'nullable|string|max:255',
                 'penulis_lainnya' => 'nullable|string|max:255',
                 'email_penulis' => 'required|email|max:255',
@@ -529,7 +598,7 @@ class KetuaKbkController extends Controller
 
             // Simpan data penelitian
             $penelitian = new Penelitian();
-            $penelitian->kbk_id = $request->kbk_id;
+            $penelitian->kbk_id = $kbkId;
             $penelitian->judul = $request->judul;
             $penelitian->abstrak = $request->abstrak;
             $penelitian->penulis = $request->penulis;
@@ -715,7 +784,13 @@ class KetuaKbkController extends Controller
                 'penulis_korespondensi_lainnya.required_without' => 'Silakan pilih penulis korespondensi atau isi manual.',
             ]);
 
+            $kbkId = Auth::user()->kelompokKeahlian->id ?? null;
             $penelitian = Penelitian::findOrFail($id);
+
+            // Cegah Ketua KBK mengubah penelitian milik KBK lain (IDOR)
+            if (!$kbkId || $penelitian->kbk_id != $kbkId) {
+                abort(403, 'Anda tidak memiliki akses untuk mengubah penelitian ini.');
+            }
 
             // Update data utama
             $penelitian->judul = $request->judul;
@@ -793,7 +868,13 @@ class KetuaKbkController extends Controller
 
     public function hapusPenelitian($id)
     {
+        $kbkId = Auth::user()->kelompokKeahlian->id ?? null;
         $penelitian = Penelitian::findOrFail($id);
+
+        // Cegah Ketua KBK menghapus penelitian milik KBK lain (IDOR)
+        if (!$kbkId || $penelitian->kbk_id != $kbkId) {
+            return redirect('/k-kbk/penelitian')->with('error', 'Anda tidak memiliki akses untuk menghapus penelitian ini.');
+        }
 
         if ($penelitian->gambar && Storage::exists($penelitian->gambar)) {
             Storage::delete($penelitian->gambar);
@@ -832,7 +913,14 @@ class KetuaKbkController extends Controller
             'password_last' => 'required|string', // Validasi password terakhir
         ]);
 
-        $user = User::find($id);
+        // PENTING: paksa update ke akun yang sedang login (Auth::id()),
+        // jangan pakai $id dari URL. Kalau tidak, Ketua KBK bisa mengedit
+        // profil user lain hanya dengan mengganti angka ID di URL (IDOR).
+        if ((int) $id !== (int) Auth::id()) {
+            abort(403, 'Anda hanya dapat mengubah profil Anda sendiri.');
+        }
+
+        $user = User::find(Auth::id());
 
         // Cek apakah password terakhir yang dimasukkan sesuai
         if (!Hash::check($request->password_last, $user->password)) {
@@ -888,12 +976,19 @@ class KetuaKbkController extends Controller
 
     public function prosesUbahPassword(Request $request, $id)
     {
+        // PENTING: paksa ganti password akun yang sedang login (Auth::id()),
+        // jangan pakai $id dari URL, supaya Ketua KBK tidak bisa mengganti
+        // password akun lain (IDOR / account takeover).
+        if ((int) $id !== (int) Auth::id()) {
+            abort(403, 'Anda hanya dapat mengubah password Anda sendiri.');
+        }
+
         $request->validate([
             'password_lama' => 'required|string',
             'password_baru' => 'required|string|min:5|confirmed', // Pastikan ada konfirmasi
         ]);
 
-        $user = User::find($id);
+        $user = User::find(Auth::id());
 
         // Cek apakah password lama sesuai
         if (!Hash::check($request->password_lama, $user->password)) {
