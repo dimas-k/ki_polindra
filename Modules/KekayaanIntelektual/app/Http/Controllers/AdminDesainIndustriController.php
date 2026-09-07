@@ -532,13 +532,13 @@ class AdminDesainIndustriController extends Controller
         $desainIndustri = DesainIndustri::findOrFail($id);
 
         if ($desainIndustri->dikirim_ke) {
-            return back()->with('error', 'Data ini sudah pernah dikirim ke ' . $desainIndustri->dikirim_ke . '.');
+            return back()->with('kirim_error', 'Data ini sudah pernah dikirim ke ' . $desainIndustri->dikirim_ke . '.');
         }
 
         $service->kirim('desain_industri', $desainIndustri, $request->tujuan, (int) $request->kbk_id);
 
         return redirect()
             ->route('admin_desainindustri.show', $id)
-            ->with('success', 'Data berhasil dikirim ke ' . ucfirst($request->tujuan) . '.');
+            ->with('kirim_success', 'Data berhasil dikirim ke ' . ucfirst($request->tujuan) . '.');
     }
 }

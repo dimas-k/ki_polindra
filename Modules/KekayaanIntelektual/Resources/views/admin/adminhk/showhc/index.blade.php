@@ -56,6 +56,20 @@
                     <h3 class="fw-normal font-family-Kokoro mb-3"><i class="bi bi-person me-3"></i>Data hak cipta
                         {{ $hc->nama_lengkap }}
                     </h3>
+
+                    @if (session()->has('kirim_success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('kirim_success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                    @if (session()->has('kirim_error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('kirim_error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
                     <div class="table-responsive p-3">
                         <table class="table table-borderless rounded">
 

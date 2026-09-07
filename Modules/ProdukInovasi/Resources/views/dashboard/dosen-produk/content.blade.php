@@ -14,11 +14,11 @@
         </h1>
         <nav aria-label="breadcrumb animated slideInDown">
             <ol class="breadcrumb justify-content-center mb-0">
-                <li class="breadcrumb-item"><a class="text-white" href="/">Home</a></li>
+                <li class="breadcrumb-item"><a class="text-white" href="/dproin-polindra">Home</a></li>
                 <li class="breadcrumb-item text-primary active" aria-current="page">
                     Produk dan Penelitian
                     @if ($anggota_kbk ?? $anggota_user)
-                        {{ $anggota_kbk ?? $anggota_user->nama_lengkap }}
+                        {{ $anggota_kbk->nama_lengkap ?? $anggota_user->nama_lengkap }}
                     @elseif ($p_dosen && $p_dosen->isNotEmpty())
                         {{ $dosen }}
                     @elseif ($plt_dosen && $plt_dosen->isNotEmpty())

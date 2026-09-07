@@ -772,13 +772,13 @@ class AdminPatenController extends Controller
         $paten = Paten::findOrFail($id);
 
         if ($paten->dikirim_ke) {
-            return back()->with('error', 'Data ini sudah pernah dikirim ke ' . $paten->dikirim_ke . '.');
+            return back()->with('kirim_error', 'Data ini sudah pernah dikirim ke ' . $paten->dikirim_ke . '.');
         }
 
         $service->kirim('paten', $paten, $request->tujuan, (int) $request->kbk_id);
 
         return redirect()
             ->route('admin_paten.show', $id)
-            ->with('success', 'Data berhasil dikirim ke ' . ucfirst($request->tujuan) . '.');
+            ->with('kirim_success', 'Data berhasil dikirim ke ' . ucfirst($request->tujuan) . '.');
     }
 }

@@ -129,6 +129,11 @@
                     <h6 class="footer-title text-uppercase fw-bold mb-4 text-dark">Link Terkait</h6>
                     <ul class="list-unstyled">
                         <li class="mb-3">
+                            <a href="/dproin-polindra" class="footer-link text-muted text-decoration-none">
+                                <i class="bi bi-arrow-right-short me-1"></i>Dashboard Produk Inovasi & Penelitian POLINDRA
+                            </a>
+                        </li>
+                        <li class="mb-3">
                             <a href="https://p3m.polindra.ac.id/" class="footer-link text-muted text-decoration-none"
                                 target="_blank" rel="noopener">
                                 <i class="bi bi-arrow-right-short me-1"></i>P3M POLINDRA

@@ -4,7 +4,7 @@
         <h1 class="display-4 text-white animated slideInDown mb-3">Kelompok Bidang Keahlian</h1>
         <nav aria-label="breadcrumb animated slideInDown">
             <ol class="breadcrumb justify-content-center mb-0">
-                <li class="breadcrumb-item"><a class="text-white" href="/">Home</a></li>
+                <li class="breadcrumb-item"><a class="text-white" href="/dproin-polindra">Home</a></li>
                 <li class="breadcrumb-item text-primary active" aria-current="page">{{ $kkbk->nama_kbk }}</li>
             </ol>
         </nav>

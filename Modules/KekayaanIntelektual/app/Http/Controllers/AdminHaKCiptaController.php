@@ -571,13 +571,13 @@ class AdminHaKCiptaController extends Controller
         $hakCipta = HakCipta::findOrFail($id);
 
         if ($hakCipta->dikirim_ke) {
-            return back()->with('error', 'Data ini sudah pernah dikirim ke ' . $hakCipta->dikirim_ke . '.');
+            return back()->with('kirim_error', 'Data ini sudah pernah dikirim ke ' . $hakCipta->dikirim_ke . '.');
         }
 
         $service->kirim('hak_cipta', $hakCipta, $request->tujuan, (int) $request->kbk_id);
 
         return redirect()
             ->route('admin_hakcipta.show', $id)
-            ->with('success', 'Data berhasil dikirim ke ' . ucfirst($request->tujuan) . '.');
+            ->with('kirim_success', 'Data berhasil dikirim ke ' . ucfirst($request->tujuan) . '.');
     }
 }
