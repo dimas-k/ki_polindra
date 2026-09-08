@@ -6,11 +6,12 @@ use App\Models\Paten;
 use App\Models\HakCipta;
 use Illuminate\Http\Request;
 use App\Models\DesainIndustri;
+use App\Models\Jurusan;
 use Illuminate\Routing\Controller;
 
 class HakCiptaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $itung = HakCipta::all()->count();
         $tercatat = HakCipta::where('status', 'Tercatat')->count();
@@ -23,13 +24,22 @@ class HakCiptaController extends Controller
         $hcKet = HakCipta::where('status', 'Keterangan belum lengkap')->count();
         $mvdov = HakCipta::where('status', 'Menunggu Verifikasi Data Oleh Verifikator')->count();
 
+        // Daftar jurusan untuk filter diagram Jumlah Hak Cipta per Jurusan.
+        // Default (tanpa pilihan) tetap menampilkan data seluruh jurusan seperti semula.
+        $jurusanList = Jurusan::orderBy('nama_jurusan')->get();
+        $jurusanId = $request->get('jurusan');
+        $jurusanTerpilih = $jurusanId ? Jurusan::find($jurusanId) : null;
+
         $data = HakCipta::selectRaw('YEAR(tanggal_permohonan) as tahun, COUNT(*) as jumlah')
+            ->when($jurusanTerpilih, function ($query) use ($jurusanTerpilih) {
+                $query->whereRaw('LOWER(TRIM(jurusan)) = ?', [strtolower(trim($jurusanTerpilih->nama_jurusan))]);
+            })
             ->groupByRaw('YEAR(tanggal_permohonan)')
             ->orderByRaw('YEAR(tanggal_permohonan) ASC')
             ->get();
 
 
-        $allYears = range($data->min('tahun'), $data->max('tahun'));
+        $allYears = $data->isNotEmpty() ? range($data->min('tahun'), $data->max('tahun')) : [];
 
         $formattedData = collect($allYears)->map(function ($year) use ($data) {
             return [
@@ -42,7 +52,7 @@ class HakCiptaController extends Controller
         $jumlah = $formattedData->pluck('jumlah')->toArray();
 
 
-        return view('umum-page.Hakcipta.index', compact('hc', 'tercatat', 'null', 'tolak', 'itung', 'hcTolak', 'hcTerima', 'hcKet', 'tahun','jumlah', 'mvdov'));
+        return view('umum-page.Hakcipta.index', compact('hc', 'tercatat', 'null', 'tolak', 'itung', 'hcTolak', 'hcTerima', 'hcKet', 'tahun','jumlah', 'mvdov', 'jurusanList', 'jurusanTerpilih'));
     }
     public function cari(Request $request)
     {

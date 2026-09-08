@@ -6,33 +6,155 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="shortcut icon" href="{{ asset('assets/polindra21.png') }}">
-    <link rel="stylesheet" href="{{ asset('assets-login-user/login.css') }}">
-    <title>SIKI POLINDRA || Login</title>
+    <title>SIKI POLINDRA || Lupa Password</title>
     <style>
+        :root {
+            --polindra-navy: #002a57;
+            --polindra-blue: #003d7a;
+            --polindra-blue-light: #0066cc;
+            --polindra-line: #dde5ee;
+        }
+
+        html,
         body {
-            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .auth-wrap {
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
         }
-        .card {
-            border-radius: 1rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+        .auth-side {
+            background-color: var(--polindra-navy);
+            color: #fff;
+            width: 42%;
+            padding: 48px 44px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .auth-side-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .auth-side-brand img {
+            height: 42px;
+            width: 42px;
+        }
+
+        .auth-side-brand span {
+            font-size: 0.85rem;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .auth-side h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            line-height: 1.4;
+            margin: 40px 0 14px;
+        }
+
+        .auth-side p {
+            font-size: 0.9rem;
+            line-height: 1.75;
+            color: #b9c9dd;
+            max-width: 340px;
+        }
+
+        .auth-side-foot {
+            font-size: 0.78rem;
+            color: #8098b8;
+        }
+
+        @media (max-width: 900px) {
+            .auth-side {
+                display: none;
+            }
+        }
+
+        .auth-form-panel {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            background-color: #fff;
+        }
+
+        .auth-form-box {
+            width: 100%;
+            max-width: 380px;
+        }
+
+        .auth-form-box h4 {
+            font-weight: 700;
+            color: var(--polindra-navy);
+            margin-bottom: 4px;
+        }
+
+        .auth-form-box .subtitle {
+            font-size: 0.88rem;
+            color: #6c7a89;
+            margin-bottom: 24px;
+        }
+
+        .form-control {
+            border-color: var(--polindra-line);
+            font-size: 0.9rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--polindra-blue-light);
+            box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.15);
+        }
+
+        .btn-primary {
+            background-color: var(--polindra-blue);
+            border-color: var(--polindra-blue);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--polindra-navy);
+            border-color: var(--polindra-navy);
         }
     </style>
 </head>
 <body>
-    <div class="container text-center mt-4">
-        <img class="navbar-brand" src="{{ asset('assets/logo-polindra.png') }}" style="height: 50px;">
-        <h5 class="text-white mt-2">Sistem Informasi Kekayaan Intelektual <br> Politeknik Negeri Indramayu</h5>
-    </div>
-    <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-        <div class="col-12 col-md-8 col-lg-5">
-            <div class="card bg-light p-4">
-                <h4 class="text-center">Lupa Password</h4>
-                <p class="text-center text-muted">Kami akan mengirimkan email ke alamat yang Anda daftarkan.</p>
+    <div class="auth-wrap">
+        <div class="auth-side">
+            <div class="auth-side-brand">
+                <img src="{{ asset('assets/logo-polindra.png') }}" alt="Logo Polindra">
+                <span>Sistem Informasi<br>Kekayaan Intelektual</span>
+            </div>
+            <div>
+                <h1>Lupa Password?</h1>
+                <p>
+                    Jangan khawatir. Masukkan email yang terdaftar dan kami akan mengirimkan tautan untuk mengatur
+                    ulang password Anda.
+                </p>
+            </div>
+            <div class="auth-side-foot">
+                &copy; {{ date('Y') }} Politeknik Negeri Indramayu
+            </div>
+        </div>
+
+        <div class="auth-form-panel">
+            <div class="auth-form-box">
+                <h4>Lupa Password</h4>
+                <p class="subtitle">Kami akan mengirimkan email ke alamat yang Anda daftarkan.</p>
+
                 @if($errors->any())
                     @foreach($errors->all() as $error)
                         <div class="alert alert-danger">{{ $error }}</div>
@@ -44,17 +166,21 @@
                 @if(session()->has('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
+
                 <form action="{{ route('forget.password.post') }}" method="POST">
                     @csrf
                     <div class="mb-3">
                         <label class="form-label">Alamat Email</label>
-                        <input type="email" class="form-control" name="email" placeholder="Masukkan email yang terdaftar" required>
+                        <input type="email" class="form-control" name="email"
+                            placeholder="Masukkan email yang terdaftar" required>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Kirim</button>
                 </form>
+                <p class="text-center mt-3"><a href="/login" class="fw-bold">Kembali ke Login</a></p>
             </div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

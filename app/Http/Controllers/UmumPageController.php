@@ -6,10 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Paten;
 use App\Models\HakCipta;
 use App\Models\DesainIndustri;
+use App\Models\Jurusan;
 
 class UmumPageController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $paten = Paten::all()->count();
         $di = DesainIndustri::all()->count();
@@ -19,13 +20,27 @@ class UmumPageController extends Controller
         $contohDi = DesainIndustri::where('status', 'Diberi')->count();
         $contohHc = HakCipta::where('status', 'Tercatat')->count();
 
+        // Daftar jurusan untuk filter diagram Kekayaan Intelektual per Jurusan.
+        // Default (tanpa pilihan) tetap menampilkan data seluruh jurusan seperti semula.
+        $jurusanList = Jurusan::orderBy('nama_jurusan')->get();
+        $jurusanId = $request->get('jurusan');
+        $jurusanTerpilih = $jurusanId ? Jurusan::find($jurusanId) : null;
+
+        $filterJurusan = function ($query) use ($jurusanTerpilih) {
+            if ($jurusanTerpilih) {
+                $query->whereRaw('LOWER(TRIM(jurusan)) = ?', [strtolower(trim($jurusanTerpilih->nama_jurusan))]);
+            }
+        };
+
         $data_paten = Paten::selectRaw('YEAR(tanggal_permohonan) as tahun, COUNT(*) as jumlah')
+            ->when($jurusanTerpilih, $filterJurusan)
             ->groupBy('tahun')
             ->orderBy('tahun')
             ->get();
 
         // Data untuk Hak Cipta
         $data_hakCipta = HakCipta::selectRaw('YEAR(tanggal_permohonan) as tahun, COUNT(*) as jumlah')
+            ->when($jurusanTerpilih, $filterJurusan)
             ->groupBy('tahun')
             ->orderBy('tahun')
             ->get();
@@ -33,6 +48,7 @@ class UmumPageController extends Controller
 
         // Data untuk Desain Industri
         $data_desainIndustri = DesainIndustri::selectRaw('YEAR(tanggal_permohonan) as tahun, COUNT(*) as jumlah')
+            ->when($jurusanTerpilih, $filterJurusan)
             ->groupBy('tahun')
             ->orderBy('tahun')
             ->get();
@@ -70,7 +86,9 @@ class UmumPageController extends Controller
             'tahun',
             'data_paten_per_tahun',
             'data_hakCipta_per_tahun',
-            'data_desainIndustri_per_tahun'
+            'data_desainIndustri_per_tahun',
+            'jurusanList',
+            'jurusanTerpilih'
         ));
     }
 }

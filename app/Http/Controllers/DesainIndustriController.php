@@ -6,6 +6,7 @@ use App\Models\Paten;
 use App\Models\HakCipta;
 use Illuminate\Http\Request;
 use App\Models\DesainIndustri;
+use App\Models\Jurusan;
 use Illuminate\Routing\Controller;
 
 class DesainIndustriController extends Controller
@@ -13,7 +14,7 @@ class DesainIndustriController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $di = DesainIndustri::latest()->paginate(5);
         $itung = DesainIndustri::all()->count();
@@ -30,13 +31,22 @@ class DesainIndustriController extends Controller
         $desainKBL = DesainIndustri::where('status', 'Keterangan belum lengkap')->count();
         $desainDPU = DesainIndustri::where('status', 'Dalam proses usulan')->count();
 
+        // Daftar jurusan untuk filter diagram Jumlah Desain Industri per Jurusan.
+        // Default (tanpa pilihan) tetap menampilkan data seluruh jurusan seperti semula.
+        $jurusanList = Jurusan::orderBy('nama_jurusan')->get();
+        $jurusanId = $request->get('jurusan');
+        $jurusanTerpilih = $jurusanId ? Jurusan::find($jurusanId) : null;
+
         $data = DesainIndustri::selectRaw('YEAR(tanggal_permohonan) as tahun, COUNT(*) as jumlah')
+            ->when($jurusanTerpilih, function ($query) use ($jurusanTerpilih) {
+                $query->whereRaw('LOWER(TRIM(jurusan)) = ?', [strtolower(trim($jurusanTerpilih->nama_jurusan))]);
+            })
             ->groupByRaw('YEAR(tanggal_permohonan)')
             ->orderByRaw('YEAR(tanggal_permohonan) ASC')
             ->get();
 
 
-        $allYears = range($data->min('tahun'), $data->max('tahun'));
+        $allYears = $data->isNotEmpty() ? range($data->min('tahun'), $data->max('tahun')) : [];
 
         $formattedData = collect($allYears)->map(function ($year) use ($data) {
             return [
@@ -48,7 +58,7 @@ class DesainIndustriController extends Controller
         $tahun = $formattedData->pluck('tahun')->toArray();
         $jumlah = $formattedData->pluck('jumlah')->toArray();
 
-        return view('umum-page.Desainindustri.index', compact('di', 'priksa', 'proses', 'null','tolak','beri','itung','desainDi','desainDK','desainP','desainKBL','desainDPU','tahun','jumlah','mvdov')); 
+        return view('umum-page.Desainindustri.index', compact('di', 'priksa', 'proses', 'null','tolak','beri','itung','desainDi','desainDK','desainP','desainKBL','desainDPU','tahun','jumlah','mvdov','jurusanList','jurusanTerpilih')); 
     }
     public function cari(Request $request)
     {
