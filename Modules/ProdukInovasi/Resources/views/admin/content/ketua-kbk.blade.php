@@ -207,9 +207,9 @@
                                                 class='bx bx-trash'></i></a>
                                     </form>
                                 </div>
-                                <a href="{{ route('reset.password', $k->id) }}"
+                                <a href="{{ route('kkbk.reset.password', $k->id) }}"
                                     class="btn btn-danger resetPasswordBtn"
-                                    data-url="{{ route('reset.password', $k->id) }}">Reset Password</a>
+                                    data-url="{{ route('kkbk.reset.password', $k->id) }}">Reset Password</a>
                             </td>
                         </tr>
 

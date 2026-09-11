@@ -36,6 +36,8 @@
                 </div>
             </div>
             {{-- <a href="{{ route('karya-intelektual.index') }}" class="nav-item nav-link {{ Request::is('dproin-polindra/karya-intelektual') ? 'active' : '' }}">Karya Kekayaan Intelektual</a> --}}
+            <a href="{{ route('news.index') }}"
+                class="nav-item nav-link {{ Request::is('dproin-polindra/berita*') ? 'active' : '' }}">Berita</a>
             <a href="/dproin-polindra/kontak"
                 class="nav-item nav-link {{ Request::is('dproin-polindra/kontak') ? 'active' : '' }}">Kontak Kami</a>
             <a href="/login" class="nav-item nav-link {{ Request::is('login') ? 'active' : '' }}"

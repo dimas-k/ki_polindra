@@ -140,6 +140,7 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::post('/admin/pengguna/umum/tambah', [AdminController::class, 'umumNew'])->name('tambah.umum');
     Route::post('/admin/pengguna/umum/update/{id}', [AdminController::class, 'updateUmum'])->name('umum.akun.update');
     Route::get('/admin/pengguna/umum/{id}', [AdminController::class, 'detailUmum'])->name('umum.detail');
+    Route::get('/admin/pengguna/umum/hapus/{id}', [AdminController::class, 'hapusUmum'])->name('umum.hapus');
 
     Route::get('/admin/pengguna/dosen', [AdminController::class, 'lihatDosen'])->name('lihat.dosen');
     Route::get('/admin/pengguna/dosen/{id}', [AdminController::class, 'detailDosen'])->name('detail.Dosen');

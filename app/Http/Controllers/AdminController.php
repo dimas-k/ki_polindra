@@ -93,11 +93,29 @@ class AdminController extends Controller
         $admin = User::where('role', 'Admin')->get();
         return view('admin.admin-page.index', compact('admin'));
     }
-    public function lihatDosen()
+    public function lihatDosen(Request $request)
     {
-        $dosen = User::where('role', 'Dosen')->orderBy('nama_lengkap', 'asc')->get();
+        $search = $request->input('search');
 
-        return view('admin.dosen-page.index', compact('dosen'));
+        $dosen = User::where('role', 'Dosen')
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('nama_lengkap', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('nip', 'like', "%{$search}%")
+                        ->orWhere('jabatan', 'like', "%{$search}%")
+                        ->orWhere('no_telepon', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('nama_lengkap', 'asc')
+            ->paginate(10)
+            ->withQueryString();
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return view('admin.dosen-page.table', compact('dosen'));
+        }
+
+        return view('admin.dosen-page.index', compact('dosen', 'search'));
     }
     public function detailDosen($id)
     {
@@ -162,10 +180,34 @@ class AdminController extends Controller
         User::find($id)->delete();
         return redirect()->back();
     }
-    public function lihatUmum()
+    public function hapusUmum(string $id)
     {
-        $umum = User::where('role', 'Umum')->orderBy('nama_lengkap', 'asc')->get();
-        return view('admin.umum.index', compact('umum'));
+        User::find($id)->delete();
+        return redirect()->back();
+    }
+    public function lihatUmum(Request $request)
+    {
+        $search = $request->input('search');
+
+        $umum = User::where('role', 'Umum')
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('nama_lengkap', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('kerjaan', 'like', "%{$search}%")
+                        ->orWhere('alamat', 'like', "%{$search}%")
+                        ->orWhere('no_telepon', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('nama_lengkap', 'asc')
+            ->paginate(10)
+            ->withQueryString();
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return view('admin.umum.table', compact('umum'));
+        }
+
+        return view('admin.umum.index', compact('umum', 'search'));
     }
     public function umumNew(Request $request)
     {
@@ -231,8 +273,8 @@ class AdminController extends Controller
     public function store(Request $request)
     {
         $validasidata = $request->validate([
-            'username' => 'required|min:3',
-            'password' => 'required|max:10'
+            'username' => 'required|min:3|unique:users,username',
+            'password' => 'required|min:5|max:10'
         ]);
         $user = new User;
         $user->nama_lengkap = $request->nama_lengkap;
@@ -241,6 +283,7 @@ class AdminController extends Controller
         $user->no_telepon = $request->no_telepon;
         $user->username = $request->username;
         $user->password = Hash::make($request->password);
+        $user->role = 'Admin';
         $user->save($validasidata);
 
         return redirect('/admin/listadmin')->with('success', 'Data admin telah ditabahkan');

@@ -45,7 +45,6 @@ class DashboardController extends Controller
         $kbk_nama = KelompokKeahlian::find($nama_kbk);
         $kkbk = DB::table('users')
             ->join('kelompok_keahlians', 'users.kbk_id', '=', 'kelompok_keahlians.id')
-
             ->select(
                 'users.id',
                 'users.nama_lengkap',
@@ -56,13 +55,7 @@ class DashboardController extends Controller
             )
             ->where('kelompok_keahlians.nama_kbk', '=', $nama_kbk)
             ->first();
-        // $anggota_kbk = DB::table('anggota_kelompok_keahlians')
-        //     ->join('kelompok_keahlians', 'anggota_kelompok_keahlians.kbk_id', '=', 'kelompok_keahlians.id')
-        //     ->where('kelompok_keahlians.nama_kbk', '=', $nama_kbk)
-        //     ->select(
-        //         'anggota_kelompok_keahlians.nama_lengkap',
-        //         'anggota_kelompok_keahlians.nama_lengkap'
-        //     )->get();
+
         $anggota_kbk = DB::table('anggota_kelompok_keahlians')
             ->join('kelompok_keahlians', 'anggota_kelompok_keahlians.kbk_id', '=', 'kelompok_keahlians.id')
             ->where('kelompok_keahlians.nama_kbk', '=', $nama_kbk)
@@ -72,16 +65,6 @@ class DashboardController extends Controller
             )
             ->get();
 
-
-        // dd($kelompokKeahlian);
-        // Mengambil dan menampilkan nama_lengkap dan nama_kbk
-        // foreach ($kkbk as $item) {
-        //     $namaLengkap = $item->nama_lengkap;  // Mengambil nama_lengkap
-        //     $namaKBK = $item->nama_kbk;    // Mengambil nama_kbk
-        //     echo "Nama: " . $namaLengkap . ", KBK: " . $namaKBK . "\n";
-        // }
-
-        // $data_produk = Produk::where('kbk_id', $id)->get();
         $data_produk = DB::table('produks')
             ->join('kelompok_keahlians', 'produks.kbk_id', '=', 'kelompok_keahlians.id')
             ->select(
@@ -92,10 +75,9 @@ class DashboardController extends Controller
             )
             ->where('kelompok_keahlians.nama_kbk', '=', $nama_kbk)
             ->where('produks.status', 'Tervalidasi')
-            ->groupBy('produks.id')  // group by primary key, bukan nama_produk, supaya kompatibel dgn only_full_group_by
+            ->groupBy('produks.id')
             ->latest('produks.created_at')
             ->get();
-
 
         $data_penelitian = DB::table('users')
             ->join('kelompok_keahlians', 'users.kbk_id', '=', 'kelompok_keahlians.id')
@@ -118,7 +100,6 @@ class DashboardController extends Controller
                 'penelitians.anggota_penulis_lainnya',
                 'penelitians.lampiran',
             )->where('kelompok_keahlians.nama_kbk', '=', $nama_kbk)->where('status', 'Tervalidasi')->latest('penelitians.created_at')->get();
-        // dd($data_produk);
 
         return view('produkinovasi::dashboard.kelompok_keahlian.index', compact('kbk', 'kbk_nama', 'kkbk', 'data_produk', 'data_penelitian', 'anggota_kbk'));
     }
@@ -132,8 +113,6 @@ class DashboardController extends Controller
             ->where('nama_produk', $nama_produk)
             ->firstOrFail();
 
-        // dd($produk);
-
         return view('produkinovasi::dashboard.detail-produk.index', compact('produk', 'kbk', 'kbk_nama'));
     }
 
@@ -145,7 +124,7 @@ class DashboardController extends Controller
         $penelitian = Penelitian::with(['kelompokKeahlian', 'anggotaPenelitian.detailAnggota'])
             ->where('judul', $judul)
             ->firstOrFail();
-        // dd($penelitian);
+
         return view('produkinovasi::dashboard.detail-penelitian.index', compact('penelitian', 'kbk'));
     }
 
@@ -153,13 +132,10 @@ class DashboardController extends Controller
     {
         $kbk = KelompokKeahlian::all();
 
-        // Cari di tabel anggota_kelompok_keahlian atau users
         $anggota_user = User::where('nama_lengkap', $dosen)->first();
         $anggota_kbk = AnggotaKelompokKeahlian::where('nama_lengkap', $dosen)->first();
 
-       
         $p_dosen = Produk::where(function ($query) use ($anggota_user, $anggota_kbk, $dosen) {
-            
             if ($dosen) {
                 $query->where(function ($query) use ($dosen) {
                     $query->where('anggota_inventor_lainnya', 'LIKE', '%' . $dosen . '%')
@@ -167,8 +143,7 @@ class DashboardController extends Controller
                         ->orWhere('inventor_lainnya', 'LIKE', '%' . $dosen . '%');
                 });
             }
-        
-           
+
             if ($anggota_kbk || $anggota_user) {
                 $query->orWhereHas('anggota', function ($subQuery) use ($anggota_kbk, $anggota_user) {
                     $subQuery->where(function ($query) use ($anggota_kbk, $anggota_user) {
@@ -186,20 +161,10 @@ class DashboardController extends Controller
             ->with(['kelompokKeahlian', 'anggota.detail'])
             ->paginate(4);
 
-        // if($anggota_user) {
-
-        //     $anggota_user = $anggota_user->nama_lengkap;
-        //     // dd($anggota);
-        //     // Tambahkan pencarian di kolom inventor_lainnya
-        //     $query->where('anggota_inventor_lainnya', 'LIKE', '%' . $dosen . '%')->orWhere('inventor', 'LIKE', '%' . $dosen . '%')->orwhere('inventor_lainnya', 'LIKE', '%' . $dosen . '%');
-        // }
-        // dd($p_dosen, $dosen, $anggota_kbk, $anggota_user);
-
-        // $plt_dosen = null;
         $plt_dosen = Penelitian::where(function ($query) use ($anggota_kbk, $anggota_user,  $dosen) {
-            if ($dosen) {               
+            if ($dosen) {
                 $query->where('penulis', 'LIKE', '%' . $dosen . '%')->orwhere('penulis_lainnya', 'LIKE', '%' . $dosen . '%')->orWhere('penulis_korespondensi', 'LIKE', '%' . $dosen . '%')->orWhere('anggota_penulis_lainnya', 'LIKE', '%' . $dosen . '%');
-            } 
+            }
             if ($anggota_kbk || $anggota_user) {
                 $query->orWhereHas('anggotaPenelitian', function ($subQuery) use ($anggota_kbk, $anggota_user) {
                     $subQuery->where(function ($query) use ($anggota_kbk, $anggota_user) {
@@ -226,17 +191,9 @@ class DashboardController extends Controller
         ]);
     }
 
-
-
     /**
      * Halaman detail daftar Karya Kekayaan Intelektual (Paten, Hak Cipta,
      * Desain Industri) yang datanya diambil dari SIKI Polindra.
-     */
-    /**
-     * Sebelum penggabungan sistem, method ini manggil SikiPolindraService
-     * (HTTP request ke aplikasi terpisah). Sekarang, karena Paten/HakCipta/
-     * DesainIndustri ada di database yang sama, cukup query Eloquent
-     * langsung — lebih cepat, tidak tergantung koneksi network lagi.
      */
     public function karyaIntelektual()
     {
@@ -289,6 +246,7 @@ class DashboardController extends Controller
 
         return view('produkinovasi::dashboard.katalog-penelitian.index', compact('penelitian', 'kbk'));
     }
+
     public function katalogPenelitianCari(Request $request)
     {
         $kbk = KelompokKeahlian::all();
@@ -296,5 +254,49 @@ class DashboardController extends Controller
         $penelitian = Penelitian::with('KelompokKeahlian')->where('judul', 'LIKE', "%" . $cari . "%")->where('status', 'Tervalidasi')->paginate(5);
 
         return view('produkinovasi::dashboard.katalog-penelitian.index', compact('penelitian', 'kbk'));
+    }
+
+    /**
+     * ===== Berita / News (halaman publik) =====
+     * $kbk WAJIB diambil di sini karena layout dashboard (dropdown
+     * navigasi Kelompok Bidang Keahlian) butuh variabel ini di semua
+     * halaman.
+     */
+    public function newsIndex(Request $request)
+    {
+        $kbk = KelompokKeahlian::all();
+
+        $kategori = $request->input('kategori');
+        $cari = $request->input('cari');
+
+        $news = \Modules\ProdukInovasi\app\Models\News::published()
+            ->when($kategori, fn($q) => $q->where('kategori', $kategori))
+            ->when($cari, fn($q) => $q->where('judul', 'like', "%{$cari}%"))
+            ->orderBy('created_at', 'desc')
+            ->paginate(6)
+            ->withQueryString();
+
+        $kategoriList = \Modules\ProdukInovasi\app\Models\News::published()
+            ->whereNotNull('kategori')
+            ->distinct()
+            ->pluck('kategori');
+
+        return view('produkinovasi::dashboard.news.index', compact('news', 'kbk', 'kategoriList', 'kategori', 'cari'));
+    }
+
+    public function newsDetail(string $slug)
+    {
+        $kbk = KelompokKeahlian::all();
+
+        $berita = \Modules\ProdukInovasi\app\Models\News::published()->where('slug', $slug)->firstOrFail();
+
+        $terkait = \Modules\ProdukInovasi\app\Models\News::published()
+            ->where('id', '!=', $berita->id)
+            ->when($berita->kategori, fn($q) => $q->where('kategori', $berita->kategori))
+            ->orderBy('created_at', 'desc')
+            ->limit(3)
+            ->get();
+
+        return view('produkinovasi::dashboard.news-detail.index', compact('berita', 'kbk', 'terkait'));
     }
 }

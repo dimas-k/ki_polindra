@@ -56,7 +56,7 @@ class ForgetPasswordManager extends Controller
             ])->first();
 
         if (!$updatePassword) {
-            return redirect()->to(route("reset.password"))->with("error", "invalid");
+            return redirect()->to(route("forget.password"))->with("error", "Token reset password tidak valid atau sudah kedaluwarsa. Silakan minta link reset baru.");
         }
 
         User::where("email", $request->email)

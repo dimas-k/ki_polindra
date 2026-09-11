@@ -7,6 +7,7 @@ use Modules\ProdukInovasi\app\Http\Controllers\KelompokBidangController;
 use Modules\ProdukInovasi\app\Http\Controllers\AdminPenelitianController;
 use Modules\ProdukInovasi\app\Http\Controllers\AdminProdukInovasiController;
 use Modules\ProdukInovasi\app\Http\Controllers\AdminKetuaKbkController;
+use Modules\ProdukInovasi\app\Http\Controllers\AdminNewsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,9 @@ Route::prefix('dproin-polindra')->group(function () {
 
     Route::get('/katalog/penelitian', [DashboardController::class, 'katalogPenelitian']);
     Route::post('/katalog/penelitian/cari', [DashboardController::class, 'katalogPenelitianCari']);
+
+    Route::get('/berita', [DashboardController::class, 'newsIndex'])->name('news.index');
+    Route::get('/berita/{slug}', [DashboardController::class, 'newsDetail'])->name('news.show');
 });
 
 // ===== Area Admin (produk/penelitian/KBK) — role disamakan ke 'Admin' =====
@@ -58,13 +62,21 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::get('/admin/penelitian/show/{id}', [AdminPenelitianController::class, 'showPenelitian'])->name('admin.show.penelitian');
     Route::put('/admin/penelitian/edit-status/{id}', [AdminPenelitianController::class, 'validatePenelitian'])->name('validasi.penelitian');
 
+    // ===== Kelola Berita (baru ditambahkan) =====
+    Route::get('/admin/news', [AdminNewsController::class, 'index'])->name('admin.news.index');
+    Route::get('/admin/news/create', [AdminNewsController::class, 'create'])->name('admin.news.create');
+    Route::post('/admin/news/store', [AdminNewsController::class, 'store'])->name('admin.news.store');
+    Route::get('/admin/news/edit/{id}', [AdminNewsController::class, 'edit'])->name('admin.news.edit');
+    Route::put('/admin/news/update/{id}', [AdminNewsController::class, 'update'])->name('admin.news.update');
+    Route::delete('/admin/news/delete/{id}', [AdminNewsController::class, 'destroy'])->name('admin.news.destroy');
+
     // ===== Pengguna > Ketua KBK (baru ditambahkan) =====
     Route::get('/admin/ketua-kbk', [AdminKetuaKbkController::class, 'ketuaKBK']);
     Route::get('/admin/k-kbk/show/{id}', [AdminKetuaKbkController::class, 'showDataKetuaKbk'])->name('show.k-kbk');
     Route::post('/admin/ketua-kbk/store', [AdminKetuaKbkController::class, 'storeDataKetuaKbk']);
     Route::post('/admin/ketua-kbk/update/{id}', [AdminKetuaKbkController::class, 'updateKetuaKbk'])->name('update.k-kbk');
     Route::delete('/admin/ketua-kbk/delete/{id}', [AdminKetuaKbkController::class, 'hapusKetuaKbk'])->name('hapus.k-kbk');
-    Route::get('/admin/ketua-kbk/reset_password_KKBK/{id}', [AdminKetuaKbkController::class, 'resetPassword'])->name('reset.password');
+    Route::get('/admin/ketua-kbk/reset_password_KKBK/{id}', [AdminKetuaKbkController::class, 'resetPassword'])->name('kkbk.reset.password');
 });
 
 // ===== Area Ketua KBK — role disamakan ke 'Ketua KBK' =====

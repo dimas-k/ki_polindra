@@ -65,7 +65,7 @@ class LoginUserController extends Controller
         $validasidata = $request->validate([
             'nama_lengkap' => 'required|string',
             'no_telepon' => 'required|string',
-            'email' => 'required|email:dns|unique:users',
+            'email' => 'required|email:rfc|unique:users',
             'nip' => 'nullable|integer|unique:users',
             'username' => 'required|min:5|unique:users|string',
             'password' => 'required|min:5|max:15'

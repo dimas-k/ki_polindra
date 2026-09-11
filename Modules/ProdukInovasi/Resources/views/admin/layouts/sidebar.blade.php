@@ -46,6 +46,13 @@
         </li>
 
         <li class="menu-item">
+            <a href="{{ route('admin.news.index') }}" class="menu-link {{ Request::is('admin/news*') ? 'active bg-light' : '' }}">
+                <i class='menu-icon tf-icons bx bx-news'></i>
+                <div class="text-truncate" data-i18n="Berita">Berita</div>
+            </a>
+        </li>
+
+        <li class="menu-item">
             <a href="#" class="menu-link menu-toggle {{ Request::is('admin/produk-inovasi/*') ? 'active bg-light' : '' }}">
                 <i class='menu-icon tf-icons bx bxs-cog'></i>
                 <div class="text-truncate" data-i18n="Produk">Produk Inovasi</div>
