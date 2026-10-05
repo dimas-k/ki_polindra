@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Storage;
 use Modules\ProdukInovasi\app\Models\News;
-use Modules\ProdukInovasi\app\Models\KelompokKeahlian;
+use Modules\ProdukInovasi\app\Models\NewsCategory;
 
 class AdminNewsController extends Controller
 {
@@ -15,10 +15,11 @@ class AdminNewsController extends Controller
         $search = $request->input('search');
 
         $news = News::query()
+            ->with('category')
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('judul', 'like', "%{$search}%")
-                        ->orWhere('kategori', 'like', "%{$search}%");
+                        ->orWhereHas('category', fn($cq) => $cq->where('nama', 'like', "%{$search}%"));
                 });
             })
             ->orderBy('created_at', 'desc')
@@ -29,23 +30,21 @@ class AdminNewsController extends Controller
             return view('produkinovasi::admin.news.table', compact('news'));
         }
 
-        $kbk_navigasi = KelompokKeahlian::select('id', 'nama_kbk')->get();
-
-        return view('produkinovasi::admin.news.index', compact('news', 'search', 'kbk_navigasi'));
+        return view('produkinovasi::admin.news.index', compact('news', 'search'));
     }
 
     public function create()
     {
-        $kbk_navigasi = KelompokKeahlian::select('id', 'nama_kbk')->get();
+        $categories = NewsCategory::orderBy('nama')->get();
 
-        return view('produkinovasi::admin.news.create', compact('kbk_navigasi'));
+        return view('produkinovasi::admin.news.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
             'judul' => 'required|string|max:255',
-            'kategori' => 'required|string|max:100',
+            'news_category_id' => 'required|exists:news_categories,id',
             'ringkasan' => 'nullable|string|max:500',
             'konten' => 'required|string',
             'gambar_sampul' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
@@ -67,9 +66,9 @@ class AdminNewsController extends Controller
     {
         $news = News::findOrFail($id);
 
-        $kbk_navigasi = KelompokKeahlian::select('id', 'nama_kbk')->get();
+        $categories = NewsCategory::orderBy('nama')->get();
 
-        return view('produkinovasi::admin.news.edit', compact('news', 'kbk_navigasi'));
+        return view('produkinovasi::admin.news.edit', compact('news', 'categories'));
     }
 
     public function update(Request $request, string $id)
@@ -78,7 +77,7 @@ class AdminNewsController extends Controller
 
         $data = $request->validate([
             'judul' => 'required|string|max:255',
-            'kategori' => 'required|string|max:100',
+            'news_category_id' => 'required|exists:news_categories,id',
             'ringkasan' => 'nullable|string|max:500',
             'konten' => 'required|string',
             'gambar_sampul' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',

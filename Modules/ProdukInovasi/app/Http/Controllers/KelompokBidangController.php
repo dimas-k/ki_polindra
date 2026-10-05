@@ -5,7 +5,6 @@ namespace Modules\ProdukInovasi\app\Http\Controllers;
 use Illuminate\Http\Request;
 use Modules\ProdukInovasi\app\Models\KelompokKeahlian;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Models\Jurusan;
@@ -16,19 +15,12 @@ class KelompokBidangController extends Controller
     {
         $kbk = KelompokKeahlian::all();
 
-        $kbk_navigasi = DB::table('kelompok_keahlians')
-            ->select(
-                'kelompok_keahlians.id',
-                'kelompok_keahlians.nama_kbk'
-            )
-            ->get();
-
         // Daftar jurusan diambil dari tabel master 'jurusan' supaya dropdown
         // di form Tambah/Update KBK tidak lagi berupa teks bebas (mencegah
         // typo & data jurusan yang tidak konsisten).
         $jurusanList = Jurusan::orderBy('nama_jurusan')->get();
 
-        return view('produkinovasi::admin.kbk.index', compact('kbk', 'kbk_navigasi', 'jurusanList'));
+        return view('produkinovasi::admin.kbk.index', compact('kbk', 'jurusanList'));
     }
 
     public function storeKelompokKeahlian(Request $request)

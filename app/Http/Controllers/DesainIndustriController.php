@@ -198,6 +198,7 @@ class DesainIndustriController extends Controller
             'no_telepon'=> 'required',
             'tanggal_lahir'=> 'required',
             'ktp_inventor'=> 'required|mimes:pdf',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email'=> 'required|email',
             'kewarganegaraan'=> 'required',
             'kode_pos'=> 'required',
@@ -224,6 +225,7 @@ class DesainIndustriController extends Controller
         // File sensitif (data pribadi) disimpan di disk private
         $privateFiles = [
             'ktp_inventor'     => 'ktp_inventor',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'surat_kepemilikan' => 'surat_kepemilikan',
             'surat_pengalihan'  => 'surat_pengalihan',
         ];
@@ -245,6 +247,9 @@ class DesainIndustriController extends Controller
             }
         }
 
+        if ($request->hasFile('gambar_img')) {
+            $di->gambar_img = \App\Support\GambarImage::store($request);
+        }
         $di->save($validasidata);
 
         return redirect('/pengajuan-desain-industri')->with('success', 'Data desain industri berhasil Disimpan!');

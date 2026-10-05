@@ -139,6 +139,7 @@ class AdminPatenController extends Controller
             'no_telepon' => 'required|max:14',
             'tanggal_lahir' => 'required|date',
             'ktp_inventor' => 'required|mimes:pdf|max:2028',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required|integer',
@@ -180,6 +181,7 @@ class AdminPatenController extends Controller
         // Daftar file yang disimpan di private storage
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'data_pengaju2' => 'data_pengaju2',
             'pengalihan_hak' => 'pengalihan_hak',
             'klaim' => 'klaim',
@@ -207,6 +209,9 @@ class AdminPatenController extends Controller
             }
         }
 
+        if ($request->hasFile('gambar_img')) {
+            $paten->gambar_img = \App\Support\GambarImage::store($request);
+        }
         $paten->save($validasidata);
 
         return redirect('/admin/paten')->with('success', 'Data Paten Berhasil Ditambahkan');
@@ -223,6 +228,7 @@ class AdminPatenController extends Controller
             'no_telepon' => 'required|max:14',
             'tanggal_lahir' => 'required|date',
             'ktp_inventor' => 'required|mimes:pdf|max:2028',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required|integer',
@@ -258,6 +264,7 @@ class AdminPatenController extends Controller
         // Daftar file yang disimpan di private storage
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'pengalihan_hak' => 'pengalihan_hak',
             'klaim' => 'klaim',
             'pernyataan_kepemilikan' => 'pernyataan_kepemilikan',
@@ -284,6 +291,9 @@ class AdminPatenController extends Controller
             }
         }
 
+        if ($request->hasFile('gambar_img')) {
+            $paten->gambar_img = \App\Support\GambarImage::store($request);
+        }
         $paten->save($validasidata);
         return redirect('/admin/paten')->with('success', 'Data Paten Berhasil Ditambahkan');
     }
@@ -527,6 +537,7 @@ class AdminPatenController extends Controller
             'no_telepon'                => 'required|max:14',
             'tanggal_lahir'             => 'required|date',
             'ktp_inventor'              => 'nullable|mimes:pdf|max:2028',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email'                     => 'required|email',
             'kewarganegaraan'           => 'required',
             'kode_pos'                  => 'required|integer',
@@ -567,6 +578,7 @@ class AdminPatenController extends Controller
 
         $privateFiles = [
             'ktp_inventor'           => 'ktp_inventor',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'data_pengaju2'          => 'data_pengaju2',
             'pengalihan_hak'         => 'pengalihan_hak',
             'klaim'                  => 'klaim',
@@ -603,6 +615,9 @@ class AdminPatenController extends Controller
         }
 
         // Simpan perubahan ke database
+        if ($request->hasFile('gambar_img')) {
+            $paten->gambar_img = \App\Support\GambarImage::store($request);
+        }
         $paten->save();
 
         return redirect('/admin/paten')->with('success', 'Data Paten berhasil diupdate!');
@@ -617,6 +632,7 @@ class AdminPatenController extends Controller
             'no_telepon' => 'required|max:14',
             'tanggal_lahir' => 'required|date',
             'ktp_inventor' => 'required|mimes:pdf|max:2028',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required|integer',
@@ -651,6 +667,7 @@ class AdminPatenController extends Controller
         // Daftar field file untuk di-update
         $privateFiles = [
             'ktp_inventor'           => 'ktp_inventor',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'pengalihan_hak'         => 'pengalihan_hak',
             'klaim'                  => 'klaim',
             'pernyataan_kepemilikan' => 'pernyataan_kepemilikan',
@@ -685,6 +702,9 @@ class AdminPatenController extends Controller
             }
         }
         // Simpan perubahan ke database
+        if ($request->hasFile('gambar_img')) {
+            $paten->gambar_img = \App\Support\GambarImage::store($request);
+        }
         $paten->save($validasidata);
 
         return redirect('/admin/paten')->with('success', 'Data paten berhasil di update');
@@ -726,6 +746,9 @@ class AdminPatenController extends Controller
         }
 
         // Simpan perubahan ke database
+        if ($request->hasFile('gambar_img')) {
+            $paten->gambar_img = \App\Support\GambarImage::store($request);
+        }
         $paten->save();
 
         return redirect('/admin/paten')->with('success', 'Status paten berhasil di update');

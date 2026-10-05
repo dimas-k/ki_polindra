@@ -168,6 +168,7 @@ class HakCiptaController extends Controller
             'no_telepon' => 'required',
             'tanggal_lahir' => 'required',
             'ktp_inventor' => 'required|mimes:pdf',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required',
@@ -197,6 +198,7 @@ class HakCiptaController extends Controller
         // File sensitif (data pribadi) disimpan di disk private
         $privateFiles = [
             'ktp_inventor'    => 'ktp_inventor',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'surat_pengalihan' => 'surat_pengalihan',
             'surat_pernyataan' => 'surat_pernyataan',
         ];
@@ -215,6 +217,9 @@ class HakCiptaController extends Controller
             $hc->dokumen_invensi = $file->storeAs('dokumen-hc', $filename, 'public');
         }
 
+        if ($request->hasFile('gambar_img')) {
+            $hc->gambar_img = \App\Support\GambarImage::store($request);
+        }
         $hc->save($validasidata);
 
         return redirect('/pengajuan-hak-cipta')->with('success', 'Data hak cipta berhasil Disimpan!');

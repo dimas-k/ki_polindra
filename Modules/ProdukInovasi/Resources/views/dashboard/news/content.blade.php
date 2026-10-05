@@ -24,8 +24,8 @@
                     <a href="{{ route('news.index') }}"
                         class="btn btn-sm {{ empty($kategori) ? 'btn-primary' : 'btn-outline-primary' }}">Semua</a>
                     @foreach ($kategoriList as $k)
-                        <a href="{{ route('news.index', ['kategori' => $k]) }}"
-                            class="btn btn-sm {{ $kategori == $k ? 'btn-primary' : 'btn-outline-primary' }}">{{ $k }}</a>
+                        <a href="{{ route('news.index', ['kategori' => $k->id]) }}"
+                            class="btn btn-sm {{ $kategori == $k->id ? 'btn-primary' : 'btn-outline-primary' }}">{{ $k->nama }}</a>
                     @endforeach
                 </div>
             </div>
@@ -51,7 +51,7 @@
                                 style="height: 200px; object-fit: cover;">
                         </a>
                         <div class="card-body d-flex flex-column">
-                            <span class="badge bg-primary mb-2 align-self-start">{{ $item->kategori }}</span>
+                            <span class="badge bg-primary mb-2 align-self-start">{{ $item->category->nama ?? '-' }}</span>
                             <h5 class="card-title">
                                 <a href="{{ route('news.show', $item->slug) }}"
                                     class="text-dark text-decoration-none">{{ $item->judul }}</a>

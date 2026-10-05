@@ -152,6 +152,7 @@ class AdminHaKCiptaController extends Controller
             'no_telepon' => 'required|max:14',
             'tanggal_lahir' => 'required|date',
             'ktp_inventor' => 'nullable|mimes:pdf|max:2028',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required|integer',
@@ -190,6 +191,7 @@ class AdminHaKCiptaController extends Controller
             $publicFiles = ['dokumen_invensi'];
             $privateFiles = [
                 'ktp_inventor' => 'ktp_inventor',
+                'gambar_img' => \App\Support\GambarImage::RULE,
                 'data_pengaju2' => 'data_pengaju2',
                 'surat_pengalihan' => 'surat_pengalihan',
                 'surat_pernyataan' => 'surat_pernyataan',
@@ -220,6 +222,9 @@ class AdminHaKCiptaController extends Controller
                     $hc->{$field} = $path;
                 }
             }
+            if ($request->hasFile('gambar_img')) {
+                $hc->gambar_img = \App\Support\GambarImage::store($request);
+            }
             $hc->save($validasidata);
             return redirect('/admin/hak-cipta')->with('success','Data hak cipta berhasil di update');
         } catch(\Exception $e) {
@@ -235,6 +240,7 @@ class AdminHaKCiptaController extends Controller
             'no_telepon' => 'required',
             'tanggal_lahir' => 'required',
             'ktp_inventor' => 'required|mimes:pdf',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required',
@@ -266,6 +272,7 @@ class AdminHaKCiptaController extends Controller
         $publicFiles = ['dokumen_invensi'];
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'surat_pengalihan' => 'surat_pengalihan',
             'surat_pernyataan' => 'surat_pernyataan',
         ];
@@ -297,6 +304,9 @@ class AdminHaKCiptaController extends Controller
         }
 
         // Simpan perubahan ke database
+        if ($request->hasFile('gambar_img')) {
+            $hc->gambar_img = \App\Support\GambarImage::store($request);
+        }
         $hc->save($validasidata);
         return redirect('/admin/hak-cipta')->with('success','Data hak cipta berhasil di update');
 
@@ -322,6 +332,9 @@ class AdminHaKCiptaController extends Controller
                 $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
                 $hc->sertifikat_hakcipta = $file->storeAs('dokumen-hc', $filename, 'public');
             }
+        }
+        if ($request->hasFile('gambar_img')) {
+            $hc->gambar_img = \App\Support\GambarImage::store($request);
         }
         $hc->save($validasidata);
         return redirect('/admin/hak-cipta')->with('success','Data hak cipta berhasil di update')
@@ -361,6 +374,9 @@ class AdminHaKCiptaController extends Controller
         }
 
         // Simpan perubahan ke database
+        if ($request->hasFile('gambar_img')) {
+            $hc->gambar_img = \App\Support\GambarImage::store($request);
+        }
         $hc->save();
 
         return redirect('/admin/hak-cipta')->with('success', 'Status Hak Cipta berhasil di update');
@@ -408,6 +424,7 @@ class AdminHaKCiptaController extends Controller
             'no_telepon' => 'required',
             'tanggal_lahir' => 'required',
             'ktp_inventor' => 'required|mimes:pdf',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required',
@@ -446,6 +463,7 @@ class AdminHaKCiptaController extends Controller
         $publicFiles = ['dokumen_invensi'];
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'data_pengaju2' => 'data_pengaju2',
             'surat_pengalihan' => 'surat_pengalihan',
             'surat_pernyataan' => 'surat_pernyataan'
@@ -471,6 +489,9 @@ class AdminHaKCiptaController extends Controller
                 $hc->{$field} = $path;
             }
         }
+        if ($request->hasFile('gambar_img')) {
+            $hc->gambar_img = \App\Support\GambarImage::store($request);
+        }
         $hc->save($validasidata);
 
         return redirect('/admin/hak-cipta')->with('success', 'Data hak cipta berhasil ditambahkan');
@@ -484,6 +505,7 @@ class AdminHaKCiptaController extends Controller
             'no_telepon' => 'required',
             'tanggal_lahir' => 'required',
             'ktp_inventor' => 'required|mimes:pdf',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required',
@@ -516,6 +538,7 @@ class AdminHaKCiptaController extends Controller
         $publicFiles = ['dokumen_invensi'];
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'data_pengaju2' => 'data_pengaju2',
             'surat_pengalihan' => 'surat_pengalihan',
             'surat_pernyataan' => 'surat_pernyataan'
@@ -540,6 +563,9 @@ class AdminHaKCiptaController extends Controller
                 $path = $file->storeAs('dokumen-hc', $filename, 'public');
                 $hc->{$field} = $path;
             }
+        }
+        if ($request->hasFile('gambar_img')) {
+            $hc->gambar_img = \App\Support\GambarImage::store($request);
         }
         $hc->save($validasidata);
         return redirect('/admin/hak-cipta')->with('success', 'Data hak cipta berhasil ditambahkan');

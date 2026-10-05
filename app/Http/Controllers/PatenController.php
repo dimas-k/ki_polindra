@@ -255,6 +255,7 @@ class PatenController extends Controller
             'no_telepon' => 'required',
             'tanggal_lahir' => 'required',
             'ktp_inventor' => 'required|mimes:pdf',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email.dns',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required|integer',
@@ -277,6 +278,7 @@ class PatenController extends Controller
         // File sensitif (data pribadi) disimpan di disk private
         $privateFiles = [
             'ktp_inventor'           => 'ktp_inventor',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'pengalihan_hak'         => 'pengalihan_hak',
             'klaim'                  => 'klaim',
             'pernyataan_kepemilikan' => 'pernyataan_kepemilikan',
@@ -307,6 +309,9 @@ class PatenController extends Controller
         $paten->judul_paten = $request->judul_paten;
         $paten->tanggal_permohonan = $request->tanggal_permohonan;
 
+        if ($request->hasFile('gambar_img')) {
+            $paten->gambar_img = \App\Support\GambarImage::store($request);
+        }
         $paten->save($validasidata);
 
         return redirect('/pengajuan-paten')->with('success', 'Data Paten berhasil Disimpan!');

@@ -81,11 +81,17 @@
 
                                 <div class="row mb-3">
                                     <div class="col-md-8">
-                                        <label for="kategori" class="form-label">Kategori</label>
-                                        <input type="text" id="kategori" name="kategori"
-                                            class="form-control @error('kategori') is-invalid @enderror"
-                                            value="{{ old('kategori') }}" placeholder="mis. Berita Kampus, Artikel">
-                                        @error('kategori')
+                                        <label for="news_category_id" class="form-label">Kategori</label>
+                                        <select id="news_category_id" name="news_category_id"
+                                            class="form-control @error('news_category_id') is-invalid @enderror">
+                                            <option value="">-- Pilih Kategori --</option>
+                                            @foreach ($categories as $cat)
+                                                <option value="{{ $cat->id }}" {{ old('news_category_id') == $cat->id ? 'selected' : '' }}>
+                                                    {{ $cat->nama }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('news_category_id')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>

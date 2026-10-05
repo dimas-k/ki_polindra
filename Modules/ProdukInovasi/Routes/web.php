@@ -8,6 +8,7 @@ use Modules\ProdukInovasi\app\Http\Controllers\AdminPenelitianController;
 use Modules\ProdukInovasi\app\Http\Controllers\AdminProdukInovasiController;
 use Modules\ProdukInovasi\app\Http\Controllers\AdminKetuaKbkController;
 use Modules\ProdukInovasi\app\Http\Controllers\AdminNewsController;
+use Modules\ProdukInovasi\app\Http\Controllers\AdminNewsCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,6 +70,12 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::get('/admin/news/edit/{id}', [AdminNewsController::class, 'edit'])->name('admin.news.edit');
     Route::put('/admin/news/update/{id}', [AdminNewsController::class, 'update'])->name('admin.news.update');
     Route::delete('/admin/news/delete/{id}', [AdminNewsController::class, 'destroy'])->name('admin.news.destroy');
+
+    // ===== Kategori Berita (baru ditambahkan) =====
+    Route::get('/admin/news-category', [AdminNewsCategoryController::class, 'index'])->name('admin.news-category.index');
+    Route::post('/admin/news-category/store', [AdminNewsCategoryController::class, 'store'])->name('admin.news-category.store');
+    Route::put('/admin/news-category/update/{id}', [AdminNewsCategoryController::class, 'update'])->name('admin.news-category.update');
+    Route::delete('/admin/news-category/delete/{id}', [AdminNewsCategoryController::class, 'destroy'])->name('admin.news-category.destroy');
 
     // ===== Pengguna > Ketua KBK (baru ditambahkan) =====
     Route::get('/admin/ketua-kbk', [AdminKetuaKbkController::class, 'ketuaKBK']);

@@ -5,7 +5,6 @@ namespace Modules\ProdukInovasi\app\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Modules\ProdukInovasi\app\Models\KelompokKeahlian;
@@ -32,28 +31,14 @@ class AdminKetuaKbkController extends Controller
         $kbk = User::with('kelompokKeahlian')->where('role', 'Ketua KBK')->paginate(10);
         $jenis_kbk = KelompokKeahlian::all();
 
-        $kbk_navigasi = DB::table('kelompok_keahlians')
-            ->select(
-                'kelompok_keahlians.id',
-                'kelompok_keahlians.nama_kbk'
-            )
-            ->get();
-
-        return view('produkinovasi::admin.ketua-kbk.index', compact('kbk', 'jenis_kbk', 'kbk_navigasi'));
+        return view('produkinovasi::admin.ketua-kbk.index', compact('kbk', 'jenis_kbk'));
     }
 
     public function showDataKetuaKbk(string $id)
     {
-        $kbk_navigasi = DB::table('kelompok_keahlians')
-            ->select(
-                'kelompok_keahlians.id',
-                'kelompok_keahlians.nama_kbk'
-            )
-            ->get();
-
         $k_kbk = User::with('kelompokKeahlian')->find($id);
 
-        return view('produkinovasi::admin.ketua-kbk.show.index', compact('k_kbk', 'kbk_navigasi'));
+        return view('produkinovasi::admin.ketua-kbk.show.index', compact('k_kbk'));
     }
 
     public function storeDataKetuaKbk(Request $request)

@@ -159,6 +159,7 @@ class AdminDesainIndustriController extends Controller
             'no_telepon' => 'required',
             'tanggal_lahir' => 'required',
             'ktp_inventor' => 'nullable|mimes:pdf',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required',
@@ -192,6 +193,7 @@ class AdminDesainIndustriController extends Controller
 
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'data_pengaju2' => 'data_pengaju2',
             'surat_kepemilikan' => 'surat_kepemilikan',
             'surat_pengalihan' => 'surat_pengalihan'
@@ -225,6 +227,9 @@ class AdminDesainIndustriController extends Controller
             }
         }
 
+        if ($request->hasFile('gambar_img')) {
+            $di->gambar_img = \App\Support\GambarImage::store($request);
+        }
         $di->save($validasidata);
         return redirect('/admin/desain-industri')->with('success', 'Data desain industri berhasil di update');
     }
@@ -236,6 +241,7 @@ class AdminDesainIndustriController extends Controller
             'no_telepon' => 'required',
             'tanggal_lahir' => 'required',
             'ktp_inventor' => 'required|mimes:pdf',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required',
@@ -264,6 +270,7 @@ class AdminDesainIndustriController extends Controller
 
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'surat_kepemilikan' => 'surat_kepemilikan',
             'surat_pengalihan' => 'surat_pengalihan'
         ];
@@ -296,6 +303,9 @@ class AdminDesainIndustriController extends Controller
             }
         }
 
+        if ($request->hasFile('gambar_img')) {
+            $di->gambar_img = \App\Support\GambarImage::store($request);
+        }
         $di->save($validasidata);
         return redirect('/admin/desain-industri')->with('success', 'Data desain industri berhasil di update');
     }
@@ -322,6 +332,9 @@ class AdminDesainIndustriController extends Controller
                 $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
                 $di->sertifikat_desain = $file->storeAs('dokumen-di', $filename, 'public');
             }
+        }
+        if ($request->hasFile('gambar_img')) {
+            $di->gambar_img = \App\Support\GambarImage::store($request);
         }
         $di->save($validasidata);
         return redirect('/admin/desain-industri')->with('success', 'Data desain industri berhasil di update');
@@ -368,6 +381,7 @@ class AdminDesainIndustriController extends Controller
             'no_telepon' => 'required',
             'tanggal_lahir' => 'required',
             'ktp_inventor' => 'required|mimes:pdf',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required',
@@ -406,6 +420,7 @@ class AdminDesainIndustriController extends Controller
 
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'data_pengaju2' => 'data_pengaju2',
             'surat_kepemilikan' => 'surat_kepemilikan',
             'surat_pengalihan' => 'surat_pengalihan'
@@ -433,6 +448,9 @@ class AdminDesainIndustriController extends Controller
         }
     
         // Save the model
+        if ($request->hasFile('gambar_img')) {
+            $di->gambar_img = \App\Support\GambarImage::store($request);
+        }
         $di->save($validasidata);
     
         // Redirect with success message
@@ -448,6 +466,7 @@ class AdminDesainIndustriController extends Controller
             'no_telepon' => 'required',
             'tanggal_lahir' => 'required',
             'ktp_inventor' => 'required|mimes:pdf',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required',
@@ -477,6 +496,7 @@ class AdminDesainIndustriController extends Controller
 
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'surat_kepemilikan' => 'surat_kepemilikan',
             'surat_pengalihan' => 'surat_pengalihan'
         ];
@@ -500,6 +520,9 @@ class AdminDesainIndustriController extends Controller
                 $path = $file->storeAs('dokumen-di', $filename, 'public');
                 $di->{$field} = $path;
             }
+        }
+        if ($request->hasFile('gambar_img')) {
+            $di->gambar_img = \App\Support\GambarImage::store($request);
         }
         $di->save($validasidata);
 

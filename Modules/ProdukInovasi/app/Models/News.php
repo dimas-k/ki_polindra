@@ -16,7 +16,7 @@ class News extends Model
     protected $fillable = [
         'judul',
         'slug',
-        'kategori',
+        'news_category_id',
         'gambar_sampul',
         'ringkasan',
         'konten',
@@ -60,6 +60,11 @@ class News extends Model
     public function author()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(NewsCategory::class, 'news_category_id');
     }
 
     public function scopePublished($query)

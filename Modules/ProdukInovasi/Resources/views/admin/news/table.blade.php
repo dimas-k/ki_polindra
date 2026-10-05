@@ -20,7 +20,7 @@
                             alt="{{ $item->judul }}" style="width: 70px; height: 50px; object-fit: cover; border-radius: 6px;">
                     </td>
                     <td>{{ $item->judul }}</td>
-                    <td><span class="badge bg-label-info">{{ $item->kategori }}</span></td>
+                    <td><span class="badge bg-label-info">{{ $item->category->nama ?? '-' }}</span></td>
                     <td>
                         @if ($item->status === 'published')
                             <span class="badge bg-label-success">Published</span>

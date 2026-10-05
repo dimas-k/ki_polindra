@@ -19,6 +19,9 @@
 /storage/framework/testing/*
 /storage/framework/views/*
 /storage/logs/*
+/storage/app/public
+/storage/app/private
+
 
 .phpunit.cache
 .phpunit.result.cache
@@ -60,3 +63,4 @@ Homestead.yaml
 # Coverage
 /coverage/
 /.phpunit.result.cache
+storage/app/public/dokumen-di/1780205783_3212152206040004_TRANSKRIP_NILAI_021024..pdf

@@ -15,7 +15,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
-                <span class="badge bg-primary mb-3">{{ $berita->kategori }}</span>
+                <span class="badge bg-primary mb-3">{{ $berita->category->nama ?? '-' }}</span>
                 <p class="text-muted mb-4">
                     <i class="bi bi-calendar3 me-1"></i>{{ $berita->created_at->translatedFormat('d F Y') }}
                     @if ($berita->author)
@@ -29,7 +29,7 @@
                 @endif
 
                 <div class="news-content" style="line-height: 1.8; font-size: 1.05rem;">
-                    {!! nl2br(e($berita->konten)) !!}
+                    {!! $berita->konten !!}
                 </div>
 
                 <a href="{{ route('news.index') }}" class="btn btn-outline-primary mt-4">

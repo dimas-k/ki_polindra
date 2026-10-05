@@ -20,7 +20,6 @@ class DashboardController extends Controller
     //
     public function index()
     {
-        $kbk = KelompokKeahlian::all();
         $jumlah_kbk = KelompokKeahlian::all()->count();
         $jumlah_produk = Produk::where('status', 'Tervalidasi')->count();
         $jumlah_pusat_penelitian = Penelitian::where('status', 'Tervalidasi')->count();
@@ -30,18 +29,16 @@ class DashboardController extends Controller
         $produk_terbaru = Produk::where('status', 'Tervalidasi')->latest()->take(10)->get();
         $penelitian_terbaru = Penelitian::where('status', 'Tervalidasi')->latest()->take(10)->get();
 
-        return view('produkinovasi::dashboard.index', compact('kbk', 'jumlah_kbk', 'jumlah_produk', 'jumlah_pusat_penelitian', 'produk', 'pusat_penelitian', 'produk_terbaru', 'penelitian_terbaru'));
+        return view('produkinovasi::dashboard.index', compact('jumlah_kbk', 'jumlah_produk', 'jumlah_pusat_penelitian', 'produk', 'pusat_penelitian', 'produk_terbaru', 'penelitian_terbaru'));
     }
 
     public function contact()
     {
-        $kbk = KelompokKeahlian::all();
-        return view('produkinovasi::dashboard.contact.index', compact('kbk'));
+        return view('produkinovasi::dashboard.contact.index', []);
     }
 
     public function penelitian($nama_kbk)
     {
-        $kbk = KelompokKeahlian::all();
         $kbk_nama = KelompokKeahlian::find($nama_kbk);
         $kkbk = DB::table('users')
             ->join('kelompok_keahlians', 'users.kbk_id', '=', 'kelompok_keahlians.id')
@@ -101,36 +98,33 @@ class DashboardController extends Controller
                 'penelitians.lampiran',
             )->where('kelompok_keahlians.nama_kbk', '=', $nama_kbk)->where('status', 'Tervalidasi')->latest('penelitians.created_at')->get();
 
-        return view('produkinovasi::dashboard.kelompok_keahlian.index', compact('kbk', 'kbk_nama', 'kkbk', 'data_produk', 'data_penelitian', 'anggota_kbk'));
+        return view('produkinovasi::dashboard.kelompok_keahlian.index', compact('kbk_nama', 'kkbk', 'data_produk', 'data_penelitian', 'anggota_kbk'));
     }
 
     public function detailProduk($nama_produk)
     {
-        $kbk = KelompokKeahlian::all();
         $kbk_nama = KelompokKeahlian::where('nama_kbk', $nama_produk)->first();
 
         $produk = Produk::with(['kelompokKeahlian', 'anggota.anggota'])
             ->where('nama_produk', $nama_produk)
             ->firstOrFail();
 
-        return view('produkinovasi::dashboard.detail-produk.index', compact('produk', 'kbk', 'kbk_nama'));
+        return view('produkinovasi::dashboard.detail-produk.index', compact('produk', 'kbk_nama'));
     }
 
     public function detailPenelitian($judul)
     {
-        $kbk = KelompokKeahlian::all();
         $kbk_nama = KelompokKeahlian::where('nama_kbk', $judul)->first();
 
         $penelitian = Penelitian::with(['kelompokKeahlian', 'anggotaPenelitian.detailAnggota'])
             ->where('judul', $judul)
             ->firstOrFail();
 
-        return view('produkinovasi::dashboard.detail-penelitian.index', compact('penelitian', 'kbk'));
+        return view('produkinovasi::dashboard.detail-penelitian.index', compact('penelitian'));
     }
 
     public function dosenProduk($dosen)
     {
-        $kbk = KelompokKeahlian::all();
 
         $anggota_user = User::where('nama_lengkap', $dosen)->first();
         $anggota_kbk = AnggotaKelompokKeahlian::where('nama_lengkap', $dosen)->first();
@@ -182,7 +176,6 @@ class DashboardController extends Controller
             ->paginate(4);
 
         return view('produkinovasi::dashboard.dosen-produk.index', [
-            'kbk' => $kbk,
             'p_dosen' => $p_dosen,
             'plt_dosen' => $plt_dosen,
             'dosen' => $dosen,
@@ -197,7 +190,6 @@ class DashboardController extends Controller
      */
     public function karyaIntelektual()
     {
-        $kbk = KelompokKeahlian::all();
 
         $paten = Paten::with('prodi.jurusan')
             ->where('status', 'Diberi')
@@ -215,7 +207,6 @@ class DashboardController extends Controller
             ->get();
 
         return view('produkinovasi::dashboard.karya-intelektual.index', [
-            'kbk' => $kbk,
             'paten' => $paten,
             'hakCipta' => $hakCipta,
             'desainIndustri' => $desainIndustri,
@@ -224,79 +215,74 @@ class DashboardController extends Controller
 
     public function katalogProduk()
     {
-        $kbk = KelompokKeahlian::all();
         $produk = Produk::with('KelompokKeahlian')->where('status', 'Tervalidasi')->paginate(5);
 
-        return view('produkinovasi::dashboard.katalog-produk.index', compact('produk', 'kbk'));
+        return view('produkinovasi::dashboard.katalog-produk.index', compact('produk'));
     }
 
     public function katalogProdukCari(Request $request)
     {
-        $kbk = KelompokKeahlian::all();
 
         $cari = $request->input('cari_produk');
         $produk = Produk::with('KelompokKeahlian')->where('nama_produk', 'LIKE', "%" . $cari . "%")->where('status', 'Tervalidasi')->paginate(5);
-        return view('produkinovasi::dashboard.katalog-produk.index', compact('produk', 'kbk'));
+        return view('produkinovasi::dashboard.katalog-produk.index', compact('produk'));
     }
 
     public function katalogPenelitian()
     {
-        $kbk = KelompokKeahlian::all();
         $penelitian = Penelitian::with('KelompokKeahlian')->where('status', 'Tervalidasi')->paginate(5);
 
-        return view('produkinovasi::dashboard.katalog-penelitian.index', compact('penelitian', 'kbk'));
+        return view('produkinovasi::dashboard.katalog-penelitian.index', compact('penelitian'));
     }
 
     public function katalogPenelitianCari(Request $request)
     {
-        $kbk = KelompokKeahlian::all();
         $cari = $request->input('cari_penelitian');
         $penelitian = Penelitian::with('KelompokKeahlian')->where('judul', 'LIKE', "%" . $cari . "%")->where('status', 'Tervalidasi')->paginate(5);
 
-        return view('produkinovasi::dashboard.katalog-penelitian.index', compact('penelitian', 'kbk'));
+        return view('produkinovasi::dashboard.katalog-penelitian.index', compact('penelitian'));
     }
 
     /**
      * ===== Berita / News (halaman publik) =====
-     * $kbk WAJIB diambil di sini karena layout dashboard (dropdown
-     * navigasi Kelompok Bidang Keahlian) butuh variabel ini di semua
-     * halaman.
+     * Data $kbk untuk dropdown navigasi di sidebar dashboard sudah
+     * disuplai otomatis lewat View Composer (lihat
+     * ProdukInovasiServiceProvider::registerViewComposers), jadi tidak
+     * perlu diambil manual di sini.
      */
     public function newsIndex(Request $request)
     {
-        $kbk = KelompokKeahlian::all();
 
+        // 'kategori' di query string sekarang berisi ID kategori (news_category_id),
+        // bukan lagi teks bebas -- sejak kategori dipindah ke tabel news_categories.
         $kategori = $request->input('kategori');
         $cari = $request->input('cari');
 
         $news = \Modules\ProdukInovasi\app\Models\News::published()
-            ->when($kategori, fn($q) => $q->where('kategori', $kategori))
+            ->with('category')
+            ->when($kategori, fn($q) => $q->where('news_category_id', $kategori))
             ->when($cari, fn($q) => $q->where('judul', 'like', "%{$cari}%"))
             ->orderBy('created_at', 'desc')
             ->paginate(6)
             ->withQueryString();
 
-        $kategoriList = \Modules\ProdukInovasi\app\Models\News::published()
-            ->whereNotNull('kategori')
-            ->distinct()
-            ->pluck('kategori');
+        $kategoriList = \Modules\ProdukInovasi\app\Models\NewsCategory::orderBy('nama')->get();
 
-        return view('produkinovasi::dashboard.news.index', compact('news', 'kbk', 'kategoriList', 'kategori', 'cari'));
+        return view('produkinovasi::dashboard.news.index', compact('news', 'kategoriList', 'kategori', 'cari'));
     }
 
     public function newsDetail(string $slug)
     {
-        $kbk = KelompokKeahlian::all();
 
-        $berita = \Modules\ProdukInovasi\app\Models\News::published()->where('slug', $slug)->firstOrFail();
+        $berita = \Modules\ProdukInovasi\app\Models\News::published()->with('category')->where('slug', $slug)->firstOrFail();
 
         $terkait = \Modules\ProdukInovasi\app\Models\News::published()
             ->where('id', '!=', $berita->id)
-            ->when($berita->kategori, fn($q) => $q->where('kategori', $berita->kategori))
+            ->when($berita->news_category_id, fn($q) => $q->where('news_category_id', $berita->news_category_id))
             ->orderBy('created_at', 'desc')
             ->limit(3)
             ->get();
 
-        return view('produkinovasi::dashboard.news-detail.index', compact('berita', 'kbk', 'terkait'));
+        return view('produkinovasi::dashboard.news-detail.index', compact('berita', 'terkait'));
     }
 }

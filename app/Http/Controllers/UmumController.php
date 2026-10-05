@@ -382,6 +382,7 @@ class UmumController extends Controller
             'no_telepon' => 'required|max:14',
             'tanggal_lahir' => 'required|date',
             'ktp_inventor' => 'required|mimes:pdf|max:2028',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required|integer',
@@ -416,6 +417,7 @@ class UmumController extends Controller
             // Daftar field file untuk di-update
             $privateFiles = [
                 'ktp_inventor'           => 'ktp_inventor',
+                'gambar_img' => \App\Support\GambarImage::RULE,
                 'pengalihan_hak'         => 'pengalihan_hak',
                 'klaim'                  => 'klaim',
                 'pernyataan_kepemilikan' => 'pernyataan_kepemilikan',
@@ -451,6 +453,9 @@ class UmumController extends Controller
             }
 
             // Simpan perubahan ke database
+            if ($request->hasFile('gambar_img')) {
+                $paten->gambar_img = \App\Support\GambarImage::store($request);
+            }
             $paten->save($validasidata);
 
             // Redirect dengan pesan sukses
@@ -520,6 +525,7 @@ class UmumController extends Controller
             'no_telepon' => 'required|max:14',
             'tanggal_lahir' => 'required|date',
             'ktp_inventor' => 'nullable|mimes:pdf|max:2028',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required|integer',
@@ -550,6 +556,7 @@ class UmumController extends Controller
 
             $privateFiles = [
                 'ktp_inventor'      => 'ktp_inventor',
+                'gambar_img' => \App\Support\GambarImage::RULE,
                 'surat_kepemilikan' => 'surat_kepemilikan',
                 'surat_pengalihan'  => 'surat_pengalihan',
             ];
@@ -574,6 +581,9 @@ class UmumController extends Controller
                 }
             }
 
+            if ($request->hasFile('gambar_img')) {
+                $di->gambar_img = \App\Support\GambarImage::store($request);
+            }
             $di->save($validasidata);
             return redirect('/umum/desain-industri')->with('success', 'Data Desain Industri berhasil diperbarui!');
         } catch (\Exception $e) {
@@ -591,6 +601,7 @@ class UmumController extends Controller
             'no_telepon' => 'required',
             'tanggal_lahir' => 'required',
             'ktp_inventor' => 'required|mimes:pdf',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required',
@@ -623,6 +634,7 @@ class UmumController extends Controller
 
             $privateFiles = [
                 'ktp_inventor'    => 'ktp_inventor',
+                'gambar_img' => \App\Support\GambarImage::RULE,
                 'surat_pengalihan' => 'surat_pengalihan',
                 'surat_pernyataan' => 'surat_pernyataan',
             ];
@@ -645,6 +657,9 @@ class UmumController extends Controller
                 $hc->dokumen_invensi = $request->file('dokumen_invensi')->storeAs('dokumen-hc', $filename, 'public');
             }
 
+            if ($request->hasFile('gambar_img')) {
+                $hc->gambar_img = \App\Support\GambarImage::store($request);
+            }
             $hc->save($validasidata);
 
             return redirect('/umum/hak-cipta')->with('success', 'Data Hak Cipta berhasil diperbarui!');
@@ -665,6 +680,7 @@ class UmumController extends Controller
             'no_telepon' => 'required|max:14',
             'tanggal_lahir' => 'required|date',
             'ktp_inventor' => 'required|mimes:pdf|max:2028',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required|integer',
@@ -701,6 +717,7 @@ class UmumController extends Controller
             // Daftar file yang disimpan di private storage
             $privateFiles = [
                 'ktp_inventor' => 'ktp_inventor',
+                'gambar_img' => \App\Support\GambarImage::RULE,
                 'pengalihan_hak' => 'pengalihan_hak',
                 'klaim' => 'klaim',
                 'pernyataan_kepemilikan' => 'pernyataan_kepemilikan',
@@ -727,6 +744,9 @@ class UmumController extends Controller
                 }
             }
             // Simpan data ke database
+            if ($request->hasFile('gambar_img')) {
+                $paten->gambar_img = \App\Support\GambarImage::store($request);
+            }
             $paten->save($validasidata);
 
             // Redirect ke halaman sukses
@@ -747,6 +767,7 @@ class UmumController extends Controller
             'no_telepon' => 'required',
             'tanggal_lahir' => 'required',
             'ktp_inventor' => 'required|mimes:pdf',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required',
@@ -779,6 +800,7 @@ class UmumController extends Controller
 
             $privateFiles = [
                 'ktp_inventor'    => 'ktp_inventor',
+                'gambar_img' => \App\Support\GambarImage::RULE,
                 'surat_pengalihan' => 'surat_pengalihan',
                 'surat_pernyataan' => 'surat_pernyataan',
             ];
@@ -798,6 +820,9 @@ class UmumController extends Controller
             }
 
             // Simpan data ke database
+            if ($request->hasFile('gambar_img')) {
+                $hc->gambar_img = \App\Support\GambarImage::store($request);
+            }
             $hc->save($validasidata);
 
             // Redirect ke halaman sukses
@@ -821,6 +846,7 @@ class UmumController extends Controller
             'no_telepon' => 'required',
             'tanggal_lahir' => 'required',
             'ktp_inventor' => 'required|mimes:pdf',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required',
@@ -851,6 +877,7 @@ class UmumController extends Controller
 
             $privateFiles = [
                 'ktp_inventor'      => 'ktp_inventor',
+                'gambar_img' => \App\Support\GambarImage::RULE,
                 'data_pengaju2'     => 'data_pengaju2',
                 'surat_kepemilikan' => 'surat_kepemilikan',
                 'surat_pengalihan'  => 'surat_pengalihan',
@@ -874,6 +901,9 @@ class UmumController extends Controller
             }
 
             // Simpan data ke database
+            if ($request->hasFile('gambar_img')) {
+                $di->gambar_img = \App\Support\GambarImage::store($request);
+            }
             $di->save($validasidata);
 
             // Redirect ke halaman sukses
