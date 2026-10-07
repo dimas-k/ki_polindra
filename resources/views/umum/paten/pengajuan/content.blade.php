@@ -21,9 +21,7 @@
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title"><i class="fa fa-wpforms me-2" data-bs-toggle="tooltip"></i>Formulir
-                                Pengajuan Paten
-                            </h3>
+                            <h3 class="card-title"><i class="fa fa-wpforms me-2"></i>Formulir Pengajuan Paten</h3>
                         </div>
                         <div class="card-body">
                             @if (session()->has('success'))

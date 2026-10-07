@@ -1051,13 +1051,12 @@ class UserSeeder extends Seeder
                 continue;
             }
 
-            $updated = DB::table('users')
-                ->where('nip', $nip)
-                ->update([
-                    'kbk_id' => $kbkId,
-                    'role' => 'Ketua KBK',
-                    'updated_at' => Carbon::now(),
-                ]);
+            $uid = DB::table('users')->where('nip', $nip)->value('id');
+            if ($uid) {
+                DB::table('users')->where('id', $uid)->update(['role' => 'Dosen', 'updated_at' => Carbon::now()]);
+                \App\Models\KbkPenugasan::atur((int) $uid, (int) $kbkId, true);
+            }
+            $updated = $uid ? 1 : 0;
 
             if ($updated === 0) {
                 $notFound[] = "NIP {$nip} (untuk KBK '{$namaKbk}') tidak ditemukan di tabel users";

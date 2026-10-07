@@ -242,47 +242,4 @@ class DashboardController extends Controller
 
         return view('produkinovasi::dashboard.katalog-penelitian.index', compact('penelitian'));
     }
-
-    /**
-     * ===== Berita / News (halaman publik) =====
-     * Data $kbk untuk dropdown navigasi di sidebar dashboard sudah
-     * disuplai otomatis lewat View Composer (lihat
-     * ProdukInovasiServiceProvider::registerViewComposers), jadi tidak
-     * perlu diambil manual di sini.
-     */
-    public function newsIndex(Request $request)
-    {
-
-        // 'kategori' di query string sekarang berisi ID kategori (news_category_id),
-        // bukan lagi teks bebas -- sejak kategori dipindah ke tabel news_categories.
-        $kategori = $request->input('kategori');
-        $cari = $request->input('cari');
-
-        $news = \Modules\ProdukInovasi\app\Models\News::published()
-            ->with('category')
-            ->when($kategori, fn($q) => $q->where('news_category_id', $kategori))
-            ->when($cari, fn($q) => $q->where('judul', 'like', "%{$cari}%"))
-            ->orderBy('created_at', 'desc')
-            ->paginate(6)
-            ->withQueryString();
-
-        $kategoriList = \Modules\ProdukInovasi\app\Models\NewsCategory::orderBy('nama')->get();
-
-        return view('produkinovasi::dashboard.news.index', compact('news', 'kategoriList', 'kategori', 'cari'));
-    }
-
-    public function newsDetail(string $slug)
-    {
-
-        $berita = \Modules\ProdukInovasi\app\Models\News::published()->with('category')->where('slug', $slug)->firstOrFail();
-
-        $terkait = \Modules\ProdukInovasi\app\Models\News::published()
-            ->where('id', '!=', $berita->id)
-            ->when($berita->news_category_id, fn($q) => $q->where('news_category_id', $berita->news_category_id))
-            ->orderBy('created_at', 'desc')
-            ->limit(3)
-            ->get();
-
-        return view('produkinovasi::dashboard.news-detail.index', compact('berita', 'terkait'));
-    }
 }

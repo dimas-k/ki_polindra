@@ -231,7 +231,7 @@ class KetuaKbkController extends Controller
                 'users.nama_lengkap',
                 'kelompok_keahlians.nama_kbk as nama_kbk'
             )
-            ->where('users.role', '=', 'Ketua KBK')
+            ->whereIn('users.id', \App\Models\KbkPenugasan::ketuaAktifUserIds())
             ->get();
 
 
@@ -521,7 +521,7 @@ class KetuaKbkController extends Controller
         $penelitian = Penelitian::with(['kelompokKeahlian', 'anggotaPenelitian.detailAnggota'])->find($userId);
         $penulisU = DB::table('users')
             ->select('id', 'nama_lengkap', 'jabatan')
-            ->where('role', '=', 'Ketua KBK')
+            ->whereIn('id', \App\Models\KbkPenugasan::ketuaAktifUserIds())
             ->get();
 
         $penulisK = DB::table('anggota_kelompok_keahlians')

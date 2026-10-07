@@ -115,7 +115,9 @@ class AdminController extends Controller
             return view('admin.dosen-page.table', compact('dosen'));
         }
 
-        return view('admin.dosen-page.index', compact('dosen', 'search'));
+        $jenis_kbk = \Modules\ProdukInovasi\app\Models\KelompokKeahlian::all();
+
+        return view('admin.dosen-page.index', compact('dosen', 'search', 'jenis_kbk'));
     }
     public function detailDosen($id)
     {
@@ -148,8 +150,15 @@ class AdminController extends Controller
         $user->nip = $request->nip;
         $user->username = $request->username;
         $user->password = Hash::make($request->password);
-        $user->role = $request->role;
+        $user->role = 'Dosen';
+        $ubahKbk = $request->has('kbk_id');
+        if ($ubahKbk) {
+            $user->kbk_id = $request->kbk_id ?: null;
+        }
         $user->save($validasidata);
+        if ($ubahKbk) {
+            \App\Models\KbkPenugasan::atur($user->id, $user->kbk_id ? (int) $user->kbk_id : null, $request->boolean('is_ketua_kbk'));
+        }
 
         return redirect('/admin/pengguna/dosen')->with('success', 'Data dosen telah ditambahkan');
     }
@@ -170,8 +179,15 @@ class AdminController extends Controller
         $user->nip = $request->nip;
         $user->username = $request->username;
         $user->password = Hash::make($request->password);
-        $user->role = $request->role;
+        $user->role = 'Dosen';
+        $ubahKbk = $request->has('kbk_id');
+        if ($ubahKbk) {
+            $user->kbk_id = $request->kbk_id ?: null;
+        }
         $user->save($validasidata);
+        if ($ubahKbk) {
+            \App\Models\KbkPenugasan::atur($user->id, $user->kbk_id ? (int) $user->kbk_id : null, $request->boolean('is_ketua_kbk'));
+        }
 
         return redirect('/admin/pengguna/dosen')->with('success', 'Data dosen telah diubah');
     }

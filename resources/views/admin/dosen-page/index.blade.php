@@ -160,6 +160,19 @@
                                             <input type="text" value="Dosen" name="role" class="form-control"
                                                 hidden>
 
+                                            <div class="mb-3">
+                                                <label class="form-label" for="kbkTambahDosen">Kelompok Bidang Keahlian</label>
+                                                <select name="kbk_id" id="kbkTambahDosen" class="form-select">
+                                                    <option value="">Bukan anggota KBK</option>
+                                                    @foreach ($jenis_kbk as $kbk)
+                                                        <option value="{{ $kbk->id }}">{{ $kbk->nama_kbk }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="checkbox" name="is_ketua_kbk" value="1" id="isKetuaKbkTambah">
+                                                <label class="form-check-label" for="isKetuaKbkTambah">Ketua KBK</label>
+                                            </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-outline-secondary"
                                                     data-bs-dismiss="modal">Batal</button>

@@ -28,7 +28,7 @@ class AdminKetuaKbkController extends Controller
 {
     public function ketuaKBK()
     {
-        $kbk = User::with('kelompokKeahlian')->where('role', 'Ketua KBK')->paginate(10);
+        $kbk = User::with('kelompokKeahlian')->whereIn('id', \App\Models\KbkPenugasan::ketuaAktifUserIds())->paginate(10);
         $jenis_kbk = KelompokKeahlian::all();
 
         return view('produkinovasi::admin.ketua-kbk.index', compact('kbk', 'jenis_kbk'));
@@ -83,9 +83,11 @@ class AdminKetuaKbkController extends Controller
 
         $k_kbk->username = $request->username;
         $k_kbk->password = Hash::make($request->password);
-        $k_kbk->role = $request->role;
+        $k_kbk->role = 'Dosen';
 
         $k_kbk->save($validasi);
+
+        if ($k_kbk->kbk_id) { \App\Models\KbkPenugasan::atur($k_kbk->id, (int) $k_kbk->kbk_id, true); }
 
         return response()->json([
             'success' => true,
@@ -138,9 +140,11 @@ class AdminKetuaKbkController extends Controller
         }
 
         $k_kbk->username = $request->username;
-        $k_kbk->role = $request->role;
+        $k_kbk->role = 'Dosen';
 
         $k_kbk->save($validasi);
+
+        if ($k_kbk->kbk_id) { \App\Models\KbkPenugasan::atur($k_kbk->id, (int) $k_kbk->kbk_id, true); }
 
         return response()->json([
             'success' => true,

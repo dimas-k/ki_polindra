@@ -45,24 +45,6 @@
             </a>
         </li>
 
-        <li class="menu-item">
-            <a href="#" class="menu-link menu-toggle {{ Request::is('admin/news*') ? 'active bg-light' : '' }}">
-                <i class='menu-icon tf-icons bx bx-news'></i>
-                <div class="text-truncate" data-i18n="Berita">Berita</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{ route('admin.news.index') }}" class="menu-link {{ Request::is('admin/news') || Request::is('admin/news/*') ? 'active bg-light' : '' }}">
-                        <div class="text-truncate" data-i18n="DaftarBerita">Daftar Berita</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="{{ route('admin.news-category.index') }}" class="menu-link {{ Request::is('admin/news-category*') ? 'active bg-light' : '' }}">
-                        <div class="text-truncate" data-i18n="KategoriBerita">Kategori Berita</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
 
         <li class="menu-item">
             <a href="#" class="menu-link menu-toggle {{ Request::is('admin/produk-inovasi/*') ? 'active bg-light' : '' }}">

@@ -42,7 +42,9 @@ class LoginUserController extends Controller
         // dd($request);
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            if (Auth::user()->role == 'Dosen') {
+            if (Auth::user()->role == 'Dosen' && Auth::user()->apakahKetuaKbk()) {
+                return redirect('/ketua-kbk/portal');
+            } elseif (Auth::user()->role == 'Dosen') {
                 return redirect('/dosen/dashboard');
             } elseif (Auth::user()->role == 'Umum') {
                 return redirect('/umum/dashboard');

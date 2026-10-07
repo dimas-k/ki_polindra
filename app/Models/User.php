@@ -73,7 +73,8 @@ class User extends Authenticatable
         return $this->role === 'Umum';
     }
     public function apakahKetuaKbk(){
-        return $this->role === 'Ketua KBK';
+        return \App\Models\KbkPenugasan::where('user_id', $this->id)
+            ->where('peran', 'ketua')->whereNull('selesai')->exists();
     }
 
     // protected static function booted()
