@@ -90,8 +90,10 @@
                                     </tr>
                                     <tr>
                                         <th>Gambar desain Industri</th>
-                                        <td >: <a href="{{ route('public_di_dosen', ['filename' => basename($di->gambar_di)]) }} "
-                                            target="_blank">Lihat Gambar Desain Industri</a></td>
+                                        <td >: @foreach (\App\Support\MultiFileStorage::decode($di->gambar_di) as $__f)
+<a href="{{ route('public_di_dosen', ['filename' => basename($__f)]) }} "
+                                            target="_blank">Lihat Gambar Desain Industri</a>@if (!$loop->last)<br>@endif
+@endforeach</td>
                                     </tr>
                                     <tr>
                                         <th>Uraian Desain Industri</th>

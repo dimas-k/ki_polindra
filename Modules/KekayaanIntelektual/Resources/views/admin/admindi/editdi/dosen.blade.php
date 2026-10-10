@@ -107,7 +107,7 @@
                                 <label for="ktp" class="form-label">KTP Inventor</label>
                                 <input type="file" class="form-control" id="ktp" name="ktp_inventor">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
-                                        data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
+                                        data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih
                                     dari 10mb</span>
                                 {{-- @error('ktp_inventor')
                                             <div class="invalid-feedback">
@@ -258,10 +258,10 @@
                             </div>
                             <div class="mb-3">
                                 <label for="gambar_desain" class="form-label">Gambar Desain Industri</label>
-                                <input type="file" class="form-control" placeholder="" name="gambar_di"
+                                <input type="file" class="form-control" placeholder="" name="gambar_di[]" multiple accept=".pdf,.jpg,.jpeg,.png"
                                     id="gambar_desain">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
-                                        data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari
+                                        data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih dari
                                     10mb</span>
                                 {{-- @error('gambar_di')
                                             <div class="invalid-feedback">
@@ -274,7 +274,7 @@
                                 <input type="file" class="form-control" placeholder="" name="uraian_di"
                                     id="uraian_desain">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
-                                        data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari
+                                        data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih dari
                                     10mb</span>
                                 {{-- @error('uraian_di')
                                             <div class="invalid-feedback">
@@ -288,7 +288,7 @@
                                 <input type="file" class="form-control" placeholder="" name="surat_kepemilikan"
                                     id="pernyataan_kepemilikan">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
-                                        data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari
+                                        data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih dari
                                     10mb</span>
                                 {{-- @error('surat_kepemilikan')
                                             <div class="invalid-feedback">
@@ -301,7 +301,7 @@
                                 <input type="file" class="form-control" placeholder="" name="surat_pengalihan"
                                     id="pengalihan" value="{{ $di->surat_pengalihan }}">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
-                                        data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari
+                                        data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih dari
                                     10mb</span>
                                 {{-- @error('surat_pengalihan')
                                             <div class="invalid-feedback">
@@ -414,7 +414,7 @@
                     const allowedExcel = ['xls', 'xlsx'];
 
                     // Field yang seharusnya berformat PDF (jika diupload)
-                    const pdfFields = ['ktp_inventor', 'gambar_di', 'uraian_di', 'surat_kepemilikan',
+                    const pdfFields = ['ktp_inventor', 'uraian_di', 'surat_kepemilikan',
                         'surat_pengalihan'
                     ];
                     // Field untuk file Excel (opsional)

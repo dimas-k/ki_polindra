@@ -198,9 +198,11 @@
                     <div>
                         <div class="detail-label">Dokumen</div>
                         <div class="detail-value mt-1 d-flex flex-wrap gap-2">
-                            <a href="{{ asset('storage/' . $di->gambar_di) }}" target="_blank" class="btn-doc">
+                            @foreach (\App\Support\MultiFileStorage::decode($di->gambar_di) as $__f)
+<a href="{{ asset('storage/' . $__f) }}" target="_blank" class="btn-doc">
                                 <i class="bi bi-image"></i> Lihat Gambar DI
                             </a>
+@endforeach
                             <a href="{{ asset('storage/' . $di->uraian_di) }}" target="_blank" class="btn-doc">
                                 <i class="bi bi-file-text"></i> Lihat Uraian DI
                             </a>

@@ -139,7 +139,7 @@
                                             <th>gambar desain</th>
                                             <td>
                                                 <input type="file" class="form-control" placeholder=""
-                                                    name="gambar_di" id="gambar_desain">
+                                                    name="gambar_di[]" multiple accept=".pdf,.jpg,.jpeg,.png" id="gambar_desain">
                                                 <span class="text-danger"><i class="fa fa-warning me-2"
                                                         data-bs-toggle="tooltip"></i>Harus memasukkan kembali file yang
                                                     sama atau yang sudah di perbarui</span>

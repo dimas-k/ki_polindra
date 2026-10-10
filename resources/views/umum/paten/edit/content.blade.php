@@ -192,7 +192,7 @@
                                             <th>gambar paten</th>
                                             <td>
                                                 <input type="file" class="form-control" id="g_paten"
-                                                    placeholder="" name="gambar_paten">
+                                                    placeholder="" name="gambar_paten" accept=".pdf">
                                                 <span class="text-danger"><i class="fa fa-warning me-2"
                                                         data-bs-toggle="tooltip"></i>Harus memasukkan kembali file yang
                                                     sama atau yang sudah di perbarui</span>
@@ -202,7 +202,7 @@
                                             <th>gambar tampilan</th>
                                             <td>
                                                 <input type="file" class="form-control" id="g_tampilan"
-                                                    placeholder="" name="gambar_tampilan">
+                                                    placeholder="" name="gambar_tampilan[]" multiple accept=".pdf,.jpg,.jpeg,.png">
                                                 <span class="text-danger"><i class="fa fa-warning me-2"
                                                         data-bs-toggle="tooltip"></i>Harus memasukkan kembali file yang
                                                     sama atau yang sudah di perbarui</span>

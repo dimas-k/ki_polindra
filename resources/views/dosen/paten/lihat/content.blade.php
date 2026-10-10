@@ -132,19 +132,27 @@
                                     <tr>
                                         <th>Gambar Paten</th>
                                         <td>: 
-                                            {{-- <a href="{{ Storage::url('dokumen-paten/' . basename($paten->gambar_paten)) }}"
-                                                target="_blank">Lihat Gambar Paten</a> --}}
-                                            <a href="{{ route('public_paten_dosen', ['filename' => basename($paten->gambar_paten)]) }}"
-                                                target="_blank">Lihat Gambar Paten</a>
+                                            {{-- @foreach (\App\Support\MultiFileStorage::decode($paten->gambar_paten) as $__f)
+<a href="{{ Storage::url('dokumen-paten/' . basename($__f)) }}"
+                                                target="_blank">Lihat Gambar Paten</a>@if (!$loop->last)<br>@endif
+@endforeach --}}
+                                            @foreach (\App\Support\MultiFileStorage::decode($paten->gambar_paten) as $__f)
+<a href="{{ route('public_paten_dosen', ['filename' => basename($__f)]) }}"
+                                                target="_blank">Lihat Gambar Paten</a>@if (!$loop->last)<br>@endif
+@endforeach
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Gambar Tampilan</th>
                                         <td>: 
-                                            {{-- <a href="{{ Storage::url('dokumen-paten/' . basename($paten->gambar_tampilan))  }}"
-                                                target="_blank">Lihat Gambar Tampilan</a> --}}
-                                            <a href="{{ route('public_paten_dosen', ['filename' => basename($paten->gambar_tampilan)]) }}"
-                                                target="_blank">Lihat Gambar Tampilan</a>
+                                            {{-- @foreach (\App\Support\MultiFileStorage::decode($paten->gambar_tampilan) as $__f)
+<a href="{{ Storage::url('dokumen-paten/' . basename($__f))  }}"
+                                                target="_blank">Lihat Gambar Tampilan</a>@if (!$loop->last)<br>@endif
+@endforeach --}}
+                                            @foreach (\App\Support\MultiFileStorage::decode($paten->gambar_tampilan) as $__f)
+<a href="{{ route('public_paten_dosen', ['filename' => basename($__f)]) }}"
+                                                target="_blank">Lihat Gambar Tampilan</a>@if (!$loop->last)<br>@endif
+@endforeach
                                         </td>
                                     </tr>
                                     <tr>

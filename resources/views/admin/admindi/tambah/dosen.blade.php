@@ -233,7 +233,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="gambar_desain" class="form-label">Gambar Desain Industri</label>
-                                <input type="file" class="form-control" placeholder="" name="gambar_di"
+                                <input type="file" class="form-control" placeholder="" name="gambar_di[]" multiple accept=".pdf,.jpg,.jpeg,.png"
                                     id="gambar_desain">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari
@@ -420,7 +420,7 @@
                             }
                         } else if (files[file]) {
                             // Validate other files
-                            if (!allowedExtensionPDF.exec(files[file].name)) {
+                            if (!(['g_tampilan','gambar_desain','gambar_di'].includes(file) ? /(\.(pdf|jpe?g|png))$/i : allowedExtensionPDF).exec(files[file].name)) {
                                 showError("Tolong Masukkan " + file.replace('_', ' ').toUpperCase() + " Dengan Ekstensi .pdf!");
                                 return false;
                             }

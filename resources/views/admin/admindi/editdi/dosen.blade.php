@@ -258,7 +258,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="gambar_desain" class="form-label">Gambar Desain Industri</label>
-                                <input type="file" class="form-control" placeholder="" name="gambar_di"
+                                <input type="file" class="form-control" placeholder="" name="gambar_di[]" multiple accept=".pdf,.jpg,.jpeg,.png"
                                     id="gambar_desain">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari
@@ -414,7 +414,7 @@
                     const allowedExcel = ['xls', 'xlsx'];
 
                     // Field yang seharusnya berformat PDF (jika diupload)
-                    const pdfFields = ['ktp_inventor', 'gambar_di', 'uraian_di', 'surat_kepemilikan',
+                    const pdfFields = ['ktp_inventor', 'uraian_di', 'surat_kepemilikan',
                         'surat_pengalihan'
                     ];
                     // Field untuk file Excel (opsional)

@@ -208,7 +208,7 @@
                 <div class="mb-3">
                     <label for="" class="form-label">gambar Paten</label>
                     <input type="file" class="form-control @error('gambar_paten') is-invalid @enderror"
-                        id="" placeholder="" name="gambar_paten">
+                        id="" placeholder="" name="gambar_paten" accept=".pdf">
                     @error('surat_kuasa')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -218,7 +218,7 @@
                 <div class="mb-3">
                     <label for="" class="form-label">gambar Tampilan</label>
                     <input type="file" class="form-control @error('gambar_tampilan') is-invalid @enderror"
-                        id="" placeholder="" name="gambar_tampilan">
+                        id="" placeholder="" name="gambar_tampilan[]" multiple accept=".pdf,.jpg,.jpeg,.png">
                     @error('gambar_tampilan')
                         <div class="invalid-feedback">
                             {{ $message }}

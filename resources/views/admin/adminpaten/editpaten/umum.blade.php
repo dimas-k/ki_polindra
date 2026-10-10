@@ -257,7 +257,7 @@
                             <div class="mb-3">
                                 <label for="g_paten" class="form-label">gambar Paten</label>
                                 <input type="file" class="form-control " id="g_paten" placeholder=""
-                                    name="gambar_paten">
+                                    name="gambar_paten" accept=".pdf">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
                                     dari 10mb</span>
@@ -270,7 +270,7 @@
                             <div class="mb-3">
                                 <label for="g_tampilan" class="form-label">gambar Tampilan</label>
                                 <input type="file" class="form-control " id="g_tampilan" placeholder=""
-                                    name="gambar_tampilan">
+                                    name="gambar_tampilan[]" multiple accept=".pdf,.jpg,.jpeg,.png">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
                                     dari 10mb</span>

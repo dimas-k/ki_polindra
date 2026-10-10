@@ -5,6 +5,7 @@ namespace Modules\KekayaanIntelektual\app\Http\Controllers;
 use App\Models\User;
 use App\Models\Paten;
 use App\Models\Prodi;
+use App\Support\MultiFileStorage;
 use App\Services\KirimKeDashboardService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -156,7 +157,8 @@ class AdminPatenController extends Controller
             'pernyataan_kepemilikan' => 'required|mimes:pdf|max:2028',
             'surat_kuasa' => 'required|mimes:pdf|max:2028',
             'gambar_paten' => 'required|mimes:pdf|max:2028',
-            'gambar_tampilan' => 'required|mimes:pdf|max:2028',
+            'gambar_tampilan' => MultiFileStorage::RULE_REQUIRED,
+            'gambar_tampilan.*' => MultiFileStorage::RULE_EACH_FILE,
             'tanggal_permohonan' => 'required'
         ]);
         $paten = new Paten();
@@ -176,8 +178,8 @@ class AdminPatenController extends Controller
         $paten->judul_paten = $request->judul_paten;
         $paten->tanggal_permohonan = $request->tanggal_permohonan;
 
-        // Daftar file yang disimpan di public storage
-        $publicFiles = ['deskripsi_paten', 'abstrak_paten', 'gambar_paten', 'gambar_tampilan'];
+        // Daftar file yang disimpan di public storage (satu file per field)
+        $publicFiles = ['deskripsi_paten', 'abstrak_paten'];
         // Daftar file yang disimpan di private storage
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
@@ -207,6 +209,10 @@ class AdminPatenController extends Controller
                 $paten->{$field} = $path;
             }
         }
+        // gambar_paten & gambar_tampilan boleh diisi lebih dari 1 file
+        // (campuran PDF dan/atau gambar) -> disimpan sebagai JSON array
+        $paten->gambar_paten = MultiFileStorage::store($request, 'gambar_paten', 'dokumen-paten', 'public');
+        $paten->gambar_tampilan = MultiFileStorage::store($request, 'gambar_tampilan', 'dokumen-paten', 'public');
 
         $paten->save($validasidata);
 
@@ -237,7 +243,8 @@ class AdminPatenController extends Controller
             'pernyataan_kepemilikan' => 'required|mimes:pdf|max:2028',
             'surat_kuasa' => 'required|mimes:pdf|max:2028',
             'gambar_paten' => 'required|mimes:pdf|max:2028',
-            'gambar_tampilan' => 'required|mimes:pdf|max:2028',
+            'gambar_tampilan' => MultiFileStorage::RULE_REQUIRED,
+            'gambar_tampilan.*' => MultiFileStorage::RULE_EACH_FILE,
             'tanggal_permohonan' => 'required'
         ]);
         $paten = new Paten();
@@ -254,8 +261,8 @@ class AdminPatenController extends Controller
         $paten->judul_paten = $request->judul_paten;
         $paten->tanggal_permohonan = $request->tanggal_permohonan;
 
-        // Daftar file yang disimpan di public storage
-        $publicFiles = ['deskripsi_paten', 'abstrak_paten', 'gambar_paten', 'gambar_tampilan'];
+        // Daftar file yang disimpan di public storage (satu file per field)
+        $publicFiles = ['deskripsi_paten', 'abstrak_paten'];
         // Daftar file yang disimpan di private storage
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
@@ -284,6 +291,9 @@ class AdminPatenController extends Controller
                 $paten->{$field} = $path;
             }
         }
+        // gambar_paten & gambar_tampilan boleh diisi lebih dari 1 file
+        $paten->gambar_paten = MultiFileStorage::store($request, 'gambar_paten', 'dokumen-paten', 'public');
+        $paten->gambar_tampilan = MultiFileStorage::store($request, 'gambar_tampilan', 'dokumen-paten', 'public');
 
         $paten->save($validasidata);
         return redirect('/admin/paten')->with('success', 'Data Paten Berhasil Ditambahkan');
@@ -361,8 +371,10 @@ class AdminPatenController extends Controller
         $paten = Paten::where(function ($query) use ($filename) {
             $query->Where('abstrak_paten', 'dokumen-paten/' . $filename)
                 ->orWhere('deskripsi_paten', 'dokumen-paten/' . $filename)
-                ->orWhere('gambar_paten', 'dokumen-paten/' . $filename)
-                ->orWhere('gambar_tampilan', 'dokumen-paten/' . $filename)
+                // gambar_paten/gambar_tampilan sekarang JSON array (bisa lebih dari 1
+                // file), jadi dicocokkan dengan LIKE, bukan '=' lagi
+                ->orWhere('gambar_paten', 'LIKE', '%"dokumen-paten/' . $filename . '"%')
+                ->orWhere('gambar_tampilan', 'LIKE', '%"dokumen-paten/' . $filename . '"%')
                 ->orWhere('sertifikat_paten', 'dokumen-paten/' . $filename);
         })->first();
         // Validasi akses: hanya pemilik atau admin/verifikator yang bisa melihat
@@ -388,8 +400,8 @@ class AdminPatenController extends Controller
             $query
                 ->Where('abstrak_paten', 'dokumen-paten/' . $filename)
                 ->orWhere('deskripsi_paten', 'dokumen-paten/' . $filename)
-                ->orWhere('gambar_paten', 'dokumen-paten/' . $filename)
-                ->orWhere('gambar_tampilan', 'dokumen-paten/' . $filename)
+                ->orWhere('gambar_paten', 'LIKE', '%"dokumen-paten/' . $filename . '"%')
+                ->orWhere('gambar_tampilan', 'LIKE', '%"dokumen-paten/' . $filename . '"%')
                 ->orWhere('sertifikat_paten', 'dokumen-paten/' . $filename);
         })->first();
         // Validasi akses: hanya pemilik atau admin/verifikator yang bisa melihat
@@ -544,7 +556,8 @@ class AdminPatenController extends Controller
             'pernyataan_kepemilikan'    => 'nullable|mimes:pdf|max:2028',
             'surat_kuasa'               => 'nullable|mimes:pdf|max:2028',
             'gambar_paten'              => 'nullable|mimes:pdf|max:2028',
-            'gambar_tampilan'           => 'nullable|mimes:pdf|max:2028',
+            'gambar_tampilan'           => MultiFileStorage::RULE_NULLABLE,
+            'gambar_tampilan.*'         => MultiFileStorage::RULE_EACH_FILE,
             'tanggal_permohonan'        => 'required'
         ]);
 
@@ -589,7 +602,7 @@ class AdminPatenController extends Controller
             }
         }
 
-        $publicFiles = ['deskripsi_paten', 'abstrak_paten', 'gambar_paten', 'gambar_tampilan'];
+        $publicFiles = ['deskripsi_paten', 'abstrak_paten'];
         foreach ($publicFiles as $field) {
             if ($request->hasFile($field)) {
                 if ($paten->{$field}) {
@@ -600,6 +613,17 @@ class AdminPatenController extends Controller
                 // Simpan file ke folder 'dokumen-paten' pada disk 'public'
                 $path = $file->storeAs('dokumen-paten', $filename, 'public');
                 $paten->{$field} = $path;
+            }
+        }
+
+        // gambar_paten & gambar_tampilan: kalau ada file baru diupload,
+        // hapus semua file lama (bisa lebih dari satu) lalu simpan yang baru.
+        foreach (['gambar_paten', 'gambar_tampilan'] as $field) {
+            if ($request->hasFile($field)) {
+                foreach (MultiFileStorage::decode($paten->{$field}) as $oldPath) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+                $paten->{$field} = MultiFileStorage::store($request, $field, 'dokumen-paten', 'public');
             }
         }
 
@@ -630,8 +654,9 @@ class AdminPatenController extends Controller
             'klaim' => 'required|mimes:pdf|max:2028',
             'pernyataan_kepemilikan' => 'required|mimes:pdf|max:2028',
             'surat_kuasa' => 'required|mimes:pdf|max:2028',
-            'gambar_paten' => 'required|mimes:pdf|max:2028',
-            'gambar_tampilan' => 'required|mimes:pdf|max:2028',
+            'gambar_paten' => 'nullable|mimes:pdf|max:2028',
+            'gambar_tampilan' => MultiFileStorage::RULE_NULLABLE,
+            'gambar_tampilan.*' => MultiFileStorage::RULE_EACH_FILE,
             'tanggal_permohonan' => 'required'
         ]);
 
@@ -672,7 +697,7 @@ class AdminPatenController extends Controller
             }
         }
 
-        $publicFiles = ['deskripsi_paten', 'abstrak_paten', 'gambar_paten', 'gambar_tampilan'];
+        $publicFiles = ['deskripsi_paten', 'abstrak_paten'];
         foreach ($publicFiles as $field) {
             if ($request->hasFile($field)) {
                 if ($paten->{$field}) {
@@ -685,6 +710,16 @@ class AdminPatenController extends Controller
                 $paten->{$field} = $path;
             }
         }
+
+        foreach (['gambar_paten', 'gambar_tampilan'] as $field) {
+            if ($request->hasFile($field)) {
+                foreach (MultiFileStorage::decode($paten->{$field}) as $oldPath) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+                $paten->{$field} = MultiFileStorage::store($request, $field, 'dokumen-paten', 'public');
+            }
+        }
+
         // Simpan perubahan ke database
         $paten->save($validasidata);
 

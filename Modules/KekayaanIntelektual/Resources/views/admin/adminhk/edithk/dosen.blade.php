@@ -284,6 +284,24 @@
                                             </div>
                                         @enderror --}}
                             </div>
+<div class="mb-3">
+                                <label for="gambar_ciptaan" class="form-label">Gambar Ciptaan (opsional, boleh lebih dari 1 file)</label><br>
+                                @if (!empty($hk->gambar_ciptaan))
+                                    File : {{ collect(\App\Support\MultiFileStorage::decode($hk->gambar_ciptaan))->map(fn($f) => basename($f))->implode(', ') }}
+                                @else
+                                    File : Tidak ada
+                                @endif
+
+                                <input type="file" class="form-control " placeholder="" name="gambar_ciptaan[]" multiple accept=".pdf,.jpg,.jpeg,.png"
+                                    id="gambar_ciptaan">
+                                    <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
+                                        data-bs-toggle="tooltip"></i>masukan file jika ada perubahan</span>
+                                {{-- @error('gambar_ciptaan')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror --}}
+                            </div>
                             <div class="mb-3">
 
                                 <label class="form-label" for="surat_pengalihan">Surat Pengalihan Hak

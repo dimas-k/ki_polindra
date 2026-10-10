@@ -176,6 +176,8 @@ class HakCiptaController extends Controller
             'judul_ciptaan' => 'required',
             'uraian_singkat' => 'required|max:60000',
             'dokumen_invensi' => 'required|mimes:pdf',
+            'gambar_ciptaan' => \App\Support\MultiFileStorage::RULE_NULLABLE,
+            'gambar_ciptaan.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
             'surat_pengalihan' => 'required|mimes:pdf',
             'surat_pernyataan' => 'required|mimes:pdf',
             'tanggal_permohonan' => 'required'
@@ -211,6 +213,11 @@ class HakCiptaController extends Controller
         }
 
         // Dokumen invensi disimpan di disk public
+        // gambar ciptaan boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+        if ($request->hasFile('gambar_ciptaan')) {
+            foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
+            $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'public');
+        }
         if ($request->hasFile('dokumen_invensi')) {
             $file = $request->file('dokumen_invensi');
             $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());

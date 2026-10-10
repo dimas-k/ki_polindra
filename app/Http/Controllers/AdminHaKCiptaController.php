@@ -94,6 +94,7 @@ class AdminHaKCiptaController extends Controller
         // Cari data paten berdasarkan salah satu kolom file
         $hc = HakCipta::where(function ($query) use ($filename) {
             $query->where('dokumen_invensi', 'dokumen-hc/' . $filename)
+                ->orWhere('gambar_ciptaan', 'LIKE', '%"dokumen-hc/' . $filename . '"%')
                 ->orWhere('sertifikat_hakcipta', 'dokumen-hc/' . $filename);
         })->first();
 
@@ -164,6 +165,8 @@ class AdminHaKCiptaController extends Controller
             'judul_ciptaan' => 'required',
             'uraian_singkat' => 'required|max:60000',
             'dokumen_invensi' => 'nullable|mimes:pdf|max:2028',
+            'gambar_ciptaan' => \App\Support\MultiFileStorage::RULE_NULLABLE,
+            'gambar_ciptaan.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
             'surat_pengalihan' => 'nullable|mimes:pdf|max:2028',
             'surat_pernyataan' => 'nullable|mimes:pdf|max:2028',
             'tanggal_permohonan' => 'required|date'
@@ -189,6 +192,11 @@ class AdminHaKCiptaController extends Controller
             $hc->tanggal_permohonan = $request->tanggal_permohonan;
     
             $publicFiles = ['dokumen_invensi'];
+            // gambar ciptaan boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+            if ($request->hasFile('gambar_ciptaan')) {
+                foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
+                $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'public');
+            }
             $privateFiles = [
                 'ktp_inventor' => 'ktp_inventor',
                 'gambar_img' => \App\Support\GambarImage::RULE,
@@ -249,6 +257,8 @@ class AdminHaKCiptaController extends Controller
             'judul_ciptaan' => 'required',
             'uraian_singkat' => 'required|max:60000',
             'dokumen_invensi' => 'required|mimes:pdf',
+            'gambar_ciptaan' => \App\Support\MultiFileStorage::RULE_NULLABLE,
+            'gambar_ciptaan.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
             'surat_pengalihan' => 'required|mimes:pdf',
             'surat_pernyataan' => 'required|mimes:pdf',
             'tanggal_permohonan' => 'required'
@@ -270,6 +280,11 @@ class AdminHaKCiptaController extends Controller
         $hc->tanggal_permohonan = $request->tanggal_permohonan;
 
         $publicFiles = ['dokumen_invensi'];
+        // gambar ciptaan boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+        if ($request->hasFile('gambar_ciptaan')) {
+            foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
+            $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'public');
+        }
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
             'gambar_img' => \App\Support\GambarImage::RULE,
@@ -436,6 +451,8 @@ class AdminHaKCiptaController extends Controller
             'judul_ciptaan' => 'required',
             'uraian_singkat' => 'required|max:60000',
             'dokumen_invensi' => 'required|mimes:pdf',
+            'gambar_ciptaan' => \App\Support\MultiFileStorage::RULE_NULLABLE,
+            'gambar_ciptaan.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
             'surat_pengalihan' => 'required|mimes:pdf',
             'surat_pernyataan' => 'required|mimes:pdf',
             'tanggal_permohonan' => 'required'
@@ -461,6 +478,11 @@ class AdminHaKCiptaController extends Controller
         $hc->tanggal_permohonan = $request->tanggal_permohonan;
 
         $publicFiles = ['dokumen_invensi'];
+        // gambar ciptaan boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+        if ($request->hasFile('gambar_ciptaan')) {
+            foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
+            $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'public');
+        }
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
             'gambar_img' => \App\Support\GambarImage::RULE,
@@ -514,6 +536,8 @@ class AdminHaKCiptaController extends Controller
             'judul_ciptaan' => 'required',
             'uraian_singkat' => 'required|max:60000',
             'dokumen_invensi' => 'required|mimes:pdf',
+            'gambar_ciptaan' => \App\Support\MultiFileStorage::RULE_NULLABLE,
+            'gambar_ciptaan.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
             'surat_pengalihan' => 'required|mimes:pdf',
             'surat_pernyataan' => 'required|mimes:pdf',
             'tanggal_permohonan' => 'required'
@@ -536,6 +560,11 @@ class AdminHaKCiptaController extends Controller
         $hc->tanggal_permohonan = $request->tanggal_permohonan;
 
         $publicFiles = ['dokumen_invensi'];
+        // gambar ciptaan boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+        if ($request->hasFile('gambar_ciptaan')) {
+            foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
+            $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'public');
+        }
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
             'gambar_img' => \App\Support\GambarImage::RULE,

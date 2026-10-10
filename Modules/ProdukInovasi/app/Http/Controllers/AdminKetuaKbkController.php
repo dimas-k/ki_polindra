@@ -41,59 +41,14 @@ class AdminKetuaKbkController extends Controller
         return view('produkinovasi::admin.ketua-kbk.show.index', compact('k_kbk'));
     }
 
-    public function storeDataKetuaKbk(Request $request)
-    {
-        if ($request->ajax() && $request->has('check_unique')) {
-            $field = $request->field;
-            $value = $request->value;
-
-            $exists = User::where($field, $value)->exists();
-
-            return response()->json(['exists' => $exists]);
-        }
-
-        $validasi = $request->validate([
-            'nama_lengkap' => 'required|string|unique:users,nama_lengkap',
-            'nip' => 'required|numeric|digits_between:1,20|unique:users',
-            'kbk_id' => 'required|exists:kelompok_keahlians,id',
-            'no_telepon' => 'required',
-            'email' => 'required|email|unique:users',
-            'jabatan' => 'required',
-            'username' => 'required|unique:users',
-            'password' => 'required|min:5',
-            'confirm_password' => 'required|same:password',
-            'pas_foto' => 'required|file|mimes:jpg,jpeg,png|max:2048',
-            'role' => 'required',
-        ]);
-
-        $k_kbk = new User();
-        $k_kbk->nama_lengkap = $request->nama_lengkap;
-        $k_kbk->nip = $request->nip;
-        $k_kbk->kbk_id = $request->kbk_id;
-        $k_kbk->no_telepon = $request->no_telepon;
-        $k_kbk->email = $request->email;
-        $k_kbk->jabatan = $request->jabatan;
-
-        if ($request->hasFile('pas_foto')) {
-            $originalName = $request->file('pas_foto')->getClientOriginalName();
-            $fileName = time() . '_' . str_replace(' ', '_', $originalName);
-            $path = $request->file('pas_foto')->storeAs('dokumen-user', $fileName);
-            $k_kbk->pas_foto = $path;
-        }
-
-        $k_kbk->username = $request->username;
-        $k_kbk->password = Hash::make($request->password);
-        $k_kbk->role = 'Dosen';
-
-        $k_kbk->save($validasi);
-
-        if ($k_kbk->kbk_id) { \App\Models\KbkPenugasan::atur($k_kbk->id, (int) $k_kbk->kbk_id, true); }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Data ketua Kelompok Keahlian berhasil ditambahkan!',
-        ]);
-    }
+    /*
+    | storeDataKetuaKbk() dihapus (konsolidasi akun Ketua KBK).
+    | Pembuatan akun Ketua KBK sekarang hanya lewat form Dosen terpadu
+    | di AdminController::dosenNew (route: tambah.dosen), yang sudah
+    | punya opsi kbk_id + is_ketua_kbk -> KbkPenugasan::atur(...).
+    | Ini menghindari dua jalur pembuatan akun dengan validasi yang
+    | bisa saling berbeda/divergen.
+    */
 
     public function updateKetuaKbk(Request $request, $id)
     {

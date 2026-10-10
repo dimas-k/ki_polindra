@@ -267,8 +267,9 @@ class PatenController extends Controller
             'klaim' => 'required|mimes:pdf',
             'pernyataan_kepemilikan' => 'required|mimes:pdf',
             'surat_kuasa' => 'required|mimes:pdf',
-            'gambar_paten' => 'required|mimes:pdf',
-            'gambar_tampilan' => 'required|mimes:pdf',
+            'gambar_paten' => 'required|mimes:pdf|max:2028',
+            'gambar_tampilan' => \App\Support\MultiFileStorage::RULE_REQUIRED,
+            'gambar_tampilan.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
         ]);
         $paten = new Paten();
         $paten->nama_lengkap = $request->nama_lengkap;
@@ -293,7 +294,14 @@ class PatenController extends Controller
         }
 
         // File dokumen invensi disimpan di disk public
-        $publicFiles = ['abstrak_paten', 'deskripsi_paten', 'gambar_paten', 'gambar_tampilan'];
+        $publicFiles = ['abstrak_paten', 'deskripsi_paten'];
+        // field gambar boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+        foreach (['gambar_paten', 'gambar_tampilan'] as $mf) {
+            if ($request->hasFile($mf)) {
+                foreach (\App\Support\MultiFileStorage::decode($paten->{$mf}) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
+                $paten->{$mf} = \App\Support\MultiFileStorage::store($request, $mf, 'dokumen-paten', 'public');
+            }
+        }
         foreach ($publicFiles as $field) {
             if ($request->hasFile($field)) {
                 $file = $request->file($field);
@@ -337,8 +345,8 @@ class PatenController extends Controller
         $paten = Paten::where(function ($query) use ($filename) {
             $query->Where('abstrak_paten', 'dokumen-paten/' . $filename)
                 ->orWhere('deskripsi_paten', 'dokumen-paten/' . $filename)
-                ->orWhere('gambar_paten', 'dokumen-paten/' . $filename)
-                ->orWhere('gambar_tampilan', 'dokumen-paten/' . $filename)
+                ->orWhere('gambar_paten', 'LIKE', '%"dokumen-paten/' . $filename . '"%')
+                ->orWhere('gambar_tampilan', 'LIKE', '%"dokumen-paten/' . $filename . '"%')
                 ->orWhere('sertifikat_paten', 'dokumen-paten/' . $filename);
         })->first();
 
@@ -359,6 +367,7 @@ class PatenController extends Controller
 
         $hc = HakCipta::where(function ($query) use ($filename) {
             $query->where('dokumen_invensi', 'dokumen-hc/' . $filename)
+                ->orWhere('gambar_ciptaan', 'LIKE', '%"dokumen-hc/' . $filename . '"%')
                 ->orWhere('sertifikat_hakcipta', 'dokumen-hc/' . $filename);
         })->first();
 
@@ -379,7 +388,7 @@ class PatenController extends Controller
 
         $di = DesainIndustri::where(function ($query) use ($filename) {
             $query->where('uraian_di', 'dokumen-di/' . $filename)
-                ->orWhere('gambar_di', 'dokumen-di/' . $filename)
+                ->orWhere('gambar_di', 'LIKE', '%"dokumen-di/' . $filename . '"%')
                 ->orWhere('sertifikat_desain', 'dokumen-di/' . $filename);
         })->first();
 

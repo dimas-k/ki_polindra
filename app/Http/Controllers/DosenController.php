@@ -352,8 +352,8 @@ class DosenController extends Controller
             $query
                 ->Where('abstrak_paten', 'dokumen-paten/' . $filename)
                 ->orWhere('deskripsi_paten', 'dokumen-paten/' . $filename)
-                ->orWhere('gambar_paten', 'dokumen-paten/' . $filename)
-                ->orWhere('gambar_tampilan', 'dokumen-paten/' . $filename)
+                ->orWhere('gambar_paten', 'LIKE', '%"dokumen-paten/' . $filename . '"%')
+                ->orWhere('gambar_tampilan', 'LIKE', '%"dokumen-paten/' . $filename . '"%')
                 ->orWhere('sertifikat_paten', 'dokumen-paten/' . $filename);
         })->first();
 
@@ -407,7 +407,8 @@ class DosenController extends Controller
             'pernyataan_kepemilikan' => 'required|mimes:pdf|max:2028',
             'surat_kuasa' => 'required|mimes:pdf|max:2028',
             'gambar_paten' => 'required|mimes:pdf|max:2028',
-            'gambar_tampilan' => 'required|mimes:pdf|max:2028',
+            'gambar_tampilan' => \App\Support\MultiFileStorage::RULE_REQUIRED,
+            'gambar_tampilan.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
             'tanggal_permohonan' => 'required'
         ]);
 
@@ -431,7 +432,14 @@ class DosenController extends Controller
             $paten->tanggal_permohonan = $request->tanggal_permohonan;
 
             // Daftar file yang disimpan di public storage
-            $publicFiles = ['deskripsi_paten', 'abstrak_paten', 'gambar_paten', 'gambar_tampilan'];
+            $publicFiles = ['deskripsi_paten', 'abstrak_paten'];
+            // field gambar boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+            foreach (['gambar_paten', 'gambar_tampilan'] as $mf) {
+                if ($request->hasFile($mf)) {
+                    foreach (\App\Support\MultiFileStorage::decode($paten->{$mf}) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
+                    $paten->{$mf} = \App\Support\MultiFileStorage::store($request, $mf, 'dokumen-paten', 'public');
+                }
+            }
             // Daftar file yang disimpan di private storage
             $privateFiles = [
                 'ktp_inventor' => 'ktp_inventor',
@@ -609,7 +617,8 @@ class DosenController extends Controller
             'pernyataan_kepemilikan'    => 'nullable|mimes:pdf|max:2028',
             'surat_kuasa'               => 'nullable|mimes:pdf|max:2028',
             'gambar_paten'              => 'nullable|mimes:pdf|max:2028',
-            'gambar_tampilan'           => 'nullable|mimes:pdf|max:2028',
+            'gambar_tampilan'           => \App\Support\MultiFileStorage::RULE_NULLABLE,
+            'gambar_tampilan.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
             'tanggal_permohonan'        => 'required'
         ]);
 
@@ -661,7 +670,14 @@ class DosenController extends Controller
             }
         }
 
-        $publicFiles = ['deskripsi_paten', 'abstrak_paten', 'gambar_paten', 'gambar_tampilan'];
+        $publicFiles = ['deskripsi_paten', 'abstrak_paten'];
+        // field gambar boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+        foreach (['gambar_paten', 'gambar_tampilan'] as $mf) {
+            if ($request->hasFile($mf)) {
+                foreach (\App\Support\MultiFileStorage::decode($paten->{$mf}) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
+                $paten->{$mf} = \App\Support\MultiFileStorage::store($request, $mf, 'dokumen-paten', 'public');
+            }
+        }
         foreach ($publicFiles as $field) {
             if ($request->hasFile($field)) {
                 if ($paten->{$field}) {
@@ -728,6 +744,8 @@ class DosenController extends Controller
             'judul_ciptaan' => 'required',
             'uraian_singkat' => 'required|max:60000',
             'dokumen_invensi' => 'nullable|mimes:pdf|max:2028',
+            'gambar_ciptaan' => \App\Support\MultiFileStorage::RULE_NULLABLE,
+            'gambar_ciptaan.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
             'surat_pengalihan' => 'nullable|mimes:pdf|max:2028',
             'surat_pernyataan' => 'nullable|mimes:pdf|max:2028',
             'tanggal_permohonan' => 'required|date'
@@ -758,6 +776,11 @@ class DosenController extends Controller
             $hc->tanggal_permohonan = $request->tanggal_permohonan;
 
             $publicFiles = ['dokumen_invensi'];
+            // gambar ciptaan boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+            if ($request->hasFile('gambar_ciptaan')) {
+                foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
+                $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'public');
+            }
             $privateFiles = [
                 'ktp_inventor' => 'ktp_inventor',
                 'gambar_img' => \App\Support\GambarImage::RULE,
@@ -826,6 +849,8 @@ class DosenController extends Controller
             'judul_ciptaan' => 'required',
             'uraian_singkat' => 'required|max:60000',
             'dokumen_invensi' => 'required|mimes:pdf|max:10240', // Max size 10 MB
+            'gambar_ciptaan' => \App\Support\MultiFileStorage::RULE_NULLABLE,
+            'gambar_ciptaan.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
             'surat_pengalihan' => 'required|mimes:pdf|max:10240', // Max size 10 MB
             'surat_pernyataan' => 'required|mimes:pdf|max:10240', // Max size 10 MB
             'tanggal_permohonan' => 'required',
@@ -851,6 +876,11 @@ class DosenController extends Controller
             $hc->tanggal_permohonan = $request->tanggal_permohonan;
 
             $publicFiles = ['dokumen_invensi'];
+            // gambar ciptaan boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+            if ($request->hasFile('gambar_ciptaan')) {
+                foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
+                $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'public');
+            }
             $privateFiles = [
                 'ktp_inventor' => 'ktp_inventor',
                 'gambar_img' => \App\Support\GambarImage::RULE,
@@ -934,6 +964,7 @@ class DosenController extends Controller
         // Hanya kolom yang disimpan di disk public
         $hc = HakCipta::where(function ($query) use ($filename) {
             $query->where('dokumen_invensi', 'dokumen-hc/' . $filename)
+                ->orWhere('gambar_ciptaan', 'LIKE', '%"dokumen-hc/' . $filename . '"%')
                 ->orWhere('sertifikat_hakcipta', 'dokumen-hc/' . $filename);
         })->first();
         if (!$hc || $hc->user_id !== auth()->id()) {
@@ -986,7 +1017,7 @@ class DosenController extends Controller
         $di = DesainIndustri::where(function ($query) use ($filename) {
             $query
                 ->Where('uraian_di', 'dokumen-di/' . $filename)
-                ->orWhere('gambar_di', 'dokumen-di/' . $filename);
+                ->orWhere('gambar_di', 'LIKE', '%"dokumen-di/' . $filename . '"%');
 
         })->first();
 
@@ -1031,7 +1062,8 @@ class DosenController extends Controller
             'jenis_di' => 'required',
             'judul_di' => 'required',
             'uraian_di' => 'nullable|mimes:pdf|max:2028',
-            'gambar_di' => 'nullable|mimes:pdf|max:2028',
+            'gambar_di' => \App\Support\MultiFileStorage::RULE_NULLABLE,
+            'gambar_di.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
             'surat_kepemilikan' => 'nullable|mimes:pdf|max:2028',
             'surat_pengalihan' => 'nullable|mimes:pdf|max:2028',
             'tanggal_permohonan' => 'required|date'
@@ -1084,7 +1116,14 @@ class DosenController extends Controller
                 }
             }
     
-            $publicFiles = ['uraian_di', 'gambar_di'];
+            $publicFiles = ['uraian_di'];
+            // field gambar boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+            foreach (['gambar_di'] as $mf) {
+                if ($request->hasFile($mf)) {
+                    foreach (\App\Support\MultiFileStorage::decode($di->{$mf}) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
+                    $di->{$mf} = \App\Support\MultiFileStorage::store($request, $mf, 'dokumen-di', 'public');
+                }
+            }
             foreach ($publicFiles as $field) {
                 if ($request->hasFile($field)) {
                     if ($di->{$field}) {
@@ -1131,7 +1170,8 @@ class DosenController extends Controller
             'jenis_di' => 'required',
             'judul_di' => 'required',
             'uraian_di' => 'required|mimes:pdf|max:10240', // Max size 10 MB
-            'gambar_di' => 'required|mimes:pdf|max:10240', // Max size 10 MB
+            'gambar_di' => \App\Support\MultiFileStorage::RULE_REQUIRED,
+            'gambar_di.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
             'surat_kepemilikan' => 'required|mimes:pdf|max:10240', // Max size 10 MB
             'surat_pengalihan' => 'required|mimes:pdf|max:10240', // Max size 10 MB
             'tanggal_permohonan' => 'required'
@@ -1156,7 +1196,14 @@ class DosenController extends Controller
             $di->judul_di = $request->judul_di;
             $di->tanggal_permohonan = $request->tanggal_permohonan;
 
-            $publicFiles = ['gambar_di', 'uraian_di'];
+            $publicFiles = ['uraian_di'];
+            // field gambar boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+            foreach (['gambar_di'] as $mf) {
+                if ($request->hasFile($mf)) {
+                    foreach (\App\Support\MultiFileStorage::decode($di->{$mf}) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
+                    $di->{$mf} = \App\Support\MultiFileStorage::store($request, $mf, 'dokumen-di', 'public');
+                }
+            }
 
             $privateFiles = [
                 'ktp_inventor' => 'ktp_inventor',

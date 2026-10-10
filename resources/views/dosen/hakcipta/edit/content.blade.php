@@ -187,6 +187,21 @@
                                                     perubahan</span>
                                             </td>
                                         </tr>
+<tr>
+                                            <th>Gambar Ciptaan (opsional, boleh lebih dari 1 file)</th>
+                                            <td>
+                                                @if (!empty($hc->gambar_ciptaan))
+                                                    File : {{ collect(\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan))->map(fn($f) => basename($f))->implode(', ') }}
+                                                @else
+                                                    File : Tidak ada
+                                                @endif
+                                                <input type="file" class="form-control " placeholder=""
+                                                    name="gambar_ciptaan[]" multiple accept=".pdf,.jpg,.jpeg,.png" id="gambar_ciptaan">
+                                                <span class="text-danger"><i class="fa fa-warning me-2"
+                                                        data-bs-toggle="tooltip"></i>masukan file jika ada
+                                                    perubahan</span>
+                                            </td>
+                                        </tr>
                                         <tr>
                                             <th>Surat Pengalihan Hak Cipta</th>
                                             <td>

@@ -212,14 +212,18 @@
                                 target="_blank" class="btn-doc">
                                 <i class="bi bi-file-earmark-text"></i> Deskripsi
                             </a>
-                            <a href="{{ route('public_paten_guest', ['filename' => basename($paten->gambar_paten)]) }}"
+                            @foreach (\App\Support\MultiFileStorage::decode($paten->gambar_paten) as $__f)
+<a href="{{ route('public_paten_guest', ['filename' => basename($__f)]) }}"
                                 target="_blank" class="btn-doc">
                                 <i class="bi bi-image"></i> Gambar Paten
-                            </a>
-                            <a href="{{ route('public_paten_guest', ['filename' => basename($paten->gambar_tampilan)]) }}"
+                            </a>@if (!$loop->last)<br>@endif
+@endforeach
+                            @foreach (\App\Support\MultiFileStorage::decode($paten->gambar_tampilan) as $__f)
+<a href="{{ route('public_paten_guest', ['filename' => basename($__f)]) }}"
                                 target="_blank" class="btn-doc">
                                 <i class="bi bi-display"></i> Gambar Tampilan
-                            </a>
+                            </a>@if (!$loop->last)<br>@endif
+@endforeach
                         </div>
                     </div>
                 </div>

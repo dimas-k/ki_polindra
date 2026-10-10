@@ -206,6 +206,18 @@
                                     </div>
                                 @enderror --}}
                             </div>
+<div class="mb-3">
+                                <label for="gambar_ciptaan" class="form-label">Gambar Ciptaan (opsional, boleh lebih dari 1 file)</label>
+                                <input type="file" class="form-control " placeholder="" name="gambar_ciptaan[]" multiple accept=".pdf,.jpg,.jpeg,.png"
+                                    id="gambar_ciptaan">
+                                <span class="text-danger"><i class="fa fa-warning me-2"
+                                        data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih dari 2mb</span>
+                                {{-- @error('gambar_ciptaan')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror --}}
+                            </div>
                             <div class="mb-3">
                                 <label class="form-label" for="surat_pengalihan">Surat Pengalihan Hak Cipta</label>
                                 <input type="file" class="form-control " placeholder="" name="surat_pengalihan"

@@ -25,6 +25,13 @@ class HakCipta extends Model
     protected static function booted()
     {
         static::deleting(function ($hc) {
+            // field multi-file (JSON array of path)
+            foreach (['gambar_ciptaan'] as $mf) {
+                foreach (\App\Support\MultiFileStorage::decode($hc->{$mf}) as $mp) {
+                    Storage::disk('public')->delete($mp);
+                }
+            }
+
             // Daftar file yang disimpan di private storage
             $privateFiles = [
                 'ktp_inventor',

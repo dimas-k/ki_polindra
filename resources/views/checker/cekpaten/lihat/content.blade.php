@@ -136,13 +136,17 @@
                                     <tr>
                                         <th>Gambar Paten</th>
                                         <td>:
-                                            <a href="{{ route('public_paten_verifikator', ['file' => basename($paten->gambar_paten)])  }}" target="_blank">Lihat Gambar paten</a>
+                                            @foreach (\App\Support\MultiFileStorage::decode($paten->gambar_paten) as $__f)
+<a href="{{ route('public_paten_verifikator', ['file' => basename($__f)])  }}" target="_blank">Lihat Gambar paten</a>@if (!$loop->last)<br>@endif
+@endforeach
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Gambar Tampilan</th>
                                         <td>:
-                                            <a href="{{ route('public_paten_verifikator', ['file' => basename($paten->gambar_tampilan)])  }}" target="_blank">Lihat Gambar Tampilan</a>
+                                            @foreach (\App\Support\MultiFileStorage::decode($paten->gambar_tampilan) as $__f)
+<a href="{{ route('public_paten_verifikator', ['file' => basename($__f)])  }}" target="_blank">Lihat Gambar Tampilan</a>@if (!$loop->last)<br>@endif
+@endforeach
                                         </td>
                                     </tr>
                                     <tr>

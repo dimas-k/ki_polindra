@@ -475,22 +475,22 @@
                         });
                         return false;
                     }
-                    if (!allowedExtension.exec(g_paten.name)) {
+                    if (!/(\.pdf)$/i.exec(g_paten.name)) {
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Tolong Masukkan Gambar Paten Paten Dengan Ekstensi .pdf!",
+                            text: "Tolong Masukkan Gambar Paten Dengan Ekstensi .pdf!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500
                         });
                         return false;
                     }
-                    if (!allowedExtension.exec(g_tampilan.name)) {
+                    if (!/(\.(pdf|jpe?g|png))$/i.exec(g_tampilan.name)) {
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Tolong Masukkan Gambar Tampilan Paten Dengan Ekstensi .pdf!",
+                            text: "Tolong Masukkan Gambar Tampilan Paten Dengan Ekstensi .pdf/.jpg/.jpeg/.png!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500

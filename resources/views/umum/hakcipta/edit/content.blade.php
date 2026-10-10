@@ -146,6 +146,16 @@
                                                 
                                             </td>
                                         </tr>
+<tr>
+                                            <th>Gambar Ciptaan (opsional, boleh lebih dari 1 file)</th>
+                                            <td>
+                                                <input type="file" id="gambar_ciptaan"
+                                                    class="form-control"
+                                                    placeholder="" name="gambar_ciptaan[]" multiple accept=".pdf,.jpg,.jpeg,.png">
+                                                    <span class="text-danger"><i class="fa fa-warning me-2" data-bs-toggle="tooltip"></i>Harus memasukkan kembali file yang sama atau yang sudah di perbarui</span>
+                                                
+                                            </td>
+                                        </tr>
                                         <tr>
                                             <th>Surat Pengalihan Hak Cipta</th>
                                             <td>

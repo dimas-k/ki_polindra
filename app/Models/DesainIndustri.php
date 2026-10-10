@@ -26,6 +26,13 @@ class DesainIndustri extends Model
     protected static function booted()
     {
         static::deleting(function ($di) {
+            // field multi-file (JSON array of path)
+            foreach (['gambar_di'] as $mf) {
+                foreach (\App\Support\MultiFileStorage::decode($di->{$mf}) as $mp) {
+                    Storage::disk('public')->delete($mp);
+                }
+            }
+
             // Daftar file yang disimpan di private storage
             $privateFiles = [
                 'ktp_inventor' ,

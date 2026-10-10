@@ -32,7 +32,7 @@
                     @foreach ($paten as $p)
                         <div class="col-lg-4 col-md-6">
                             <div class="card h-100 shadow-sm">
-                                <img src="{{ asset('assets/gedung.jpg') }}" class="card-img-top"
+                                <img src="{{ ($__g = \App\Support\MultiFileStorage::firstImage($p->gambar_tampilan)) ? \Illuminate\Support\Facades\Storage::disk('public')->url($__g) : asset('assets/gedung.jpg') }}" class="card-img-top"
                                     alt="{{ $p->judul_paten }}" style="height: 180px; object-fit: cover;">
                                 <div class="card-body d-flex flex-column">
                                     <span class="badge bg-primary mb-2 align-self-start">{{ $p->jenis_paten }}</span>
@@ -45,9 +45,9 @@
                                         @if ($p->abstrak_paten)
                                             <a href="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($p->abstrak_paten) }}" target="_blank" class="btn btn-sm btn-outline-primary">Lihat Abstrak</a>
                                         @endif
-                                        @if ($p->gambar_paten)
-                                            <a href="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($p->gambar_paten) }}" target="_blank" class="btn btn-sm btn-outline-secondary">Lihat Dokumen</a>
-                                        @endif
+                                        @foreach (\App\Support\MultiFileStorage::decode($p->gambar_paten) as $__i => $__f)
+                                            <a href="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($__f) }}" target="_blank" class="btn btn-sm btn-outline-secondary">{{ \App\Support\MultiFileStorage::isImage($__f) ? 'Lihat Gambar' : 'Lihat Dokumen' }} {{ $__i + 1 }}</a>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -70,7 +70,7 @@
                     @foreach ($hakCipta as $hc)
                         <div class="col-lg-4 col-md-6">
                             <div class="card h-100 shadow-sm">
-                                <img src="{{ asset('assets/gedung.jpg') }}" class="card-img-top"
+                                <img src="{{ ($__g = \App\Support\MultiFileStorage::firstImage($hc->gambar_ciptaan) ?: ($hc->gambar_img ?? null)) ? \Illuminate\Support\Facades\Storage::disk('public')->url($__g) : asset('assets/gedung.jpg') }}" class="card-img-top"
                                     alt="{{ $hc->judul_ciptaan }}" style="height: 180px; object-fit: cover;">
                                 <div class="card-body d-flex flex-column">
                                     <span class="badge bg-primary mb-2 align-self-start">{{ $hc->jenis_ciptaan }}</span>
@@ -108,7 +108,7 @@
                     @foreach ($desainIndustri as $di)
                         <div class="col-lg-4 col-md-6">
                             <div class="card h-100 shadow-sm">
-                                <img src="{{ asset('assets/gedung.jpg') }}" class="card-img-top"
+                                <img src="{{ ($__g = \App\Support\MultiFileStorage::firstImage($di->gambar_di)) ? \Illuminate\Support\Facades\Storage::disk('public')->url($__g) : asset('assets/gedung.jpg') }}" class="card-img-top"
                                     alt="{{ $di->judul_di }}" style="height: 180px; object-fit: cover;">
                                 <div class="card-body d-flex flex-column">
                                     <span class="badge bg-primary mb-2 align-self-start">Desain Industri</span>
@@ -118,9 +118,9 @@
                                         <small>{{ $di->prodi->nama_prodi ?? '-' }} &middot; {{ $di->prodi->jurusan->nama_jurusan ?? '-' }}</small>
                                     </p>
                                     <div class="mt-auto d-flex flex-wrap gap-2">
-                                        @if ($di->gambar_di)
-                                            <a href="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($di->gambar_di) }}" target="_blank" class="btn btn-sm btn-outline-primary">Lihat Gambar Desain</a>
-                                        @endif
+                                        @foreach (\App\Support\MultiFileStorage::decode($di->gambar_di) as $__i => $__f)
+                                            <a href="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($__f) }}" target="_blank" class="btn btn-sm btn-outline-primary">{{ \App\Support\MultiFileStorage::isImage($__f) ? 'Lihat Gambar Desain' : 'Lihat Dokumen Desain' }} {{ $__i + 1 }}</a>
+                                        @endforeach
                                         @if ($di->uraian_di)
                                             <a href="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($di->uraian_di) }}" target="_blank" class="btn btn-sm btn-outline-secondary">Lihat Uraian</a>
                                         @endif

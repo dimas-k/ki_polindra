@@ -270,7 +270,7 @@
                             <div class="mb-3">
                                 <label for="g_paten" class="form-label">gambar Paten</label>
                                 <input type="file" class="form-control " id="g_paten" placeholder=""
-                                    name="gambar_paten">
+                                    name="gambar_paten" accept=".pdf">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
                                     dari 10mb</span>
@@ -283,7 +283,7 @@
                             <div class="mb-3">
                                 <label for="g_tampilan" class="form-label">gambar Tampilan</label>
                                 <input type="file" class="form-control " id="g_tampilan" placeholder=""
-                                    name="gambar_tampilan">
+                                    name="gambar_tampilan[]" multiple accept=".pdf,.jpg,.jpeg,.png">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
                                     dari 10mb</span>
@@ -687,22 +687,22 @@
                             });
                             return false;
                         }
-                        if (!allowedExtension.exec(g_paten.name)) {
+                        if (!/(\.pdf)$/i.exec(g_paten.name)) {
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops... Ada yang salah...",
-                                text: "Tolong Masukkan Gambar Paten Paten Dengan Ekstensi .pdf!",
+                                text: "Tolong Masukkan Gambar Paten Dengan Ekstensi .pdf!",
                                 position: "top-end",
                                 showConfirmButton: false,
                                 timer: 2500
                             });
                             return false;
                         }
-                        if (!allowedExtension.exec(g_tampilan.name)) {
+                        if (!/(\.(pdf|jpe?g|png))$/i.exec(g_tampilan.name)) {
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops... Ada yang salah...",
-                                text: "Tolong Masukkan Gambar Tampilan Paten Dengan Ekstensi .pdf!",
+                                text: "Tolong Masukkan Gambar Tampilan Paten Dengan Ekstensi .pdf/.jpg/.jpeg/.png!",
                                 position: "top-end",
                                 showConfirmButton: false,
                                 timer: 2500

@@ -79,6 +79,15 @@
                                         <td>: <a href="{{ route('private_hc_umum', ['filename' => basename($hc->dokumen_invensi)]) }}"
                                             target="_blank">Lihat Dokumen Invensi</a></td>
                                     </tr>
+@if (!empty($hc->gambar_ciptaan))
+<tr>
+                                        <th>Gambar Ciptaan</th>
+                                        <td>: @foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $__f)
+<a href="{{ route('private_hc_umum', ['filename' => basename($__f)]) }}"
+                                            target="_blank">Lihat Gambar Ciptaan</a>
+@endforeach</td>
+                                    </tr>
+@endif
                                     <tr>
                                         <th>Pengalihan hak invensi</th>
                                         <td>: <a href="{{ route('private_hc_umum', ['filename' => basename($hc->surat_pengalihan)]) }}"

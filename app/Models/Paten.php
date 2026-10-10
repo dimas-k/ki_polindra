@@ -35,6 +35,13 @@ class Paten extends Model
     protected static function booted()
     {
         static::deleting(function ($paten) {
+            // field multi-file (JSON array of path)
+            foreach (['gambar_tampilan', 'gambar_paten'] as $mf) {
+                foreach (\App\Support\MultiFileStorage::decode($paten->{$mf}) as $mp) {
+                    Storage::disk('public')->delete($mp);
+                }
+            }
+
             // Daftar file yang disimpan di private storage
             $privateFiles = [
                 'ktp_inventor',

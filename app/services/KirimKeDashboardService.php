@@ -16,9 +16,10 @@ class KirimKeDashboardService
      * kolom kbk_id di tabel KI, jadi wajib dipilih saat pengiriman).
      *
      * CATATAN PENTING:
-     * - 'gambar' selalu NULL saat dikirim dari KI (semua file gambar_paten/
-     *   gambar_di di data KI sebenarnya PDF, bukan JPG/PNG). Tampilan
-     *   dashboard sudah diberi fallback gambar gedung kalau gambar NULL.
+     * - 'gambar' diisi dari file bertipe gambar (jpg/jpeg/png) pertama di
+     *   field gambar_paten/gambar_tampilan/gambar_di (field itu boleh banyak
+     *   file: PDF + gambar). Kalau tidak ada file gambar, NULL -> dashboard
+     *   memakai gambar gedung default.
      * - 'lampiran' diisi dari dokumen PDF asli (sertifikat kalau ada,
      *   fallback ke dokumen utama).
      * - 'anggota' (anggota_inventor_lainnya / anggota_penulis_lainnya)
@@ -42,7 +43,7 @@ class KirimKeDashboardService
                 'kbk_id' => $kbkId,
                 'nama_produk' => $mapping['judul'],
                 'deskripsi' => $mapping['deskripsi'],
-                'gambar' => null,
+                'gambar' => $mapping['gambar'],
                 'inventor' => $mapping['nama_pengaju'],
                 'anggota_inventor_lainnya' => $anggota,
                 'email_inventor' => $mapping['email'],
@@ -57,7 +58,7 @@ class KirimKeDashboardService
                 'kbk_id' => $kbkId,
                 'judul' => $mapping['judul'],
                 'abstrak' => $mapping['deskripsi'],
-                'gambar' => null,
+                'gambar' => $mapping['gambar'],
                 'penulis' => $mapping['nama_pengaju'],
                 'anggota_penulis_lainnya' => $anggota,
                 'email_penulis' => $mapping['email'],
@@ -153,7 +154,8 @@ class KirimKeDashboardService
                 'nama_pengaju' => $record->nama_lengkap,
                 'email' => $record->email,
                 'tanggal' => $record->tanggal_permohonan,
-                'lampiran' => $record->sertifikat_paten ?: $record->gambar_paten,
+                'gambar' => \App\Support\MultiFileStorage::firstImage($record->gambar_tampilan) ?: ($record->gambar_img ?? null),
+                'lampiran' => $record->sertifikat_paten ?: \App\Support\MultiFileStorage::firstDocument($record->gambar_paten),
             ],
             'hak_cipta' => [
                 'judul' => $record->judul_ciptaan,
@@ -161,6 +163,7 @@ class KirimKeDashboardService
                 'nama_pengaju' => $record->nama_lengkap,
                 'email' => $record->email,
                 'tanggal' => $record->tanggal_permohonan,
+                'gambar' => \App\Support\MultiFileStorage::firstImage($record->gambar_ciptaan ?? null) ?: ($record->gambar_img ?? null),
                 'lampiran' => $record->sertifikat_hakcipta ?: $record->dokumen_invensi,
             ],
             'desain_industri' => [
@@ -169,7 +172,8 @@ class KirimKeDashboardService
                 'nama_pengaju' => $record->nama_lengkap,
                 'email' => $record->email,
                 'tanggal' => $record->tanggal_permohonan,
-                'lampiran' => $record->sertifikat_desain ?: $record->gambar_di,
+                'gambar' => \App\Support\MultiFileStorage::firstImage($record->gambar_di) ?: ($record->gambar_img ?? null),
+                'lampiran' => $record->sertifikat_desain ?: \App\Support\MultiFileStorage::firstDocument($record->gambar_di),
             ],
             default => throw new \InvalidArgumentException("Jenis KI tidak dikenal: {$jenisKi}"),
         };

@@ -165,8 +165,8 @@ class CheckerController extends Controller
             $query
                 ->Where('abstrak_paten', 'dokumen-paten/' . $filename)
                 ->orWhere('deskripsi_paten', 'dokumen-paten/' . $filename)
-                ->orWhere('gambar_paten', 'dokumen-paten/' . $filename)
-                ->orWhere('gambar_tampilan', 'dokumen-paten/' . $filename)
+                ->orWhere('gambar_paten', 'LIKE', '%"dokumen-paten/' . $filename . '"%')
+                ->orWhere('gambar_tampilan', 'LIKE', '%"dokumen-paten/' . $filename . '"%')
                 ->orWhere('sertifikat_paten', 'dokumen-paten/' . $filename);
         })->first();
 
@@ -193,6 +193,7 @@ class CheckerController extends Controller
         // Hanya kolom yang disimpan di disk public
         $hc = HakCipta::where(function ($query) use ($filename) {
             $query->where('dokumen_invensi', 'dokumen-hc/' . $filename)
+                ->orWhere('gambar_ciptaan', 'LIKE', '%"dokumen-hc/' . $filename . '"%')
                 ->orWhere('sertifikat_hakcipta', 'dokumen-hc/' . $filename);
         })->first();
 
@@ -218,7 +219,7 @@ class CheckerController extends Controller
         // Hanya kolom yang disimpan di disk public
         $di = DesainIndustri::where(function ($query) use ($filename) {
             $query->where('uraian_di', 'dokumen-di/' . $filename)
-                ->orWhere('gambar_di', 'dokumen-di/' . $filename)
+                ->orWhere('gambar_di', 'LIKE', '%"dokumen-di/' . $filename . '"%')
                 ->orWhere('sertifikat_desain', 'dokumen-di/' . $filename);
         })->first();
 

@@ -63,7 +63,7 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     // ===== Pengguna > Ketua KBK (baru ditambahkan) =====
     Route::get('/admin/ketua-kbk', [AdminKetuaKbkController::class, 'ketuaKBK']);
     Route::get('/admin/k-kbk/show/{id}', [AdminKetuaKbkController::class, 'showDataKetuaKbk'])->name('show.k-kbk');
-    Route::post('/admin/ketua-kbk/store', [AdminKetuaKbkController::class, 'storeDataKetuaKbk']);
+    // Route store dihapus — pembuatan akun Ketua KBK kini lewat form Dosen terpadu (tambah.dosen).
     Route::post('/admin/ketua-kbk/update/{id}', [AdminKetuaKbkController::class, 'updateKetuaKbk'])->name('update.k-kbk');
     Route::delete('/admin/ketua-kbk/delete/{id}', [AdminKetuaKbkController::class, 'hapusKetuaKbk'])->name('hapus.k-kbk');
     Route::get('/admin/ketua-kbk/reset_password_KKBK/{id}', [AdminKetuaKbkController::class, 'resetPassword'])->name('kkbk.reset.password');

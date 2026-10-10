@@ -336,12 +336,12 @@
                             <div class="mb-3">
                                 <label for="g_paten" class="form-label">gambar Paten</label><br>
                                 @if (!empty($p->gambar_paten))
-                                    File : {{ basename($p->gambar_paten) }}
+                                    File : {{ collect(\App\Support\MultiFileStorage::decode($p->gambar_paten))->map(fn($f) => basename($f))->implode(', ') }}
                                 @else
                                     File : Tidak ada
                                 @endif
                                 <input type="file" class="form-control " id="g_paten" placeholder=""
-                                    name="gambar_paten">
+                                    name="gambar_paten" accept=".pdf">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>masukan file jika ada perubahan</span>
                                 {{-- @error('gambar_paten')
@@ -353,12 +353,12 @@
                             <div class="mb-3">
                                 <label for="g_tampilan" class="form-label">gambar Tampilan</label><br>
                                 @if (!empty($p->gambar_tampilan))
-                                File : {{ basename($p->gambar_tampilan) }}
+                                File : {{ collect(\App\Support\MultiFileStorage::decode($p->gambar_tampilan))->map(fn($f) => basename($f))->implode(', ') }}
                             @else
                                 File : Tidak ada
                             @endif
                                 <input type="file" class="form-control " id="g_tampilan" placeholder=""
-                                    name="gambar_tampilan">
+                                    name="gambar_tampilan[]" multiple accept=".pdf,.jpg,.jpeg,.png">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>masukan file jika ada perubahan</span>
                                 {{-- @error('gambar_tampilan')
@@ -504,7 +504,7 @@
                             }
                         } else if (files[file]) {
                             // Validate other files
-                            if (!allowedExtensionPDF.exec(files[file].name)) {
+                            if (!(['g_tampilan','gambar_desain','gambar_di'].includes(file) ? /(\.(pdf|jpe?g|png))$/i : allowedExtensionPDF).exec(files[file].name)) {
                                 showError("Tolong Masukkan " + file.replace('_', ' ').toUpperCase() + " Dengan Ekstensi .pdf!");
                                 return false;
                             }

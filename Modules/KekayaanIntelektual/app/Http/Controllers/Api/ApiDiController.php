@@ -46,7 +46,7 @@ class ApiDiController extends Controller
                     'jurusan' => $di->prodi->jurusan->nama_jurusan ?? $di->jurusan ?? null,
                     'dokumen' => [
                         'uraian_di' => $di->uraian_di ? Storage::disk('public')->url($di->uraian_di) : null,
-                        'gambar_di' => $di->gambar_di ? Storage::disk('public')->url($di->gambar_di) : null,
+                        'gambar_di' => collect(\App\Support\MultiFileStorage::decode($di->gambar_di))->map(fn ($f) => Storage::disk('public')->url($f))->values()->all(),
                     ],
                 ];
             });

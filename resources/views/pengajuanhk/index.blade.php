@@ -162,6 +162,16 @@
                         </div>
                     @enderror
                 </div>
+<div class="mb-3">
+                    <label for="" class="form-label">Gambar Ciptaan (opsional, boleh lebih dari 1 file)</label>
+                    <input type="file" class="form-control @error('gambar_ciptaan') is-invalid @enderror"
+                        placeholder="" name="gambar_ciptaan[]" multiple accept=".pdf,.jpg,.jpeg,.png">
+                    @error('gambar_ciptaan')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
                 <div class="mb-3">
                     <label for="" class="form-label">Surat Pengalihan Hak Cipta</label>
                     <input type="file" class="form-control @error('surat_pengalihan') is-invalid @enderror"

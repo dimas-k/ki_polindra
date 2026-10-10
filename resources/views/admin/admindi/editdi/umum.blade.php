@@ -192,7 +192,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="gambar_desain" class="form-label">Gambar Desain Industri</label>
-                                <input type="file" class="form-control" placeholder="" name="gambar_di"
+                                <input type="file" class="form-control" placeholder="" name="gambar_di[]" multiple accept=".pdf,.jpg,.jpeg,.png"
                                     id="gambar_desain">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari
@@ -511,7 +511,7 @@
                             });
                             return false;
                         }
-                        if (!allowedExtension.exec(gambar_desain.name)) {
+                        if (!/(\.(pdf|jpe?g|png))$/i.exec(gambar_desain.name)) {
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops... Ada yang salah...",

@@ -127,6 +127,17 @@
                                                 target="_blank">Lihat Dokumen Invensi
                                             </a>
                                     </tr>
+@if (!empty($hc->gambar_ciptaan))
+<tr>
+                                        <th>Gambar Ciptaan</th>
+                                        <td>:
+                                            @foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $__f)
+<a href="{{ route('public_hc_verifikator', ['file' => basename($__f)]) }}"
+                                                target="_blank">Lihat Gambar Ciptaan
+                                            </a>
+@endforeach
+                                    </tr>
+@endif
                                     <tr>
                                         <th>Surat Pengalihan Hak Cipta</th>
                                         <td>: 

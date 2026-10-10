@@ -211,7 +211,7 @@
                                         <label for="gambar_desain" class="form-label">Gambar Desain Industri</label>
                                         <input type="file"
                                             class="form-control"
-                                            placeholder="" name="gambar_di" id="gambar_desain">
+                                            placeholder="" name="gambar_di[]" multiple accept=".pdf,.jpg,.jpeg,.png" id="gambar_desain">
                                             <span class="text-danger"><i class="fa fa-warning me-2"
                                                 data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan ridak lebih dari 10 mb</span>
                                         {{-- @error('gambar_di')

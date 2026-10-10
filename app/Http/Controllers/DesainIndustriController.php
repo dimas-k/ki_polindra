@@ -205,7 +205,8 @@ class DesainIndustriController extends Controller
             'jenis_di'=> 'required',
             'judul_di'=>'required',
             'uraian_di'=>'required|mimes:pdf',
-            'gambar_di'=>'required|mimes:pdf',
+            'gambar_di'=> \App\Support\MultiFileStorage::RULE_REQUIRED,
+            'gambar_di.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
             'surat_kepemilikan'=>'required|mimes:pdf',
             'surat_pengalihan'=>'required|mimes:pdf',
             'tanggal_permohonan'=>'required'
@@ -238,7 +239,14 @@ class DesainIndustriController extends Controller
         }
 
         // Dokumen invensi (uraian & gambar) disimpan di disk public
-        $publicFiles = ['uraian_di', 'gambar_di'];
+        $publicFiles = ['uraian_di'];
+        // field gambar boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+        foreach (['gambar_di'] as $mf) {
+            if ($request->hasFile($mf)) {
+                foreach (\App\Support\MultiFileStorage::decode($di->{$mf}) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
+                $di->{$mf} = \App\Support\MultiFileStorage::store($request, $mf, 'dokumen-di', 'public');
+            }
+        }
         foreach ($publicFiles as $field) {
             if ($request->hasFile($field)) {
                 $file = $request->file($field);

@@ -118,7 +118,7 @@
                                 <label for="ktp" class="form-label">KTP Inventor</label>
                                 <input type="file" class="form-control" id="ktp" name="ktp_inventor">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
-                                        data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
+                                        data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih
                                     dari 10mb</span>
                                 {{-- @error('ktp_inventor')
                                             <div class="invalid-feedback">
@@ -193,7 +193,7 @@
                                 <input type="file" class="form-control" id="abstrak" placeholder=""
                                     name="abstrak_paten">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
-                                        data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
+                                        data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih
                                     dari 10mb</span>
                                 {{-- @error('abstrak_paten')
                                             <div class="invalid-feedback">
@@ -206,7 +206,7 @@
                                 <input type="file" class="form-control " id="deskripsi" placeholder=""
                                     name="deskripsi_paten">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
-                                        data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
+                                        data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih
                                     dari 10mb</span>
                                 {{-- @error('deskripsi_paten')
                                             <div class="invalid-feedback">
@@ -219,7 +219,7 @@
                                 <input type="file" class="form-control " id="pengalihan_hak" placeholder=""
                                     name="pengalihan_hak">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
-                                        data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
+                                        data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih
                                     dari 10mb</span>
                                 {{-- @error('pengalihan_hak')
                                             <div class="invalid-feedback">
@@ -232,7 +232,7 @@
                                 <input type="file" class="form-control " id="klaim" placeholder=""
                                     name="klaim">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
-                                        data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
+                                        data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih
                                     dari 10mb</span>
                                 {{-- @error('klaim')
                                             <div class="invalid-feedback">
@@ -246,7 +246,7 @@
                                 <input type="file" class="form-control" id="kepemilikan" placeholder=""
                                     name="pernyataan_kepemilikan">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
-                                        data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
+                                        data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih
                                     dari 10mb</span>
                                 {{-- @error('pernyataan_kepemilikan')
                                             <div class="invalid-feedback">
@@ -259,7 +259,7 @@
                                 <input type="file" class="form-control " id="kuasa" placeholder=""
                                     name="surat_kuasa">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
-                                        data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
+                                        data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih
                                     dari 10mb</span>
                                 {{-- @error('surat_kuasa')
                                             <div class="invalid-feedback">
@@ -270,7 +270,7 @@
                             <div class="mb-3">
                                 <label for="g_paten" class="form-label">gambar Paten</label>
                                 <input type="file" class="form-control " id="g_paten" placeholder=""
-                                    name="gambar_paten">
+                                    name="gambar_paten" accept=".pdf">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
                                     dari 10mb</span>
@@ -283,9 +283,9 @@
                             <div class="mb-3">
                                 <label for="g_tampilan" class="form-label">gambar Tampilan</label>
                                 <input type="file" class="form-control " id="g_tampilan" placeholder=""
-                                    name="gambar_tampilan">
+                                    name="gambar_tampilan[]" multiple accept=".pdf,.jpg,.jpeg,.png">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
-                                        data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
+                                        data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih
                                     dari 10mb</span>
                                 {{-- @error('gambar_tampilan')
                                             <div class="invalid-feedback">
@@ -687,22 +687,22 @@
                             });
                             return false;
                         }
-                        if (!allowedExtension.exec(g_paten.name)) {
+                        if (!/(\.pdf)$/i.exec(g_paten.name)) {
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops... Ada yang salah...",
-                                text: "Tolong Masukkan Gambar Paten Paten Dengan Ekstensi .pdf!",
+                                text: "Tolong Masukkan Gambar Paten Dengan Ekstensi .pdf!",
                                 position: "top-end",
                                 showConfirmButton: false,
                                 timer: 2500
                             });
                             return false;
                         }
-                        if (!allowedExtension.exec(g_tampilan.name)) {
+                        if (!/(\.(pdf|jpe?g|png))$/i.exec(g_tampilan.name)) {
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops... Ada yang salah...",
-                                text: "Tolong Masukkan Gambar Tampilan Paten Dengan Ekstensi .pdf!",
+                                text: "Tolong Masukkan Gambar Tampilan Paten Dengan Ekstensi .pdf/.jpg/.jpeg/.png!",
                                 position: "top-end",
                                 showConfirmButton: false,
                                 timer: 2500

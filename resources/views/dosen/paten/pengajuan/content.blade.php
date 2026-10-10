@@ -281,7 +281,7 @@
                                         <label for="g_paten" class="form-label">gambar Paten</label>
                                         <input type="file"
                                             class="form-control @error('gambar_paten') is-invalid @enderror"
-                                            id="g_paten" name="gambar_paten" accept="application/pdf" required>
+                                            id="g_paten" name="gambar_paten" accept=".pdf" required>
                                         <span class="text-danger"><i class="fa fa-warning me-2"
                                                 data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
                                             dari 2mb</span>
@@ -293,7 +293,7 @@
                                         <label for="g_tampilan" class="form-label">gambar Tampilan</label>
                                         <input type="file"
                                             class="form-control @error('gambar_tampilan') is-invalid @enderror"
-                                            id="g_tampilan" name="gambar_tampilan" accept="application/pdf" required>
+                                            id="g_tampilan" name="gambar_tampilan[]" multiple accept=".pdf,.jpg,.jpeg,.png" required>
                                         <span class="text-danger"><i class="fa fa-warning me-2"
                                                 data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
                                             dari 2mb</span>

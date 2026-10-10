@@ -221,7 +221,7 @@
                         }
                     } else if (files[file]) {
                         // Validate other files
-                        if (!allowedExtensionPDF.exec(files[file].name)) {
+                        if (!(['g_tampilan','gambar_desain','gambar_di'].includes(file) ? /(\.(pdf|jpe?g|png))$/i : allowedExtensionPDF).exec(files[file].name)) {
                             showError("Tolong Masukkan " + file.replace('_', ' ').toUpperCase() + " Dengan Ekstensi .pdf!");
                             return false;
                         }
@@ -305,7 +305,7 @@
                         }
                     } else if (files[file]) {
                         // Validate other files
-                        if (!allowedExtensionPDF.exec(files[file].name)) {
+                        if (!(['g_tampilan','gambar_desain','gambar_di'].includes(file) ? /(\.(pdf|jpe?g|png))$/i : allowedExtensionPDF).exec(files[file].name)) {
                             showError("Tolong Masukkan " + file.replace('_', ' ').toUpperCase() + " Dengan Ekstensi .pdf!");
                             return false;
                         }

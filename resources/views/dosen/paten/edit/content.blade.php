@@ -273,12 +273,12 @@
                                             <th>gambar paten</th>
                                             <td>
                                                 @if (!empty($p->gambar_paten))
-                                                File : {{ basename($p->gambar_paten) }}
+                                                File : {{ collect(\App\Support\MultiFileStorage::decode($p->gambar_paten))->map(fn($f) => basename($f))->implode(', ') }}
                                             @else
                                                 File : Tidak ada
                                             @endif
                                                 <input type="file" class="form-control" id="g_paten"
-                                                    placeholder="" name="gambar_paten">
+                                                    placeholder="" name="gambar_paten" accept=".pdf">
                                                 <span class="text-danger"><i class="fa fa-warning me-2"
                                                         data-bs-toggle="tooltip"></i>masukan file jika ada
                                                     perubahan</span>
@@ -288,12 +288,12 @@
                                             <th>gambar tampilan</th>
                                             <td>
                                                 @if (!empty($p->gambar_tampilan))
-                                                File : {{ basename($p->gambar_tampilan) }}
+                                                File : {{ collect(\App\Support\MultiFileStorage::decode($p->gambar_tampilan))->map(fn($f) => basename($f))->implode(', ') }}
                                             @else
                                                 File : Tidak ada
                                             @endif
                                                 <input type="file" class="form-control" id="g_tampilan"
-                                                    placeholder="" name="gambar_tampilan">
+                                                    placeholder="" name="gambar_tampilan[]" multiple accept=".pdf,.jpg,.jpeg,.png">
                                                 <span class="text-danger"><i class="fa fa-warning me-2"
                                                         data-bs-toggle="tooltip"></i>masukan file jika ada
                                                     perubahan</span>

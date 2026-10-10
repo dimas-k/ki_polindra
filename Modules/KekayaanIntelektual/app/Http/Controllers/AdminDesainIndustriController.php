@@ -5,6 +5,7 @@ namespace Modules\KekayaanIntelektual\app\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\DesainIndustri;
 use App\Models\Prodi;
+use App\Support\MultiFileStorage;
 use App\Services\KirimKeDashboardService;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -102,7 +103,8 @@ class AdminDesainIndustriController extends Controller
         $di = DesainIndustri::where(function ($query) use ($filename) {
             $query
             ->Where('uraian_di', 'dokumen-di/' . $filename)
-            ->orWhere('gambar_di', 'dokumen-di/' . $filename);
+            // gambar_di sekarang JSON array (bisa lebih dari 1 file)
+            ->orWhere('gambar_di', 'LIKE', '%"dokumen-di/' . $filename . '"%');
         })->first();
 
         // Validasi akses: hanya pemilik atau admin/verifikator yang bisa melihat
@@ -170,7 +172,8 @@ class AdminDesainIndustriController extends Controller
             'jenis_di' => 'required',
             'judul_di' => 'required',
             'uraian_di' => 'nullable|mimes:pdf',
-            'gambar_di' => 'nullable|mimes:pdf',
+            'gambar_di' => MultiFileStorage::RULE_NULLABLE,
+            'gambar_di.*' => MultiFileStorage::RULE_EACH_FILE,
             'surat_kepemilikan' => 'nullable|mimes:pdf',
             'surat_pengalihan' => 'nullable|mimes:pdf',
             'tanggal_permohonan' => 'required'
@@ -212,7 +215,7 @@ class AdminDesainIndustriController extends Controller
             }
         }
 
-        $publicFiles = ['uraian_di', 'gambar_di'];
+        $publicFiles = ['uraian_di'];
         foreach ($publicFiles as $field) {
             if ($request->hasFile($field)) {
                 if ($di->{$field}) {
@@ -224,6 +227,14 @@ class AdminDesainIndustriController extends Controller
                 $path = $file->storeAs('dokumen-di', $filename, 'public');
                 $di->{$field} = $path;
             }
+        }
+
+        // gambar_di boleh diisi lebih dari 1 file (campuran PDF/gambar)
+        if ($request->hasFile('gambar_di')) {
+            foreach (MultiFileStorage::decode($di->gambar_di) as $oldPath) {
+                Storage::disk('public')->delete($oldPath);
+            }
+            $di->gambar_di = MultiFileStorage::store($request, 'gambar_di', 'dokumen-di', 'public');
         }
 
         $di->save($validasidata);
@@ -244,7 +255,8 @@ class AdminDesainIndustriController extends Controller
             'jenis_di' => 'required',
             'judul_di' => 'required',
             'uraian_di' => 'required|mimes:pdf',
-            'gambar_di' => 'required|mimes:pdf',
+            'gambar_di' => MultiFileStorage::RULE_NULLABLE,
+            'gambar_di.*' => MultiFileStorage::RULE_EACH_FILE,
             'surat_kepemilikan' => 'required|mimes:pdf',
             'surat_pengalihan' => 'required|mimes:pdf',
             'tanggal_permohonan' => 'required'
@@ -283,7 +295,7 @@ class AdminDesainIndustriController extends Controller
             }
         }
 
-        $publicFiles = ['uraian_di', 'gambar_di'];
+        $publicFiles = ['uraian_di'];
         foreach ($publicFiles as $field) {
             if ($request->hasFile($field)) {
                 if ($di->{$field}) {
@@ -295,6 +307,13 @@ class AdminDesainIndustriController extends Controller
                 $path = $file->storeAs('dokumen-di', $filename, 'public');
                 $di->{$field} = $path;
             }
+        }
+
+        if ($request->hasFile('gambar_di')) {
+            foreach (MultiFileStorage::decode($di->gambar_di) as $oldPath) {
+                Storage::disk('public')->delete($oldPath);
+            }
+            $di->gambar_di = MultiFileStorage::store($request, 'gambar_di', 'dokumen-di', 'public');
         }
 
         $di->save($validasidata);
@@ -379,7 +398,8 @@ class AdminDesainIndustriController extends Controller
             'jenis_di' => 'required',
             'judul_di' => 'required',
             'uraian_di' => 'required|mimes:pdf',
-            'gambar_di' => 'required|mimes:pdf',
+            'gambar_di' => MultiFileStorage::RULE_REQUIRED,
+            'gambar_di.*' => MultiFileStorage::RULE_EACH_FILE,
             'surat_kepemilikan' => 'required|mimes:pdf',
             'surat_pengalihan' => 'required|mimes:pdf',
             'tanggal_permohonan' => 'required'
@@ -403,7 +423,7 @@ class AdminDesainIndustriController extends Controller
         $di->judul_di = $request->judul_di;
         $di->tanggal_permohonan = $request->tanggal_permohonan;
     
-        $publicFiles = ['gambar_di', 'uraian_di'];
+        $publicFiles = ['uraian_di'];
 
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
@@ -432,6 +452,9 @@ class AdminDesainIndustriController extends Controller
                 $di->{$field} = $path;
             }
         }
+
+        // gambar_di boleh diisi lebih dari 1 file (campuran PDF/gambar)
+        $di->gambar_di = MultiFileStorage::store($request, 'gambar_di', 'dokumen-di', 'public');
     
         // Save the model
         $di->save($validasidata);
@@ -456,7 +479,8 @@ class AdminDesainIndustriController extends Controller
             'jenis_di' => 'required',
             'judul_di' => 'required',
             'uraian_di' => 'required|mimes:pdf',
-            'gambar_di' => 'required|mimes:pdf',
+            'gambar_di' => MultiFileStorage::RULE_REQUIRED,
+            'gambar_di.*' => MultiFileStorage::RULE_EACH_FILE,
             'surat_kepemilikan' => 'required|mimes:pdf',
             'surat_pengalihan' => 'required|mimes:pdf',
             'tanggal_permohonan' => 'required'
@@ -474,7 +498,7 @@ class AdminDesainIndustriController extends Controller
         $di->jenis_di = $request->jenis_di;
         $di->judul_di = $request->judul_di;
         $di->tanggal_permohonan = $request->tanggal_permohonan;
-        $publicFiles = ['gambar_di', 'uraian_di'];
+        $publicFiles = ['uraian_di'];
 
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
@@ -502,6 +526,10 @@ class AdminDesainIndustriController extends Controller
                 $di->{$field} = $path;
             }
         }
+
+        // gambar_di boleh diisi lebih dari 1 file (campuran PDF/gambar)
+        $di->gambar_di = MultiFileStorage::store($request, 'gambar_di', 'dokumen-di', 'public');
+
         $di->save($validasidata);
 
         return redirect('/admin/desain-industri')->with('success', 'Data desain industri berhasil di tambahkan');

@@ -53,8 +53,8 @@ class ApiPatenController extends Controller
                     'dokumen' => [
                         'abstrak' => $paten->abstrak_paten ? Storage::disk('public')->url($paten->abstrak_paten) : null,
                         'deskripsi' => $paten->deskripsi_paten ? Storage::disk('public')->url($paten->deskripsi_paten) : null,
-                        'gambar_paten' => $paten->gambar_paten ? Storage::disk('public')->url($paten->gambar_paten) : null,
-                        'gambar_tampilan' => $paten->gambar_tampilan ? Storage::disk('public')->url($paten->gambar_tampilan) : null,
+                        'gambar_paten' => collect(\App\Support\MultiFileStorage::decode($paten->gambar_paten))->map(fn ($f) => Storage::disk('public')->url($f))->values()->all(),
+                        'gambar_tampilan' => collect(\App\Support\MultiFileStorage::decode($paten->gambar_tampilan))->map(fn ($f) => Storage::disk('public')->url($f))->values()->all(),
                     ],
                 ];
             });

@@ -155,7 +155,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Gambar Desain Industri</label>
-                        <input type="file" class="form-control @error('gambar_di') is-invalid @enderror" placeholder="" name="gambar_di">
+                        <input type="file" class="form-control @error('gambar_di') is-invalid @enderror" placeholder="" name="gambar_di[]" multiple accept=".pdf,.jpg,.jpeg,.png">
                         @error('gambar_di')
                             <div class="invalid-feedback">
                                 {{ $message }}
