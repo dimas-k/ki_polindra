@@ -1,29 +1,21 @@
+
 /vendor/
 /node_modules/
 
-/public
-
+/public/
 /.env
 /.env.*
-!.env.example
-
-/public/build/
-/public/hot
+!/.env.example
 
 /storage/*.key
 /storage/app/*
 !/storage/app/.gitignore
-!/storage/app/public/
-!/storage/app/public/.gitignore
 
 /storage/framework/cache/*
 /storage/framework/sessions/*
 /storage/framework/testing/*
 /storage/framework/views/*
 /storage/logs/*
-/storage/app/public
-/storage/app/private
-
 
 .phpunit.cache
 .phpunit.result.cache
@@ -37,24 +29,16 @@ pnpm-debug.log*
 /.vscode/
 /.fleet/
 
-# OS
 .DS_Store
 Thumbs.db
 Desktop.ini
 
-# Laravel runtime
-/public/storage
-
-# Local development
 Homestead.json
 Homestead.yaml
 
-# Environment / local tooling
 .php-cs-fixer.cache
 .php-cs-fixer.php
-.phpunit.cache
 
-# Temporary files
 *.tmp
 *.temp
 *.swp
@@ -62,7 +46,5 @@ Homestead.yaml
 *.bak
 *~
 
-# Coverage
 /coverage/
-/.phpunit.result.cache
-storage/app/public/dokumen-di/1780205783_3212152206040004_TRANSKRIP_NILAI_021024..pdf
+```
