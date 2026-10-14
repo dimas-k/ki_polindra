@@ -443,7 +443,6 @@ class DosenController extends Controller
             // Daftar file yang disimpan di private storage
             $privateFiles = [
                 'ktp_inventor' => 'ktp_inventor',
-                'gambar_img' => \App\Support\GambarImage::RULE,
                 'data_pengaju2' => 'data_pengaju2',
                 'pengalihan_hak' => 'pengalihan_hak',
                 'klaim' => 'klaim',
@@ -648,7 +647,6 @@ class DosenController extends Controller
 
         $privateFiles = [
             'ktp_inventor'           => 'ktp_inventor',
-            'gambar_img' => \App\Support\GambarImage::RULE,
             'data_pengaju2'          => 'data_pengaju2',
             'pengalihan_hak'         => 'pengalihan_hak',
             'klaim'                  => 'klaim',
@@ -783,7 +781,6 @@ class DosenController extends Controller
             }
             $privateFiles = [
                 'ktp_inventor' => 'ktp_inventor',
-                'gambar_img' => \App\Support\GambarImage::RULE,
                 'data_pengaju2' => 'data_pengaju2',
                 'surat_pengalihan' => 'surat_pengalihan',
                 'surat_pernyataan' => 'surat_pernyataan',
@@ -883,7 +880,6 @@ class DosenController extends Controller
             }
             $privateFiles = [
                 'ktp_inventor' => 'ktp_inventor',
-                'gambar_img' => \App\Support\GambarImage::RULE,
                 'data_pengaju2' => 'data_pengaju2',
                 'surat_pengalihan' => 'surat_pengalihan',
                 'surat_pernyataan' => 'surat_pernyataan'
@@ -1096,7 +1092,6 @@ class DosenController extends Controller
 
             $privateFiles = [
                 'ktp_inventor' => 'ktp_inventor',
-                'gambar_img' => \App\Support\GambarImage::RULE,
                 'data_pengaju2' => 'data_pengaju2',
                 'surat_kepemilikan' => 'surat_kepemilikan',
                 'surat_pengalihan' => 'surat_pengalihan'
@@ -1207,7 +1202,6 @@ class DosenController extends Controller
 
             $privateFiles = [
                 'ktp_inventor' => 'ktp_inventor',
-                'gambar_img' => \App\Support\GambarImage::RULE,
                 'data_pengaju2' => 'data_pengaju2',
                 'surat_kepemilikan' => 'surat_kepemilikan',
                 'surat_pengalihan' => 'surat_pengalihan'

@@ -117,7 +117,7 @@
                                 <input type="file" class="form-control" id="ktp" name="ktp_inventor">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih
-                                    dari 10mb</span>
+                                    dari 2mb</span>
                                 {{-- @error('ktp_inventor')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -237,7 +237,7 @@
                                     id="gambar_desain">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih dari
-                                    10mb</span>
+                                    2mb</span>
                                 {{-- @error('gambar_di')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -250,7 +250,7 @@
                                     id="uraian_desain">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih dari
-                                    10mb</span>
+                                    2mb</span>
                                 {{-- @error('uraian_di')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -264,7 +264,7 @@
                                     id="pernyataan_kepemilikan">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih dari
-                                    10mb</span>
+                                    2mb</span>
                                 {{-- @error('surat_kepemilikan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -277,7 +277,7 @@
                                     id="pengalihan">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih dari
-                                    10mb</span>
+                                    2mb</span>
                                 {{-- @error('surat_pengalihan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -377,7 +377,7 @@
                         pengalihan: $('#pengalihan')[0].files[0]
                     };
         
-                    const maxSize = 10 * 1024 * 1024; // Max size: 10MB
+                    const maxSize = 2 * 1024 * 1024; // Max size: 2MB
                     const allowedExtensionPDF = /(\.pdf)$/i;
                     const allowedExtensionExcel = /(\.xlsx)$/i;
         
@@ -427,7 +427,7 @@
         
                             // Validate file size
                             if (files[file].size > maxSize) {
-                                showError("Ukuran File " + file.replace('_', ' ').toUpperCase() + " Lebih Dari 10 MB!");
+                                showError("Ukuran File " + file.replace('_', ' ').toUpperCase() + " Lebih Dari 2 MB!");
                                 return false;
                             }
                         }

@@ -184,7 +184,7 @@
                     g_tampilan: $('#g_tampilan')[0].files[0],
                 };
     
-                const maxSize = 10 * 1024 * 1024; // Max size: 10MB
+                const maxSize = 2 * 1024 * 1024; // Max size: 2MB
                 const allowedExtensionPDF = /(\.pdf)$/i;
                 const allowedExtensionExcel = /(\.xlsx)$/i;
     
@@ -234,7 +234,7 @@
     
                         // Validate file size
                         if (files[file].size > maxSize) {
-                            showError("Ukuran File " + file.replace('_', ' ').toUpperCase() + " Lebih Dari 10 MB!");
+                            showError("Ukuran File " + file.replace('_', ' ').toUpperCase() + " Lebih Dari 2 MB!");
                             return false;
                         }
                     }
@@ -280,7 +280,7 @@
                     g_tampilan: $('#g_tampilan')[0].files[0],
                 };
     
-                const maxSize = 10 * 1024 * 1024; // Max size: 10MB
+                const maxSize = 2 * 1024 * 1024; // Max size: 2MB
                 const allowedExtensionPDF = /(\.pdf)$/i;
                 const allowedExtensionExcel = /(\.xlsx)$/i;
     
@@ -321,7 +321,7 @@
     
                         // Validate file size
                         if (files[file].size > maxSize) {
-                            showError("Ukuran File " + file.replace('_', ' ').toUpperCase() + " Lebih Dari 10 MB!");
+                            showError("Ukuran File " + file.replace('_', ' ').toUpperCase() + " Lebih Dari 2 MB!");
                             return false;
                         }
                     }
@@ -367,7 +367,7 @@
                     g_tampilan: $('#g_tampilan')[0].files[0],
                 };
     
-                const maxSize = 10 * 1024 * 1024; // Max size: 10MB
+                const maxSize = 2 * 1024 * 1024; // Max size: 2MB
                 const allowedExtensionPDF = /(\.pdf)$/i;
                 const allowedExtensionExcel = /(\.xlsx)$/i;
     
@@ -417,7 +417,7 @@
     
                         // Validate file size
                         if (files[file].size > maxSize) {
-                            showError("Ukuran File " + file.replace('_', ' ').toUpperCase() + " Lebih Dari 10 MB!");
+                            showError("Ukuran File " + file.replace('_', ' ').toUpperCase() + " Lebih Dari 2 MB!");
                             return false;
                         }
                     }

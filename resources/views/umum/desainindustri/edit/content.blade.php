@@ -156,7 +156,7 @@
                                                     name="gambar_di[]" multiple accept=".pdf,.jpg,.jpeg,.png" id="gambar_desain" data-filepond-multi>
                                                 <span class="text-danger"><i class="fa fa-warning me-2"
                                                         data-bs-toggle="tooltip"></i>Harus memasukkan kembali file yang
-                                                    sama atau yang sudah diperbarui (bisa pilih lebih dari 1 file tanpa tombol Ctrl, maks 10MB per file)</span>
+                                                    sama atau yang sudah diperbarui (bisa pilih lebih dari 1 file tanpa tombol Ctrl, maks 2MB per file)</span>
                                             </td>
                                         </tr>
                                         <tr>

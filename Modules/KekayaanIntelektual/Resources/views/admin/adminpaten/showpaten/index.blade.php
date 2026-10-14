@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href={{ asset('assets/polindra21.png') }}>
-    <title>SIKI POLINDRA-Admin | Hak Cipta | Lihat</title>
+    <title>SIKI POLINDRA-Admin | Paten | Lihat</title>
     <link href={{ asset('assets/bootstrap/css/bootstrap.min.css') }} rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
@@ -53,8 +53,8 @@
             {{-- end of sidebar --}}
             <div class="col-12 col-lg-10 mt-2">
                 <div class="container bg-light rounded border pt-3">
-                    <h3 class="fw-normal font-family-Kokoro mb-3"><i class="bi bi-person me-3"></i>Data hak cipta
-                        {{ $hc->nama_lengkap }}
+                    <h3 class="fw-normal font-family-Kokoro mb-3"><i class="bi bi-person me-3"></i>Data paten
+                        {{ $p->nama_lengkap }}
                     </h3>
 
                     @if (session()->has('kirim_success'))
@@ -75,24 +75,24 @@
 
                             <tr>
                                 <th>Nama Lengkap</th>
-                                <td>: {{ $hc->nama_lengkap }}</td>
+                                <td>: {{ $p->nama_lengkap }}</td>
                             </tr>
                             <tr>
                                 <th>Alamat</th>
-                                <td>: {{ $hc->alamat }}</td>
+                                <td>: {{ $p->alamat }}</td>
                             </tr>
                             <tr>
                                 <th>No Telepon</th>
-                                <td>: {{ $hc->no_telepon }}</td>
+                                <td>: {{ $p->no_telepon }}</td>
                             </tr>
                             <tr>
                                 <th>Tanggal lahir</th>
-                                <td>: {{ \Carbon\Carbon::parse($hc->tanggal_lahir)->format('d-m-Y') }}</td>
+                                <td>: {{ \Carbon\Carbon::parse($p->tanggal_lahir)->format('d-m-Y') }}</td>
                             </tr>
                             <tr>
                                 <th>KTP</th>
                                 <td>:
-                                    <a href={{ route('private_hc', ['file' => basename($hc->ktp_inventor)]) }}
+                                    <a href="{{ url('/paten/' . basename($p->ktp_inventor)) }}"
                                         class="" target="_blank">Lihat KTP
                                     </a>
                                 </td>
@@ -100,8 +100,8 @@
                             <tr>
                                 <th>Anggota Inventor</th>
                                 <td>:
-                                    @if ($hc->data_pengaju2)
-                                        <a href="{{ route('private_hc', ['file' => basename($hc->data_pengaju2)]) }} "
+                                    @if ($p->data_pengaju2)
+                                        <a href="{{ url('/paten/' . basename($p->data_pengaju2)) }}"
                                             target="_blank">Download xlsx Anggota Inventor</a>
                                     @else
                                         Tidak ada data untuk diunduh.
@@ -110,86 +110,118 @@
                             </tr>
                             <tr>
                                 <th>Email</th>
-                                <td>: {{ $hc->email }}</td>
+                                <td>: {{ $p->email }}</td>
                             </tr>
                             <tr>
                                 <th>Kewarganegaraan</th>
-                                <td>: {{ $hc->kewarganegaraan }}</td>
+                                <td>: {{ $p->kewarganegaraan }}</td>
                             </tr>
                             <tr>
                                 <th>Kode Pos</th>
-                                <td>: {{ $hc->kode_pos }}</td>
+                                <td>: {{ $p->kode_pos }}</td>
                             </tr>
                             <tr>
                                 <th>Jurusan</th>
-                                <td>: @if ($hc->jurusan == null)
+                                <td>: @if ($p->jurusan == null || $p->jurusan == 'tidak ada')
                                         Bukan Dosen
                                     @else
-                                        {{ $hc->jurusan }}
+                                        {{ $p->jurusan }}
                                     @endif
                                 </td>
                             </tr>
                             <tr>
                                 <th>prodi</th>
-                                <td>: @if ($hc->prodi == null)
+                                <td>: @if ($p->prodi == null || $p->prodi == 'tidak ada')
                                         Bukan Dosen
                                     @else
-                                        {{ $hc->prodi }}
+                                        {{ $p->prodi }}
                                     @endif
                                 </td>
                             </tr>
                             <tr>
-                                <th>Jenis Ciptaan</th>
-                                <td>: {{ $hc->jenis_ciptaan }}</td>
+                                <th>Jenis Paten</th>
+                                <td>: {{ $p->jenis_paten }}</td>
                             </tr>
                             <tr>
-                                <th>Judul Ciptaan</th>
-                                <td>: {{ $hc->judul_ciptaan }}</td>
+                                <th>Judul Paten</th>
+                                <td>: {{ $p->judul_paten }}</td>
                             </tr>
                             <tr>
-                                <th>Uraian singkat ciptaan</th>
-                                <td>: {{ $hc->uraian_singkat }}</td>
-                            </tr>
-                            <tr>
-                                <th>Dokumen invensi</th>
-                                <td>: <a href={{ route('public_hc', ['file' => basename($hc->dokumen_invensi)]) }}
-                                        class="" target="_blank">Lihat Dokumen Invensi</a>
+                                <th>Abstrak Paten</th>
+                                <td>: <a href="{{ url('public/paten/' . basename($p->abstrak_paten)) }}"
+                                        class="" target="_blank">Lihat Abstrak Paten</a>
                                 </td>
                             </tr>
                             <tr>
-                                <th>Surat Pengalihan Hak Cipta</th>
-                                <td>: <a href={{ route('private_hc', ['file' => basename($hc->surat_pengalihan)]) }}
-                                        class="" target="_blank">Surat Pengalihan Hak Cipta</a></td>
+                                <th>Deskripsi Paten</th>
+                                <td>: <a href="{{ url('public/paten/' . basename($p->deskripsi_paten)) }}"
+                                        class="" target="_blank">Lihat Deskripsi Paten</a>
+                                </td>
+                            </tr>
+                            @if (!empty($p->gambar_paten))
+                            <tr>
+                                <th>Gambar Paten</th>
+                                <td>: @foreach (\App\Support\MultiFileStorage::decode($p->gambar_paten) as $__f)
+                                        <a href="{{ url('public/paten/' . basename($__f)) }}"
+                                            class="me-2" target="_blank">Lihat Gambar Paten {{ $loop->iteration }}</a>
+                                    @endforeach
+                                </td>
+                            </tr>
+                            @endif
+                            @if (!empty($p->gambar_tampilan))
+                            <tr>
+                                <th>Gambar Tampilan</th>
+                                <td>: @foreach (\App\Support\MultiFileStorage::decode($p->gambar_tampilan) as $__f)
+                                        <a href="{{ url('public/paten/' . basename($__f)) }}"
+                                            class="me-2" target="_blank">Lihat Gambar Tampilan {{ $loop->iteration }}</a>
+                                    @endforeach
+                                </td>
+                            </tr>
+                            @endif
+                            <tr>
+                                <th>Surat Pengalihan Hak</th>
+                                <td>: <a href="{{ url('/paten/' . basename($p->pengalihan_hak)) }}"
+                                        class="" target="_blank">Lihat Surat Pengalihan Hak</a></td>
                             </tr>
                             <tr>
-                                <th>surat pernyataan</th>
-                                <td>: <a href={{ route('private_hc', ['file' => basename($hc->surat_pernyataan)]) }}
-                                        class="" target="_blank">Lihat Surat Pernyataan</a></td>
+                                <th>Klaim</th>
+                                <td>: <a href="{{ url('/paten/' . basename($p->klaim)) }}"
+                                        class="" target="_blank">Lihat Klaim</a></td>
+                            </tr>
+                            <tr>
+                                <th>Pernyataan Kepemilikan Inventor</th>
+                                <td>: <a href="{{ url('/paten/' . basename($p->pernyataan_kepemilikan)) }}"
+                                        class="" target="_blank">Lihat Pernyataan Kepemilikan</a></td>
+                            </tr>
+                            <tr>
+                                <th>Surat Kuasa</th>
+                                <td>: <a href="{{ url('/paten/' . basename($p->surat_kuasa)) }}"
+                                        class="" target="_blank">Lihat Surat Kuasa</a></td>
                             </tr>
                             <tr>
                                 <th>Tanggal pengajuan</th>
-                                <td>: {{ \Carbon\Carbon::parse($hc->tanggal_permohonan)->format('d-m-Y') }}</td>
+                                <td>: {{ \Carbon\Carbon::parse($p->tanggal_permohonan)->format('d-m-Y') }}</td>
                             </tr>
                             <tr>
                                 <th>Status</th>
-                                <td>: {{ $hc->status }}</td>
+                                <td>: {{ $p->status }}</td>
                             </tr>
                             <tr>
-                                <th>Status Data Hak Cipta</th>
-                                <td>: @if ($hc->cekhc?->keterangan == null)
-                                        Data Hak Cipta Belum Diverifikasi
+                                <th>Status Data Paten</th>
+                                <td>: @if ($p->cek?->keterangan == null)
+                                        Data Paten Belum Diverifikasi
                                     @else
-                                        {{ $hc->cekhc?->keterangan }}
+                                        {{ $p->cek?->keterangan }}
                                     @endif
                                 </td>
                             </tr>
                             <tr>
-                                <th>Sertifikat Hak Cipta</th>
-                                <td>: @if ($hc->sertifikat_hakcipta != '')
-                                        <a href={{ route('public_hc', ['file' => basename($hc->sertifikat_hakcipta)]) }}
+                                <th>Sertifikat Paten</th>
+                                <td>: @if (!empty($p->sertifikat_paten))
+                                        <a href="{{ url('public/paten/' . basename($p->sertifikat_paten)) }}"
                                             class="" target="_blank">Lihat sertifikat</a>
                                     @else
-                                        Hak Cipta Ini Belum Mendapatkan Sertifikat
+                                        Paten Ini Belum Mendapatkan Sertifikat
                                     @endif
                                 </td>
                             </tr>
@@ -197,12 +229,12 @@
                         </table>
 
                         <div class="mt-3">
-                            @if ($hc->dikirim_ke)
+                            @if ($p->dikirim_ke)
                                 <span class="badge bg-success">
-                                    Sudah dikirim ke {{ ucfirst($hc->dikirim_ke) }}
+                                    Sudah dikirim ke {{ ucfirst($p->dikirim_ke) }}
                                 </span>
                             @else
-                                <a href="{{ route('admin_hakcipta.form_kirim', $hc->id) }}" class="btn btn-primary btn-sm">
+                                <a href="{{ route('admin_paten.form_kirim', $p->id) }}" class="btn btn-primary btn-sm">
                                     Kirim ke Dashboard (Produk Inovasi / Penelitian)
                                 </a>
                             @endif
@@ -211,10 +243,10 @@
                 </div>
 
                 @include('admin.layout.tagihan-card', [
-                    'pembayaran' => $hc->payment,
-                    'jenisSlug' => 'hak-cipta',
-                    'pengajuanId' => $hc->id,
-                    'namaPengaju' => $hc->nama_lengkap,
+                    'pembayaran' => $p->payment,
+                    'jenisSlug' => 'paten',
+                    'pengajuanId' => $p->id,
+                    'namaPengaju' => $p->nama_lengkap,
                 ])
             </div>
         </div>

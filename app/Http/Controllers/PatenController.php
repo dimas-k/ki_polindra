@@ -279,7 +279,6 @@ class PatenController extends Controller
         // File sensitif (data pribadi) disimpan di disk private
         $privateFiles = [
             'ktp_inventor'           => 'ktp_inventor',
-            'gambar_img' => \App\Support\GambarImage::RULE,
             'pengalihan_hak'         => 'pengalihan_hak',
             'klaim'                  => 'klaim',
             'pernyataan_kepemilikan' => 'pernyataan_kepemilikan',

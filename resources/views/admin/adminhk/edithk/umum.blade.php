@@ -108,7 +108,7 @@
                                     value="{{ $hk->ktp_inventor }}">
                                 <span class="text-danger"><i class="fa fa-warning me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari
-                                    10mb</span>
+                                    2mb</span>
                                 {{-- @error('ktp_inventor')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -224,7 +224,7 @@
                                     id="invensi">
                                 <span class="text-danger"><i class="fa fa-warning me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari
-                                    10mb</span>
+                                    2mb</span>
                                 {{-- @error('dokumen_invensi')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -249,7 +249,7 @@
                                     id="surat_pengalihan">
                                 <span class="text-danger"><i class="fa fa-warning me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari
-                                    10mb</span>
+                                    2mb</span>
                                 {{-- @error('surat_pengalihan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -262,7 +262,7 @@
                                     name="surat_pernyataan">
                                 <span class="text-danger"><i class="fa fa-warning me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari
-                                    10mb</span>
+                                    2mb</span>
                                 {{-- @error('surat_pernyataan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -578,7 +578,7 @@
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops... Ada yang salah...",
-                                text: "Ukuran File KTP Lebih Dari 10mb!",
+                                text: "Ukuran File KTP Lebih Dari 2mb!",
                                 position: "top-end",
                                 showConfirmButton: false,
                                 timer: 2500
@@ -589,7 +589,7 @@
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops... Ada yang salah...",
-                                text: "Ukuran File Dokumen Invensi Lebih Dari 10mb!",
+                                text: "Ukuran File Dokumen Invensi Lebih Dari 2mb!",
                                 position: "top-end",
                                 showConfirmButton: false,
                                 timer: 2500
@@ -600,7 +600,7 @@
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops... Ada yang salah...",
-                                text: "Ukuran File Surat Pengalihan Lebih Dari 10mb!",
+                                text: "Ukuran File Surat Pengalihan Lebih Dari 2mb!",
                                 position: "top-end",
                                 showConfirmButton: false,
                                 timer: 2500
@@ -611,7 +611,7 @@
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops... Ada yang salah...",
-                                text: "Ukuran File Surat Pernyataan Lebih Dari 10mb!",
+                                text: "Ukuran File Surat Pernyataan Lebih Dari 2mb!",
                                 position: "top-end",
                                 showConfirmButton: false,
                                 timer: 2500
@@ -659,7 +659,7 @@
                         pernyataan: $('#pernyataan')[0].files[0]
                     };
             
-                    const maxSize = 10 * 1024 * 1024; // Max size 10 MB
+                    const maxSize = 2 * 1024 * 1024; // Max size 2 MB
                     const allowedExtension = /\.pdf$/i;
             
                     // Function to show error messages
@@ -693,7 +693,7 @@
                             return false;
                         }
                         if (file.size > maxSize) {
-                            showError(`Ukuran File ${key.replace('_', ' ').toUpperCase()} Lebih Dari 10 MB!`);
+                            showError(`Ukuran File ${key.replace('_', ' ').toUpperCase()} Lebih Dari 2 MB!`);
                             return false;
                         }
                     }

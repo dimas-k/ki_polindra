@@ -226,7 +226,6 @@ class DesainIndustriController extends Controller
         // File sensitif (data pribadi) disimpan di disk private
         $privateFiles = [
             'ktp_inventor'     => 'ktp_inventor',
-            'gambar_img' => \App\Support\GambarImage::RULE,
             'surat_kepemilikan' => 'surat_kepemilikan',
             'surat_pengalihan'  => 'surat_pengalihan',
         ];

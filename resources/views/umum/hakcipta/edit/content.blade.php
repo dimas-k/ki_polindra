@@ -166,7 +166,7 @@
                                                 <input type="file" id="gambar_ciptaan"
                                                     class="form-control"
                                                     placeholder="" name="gambar_ciptaan[]" multiple accept=".pdf,.jpg,.jpeg,.png" data-filepond-multi>
-                                                <span class="text-danger"><i class="fa fa-warning me-2" data-bs-toggle="tooltip"></i>Harus memasukkan kembali file yang sama atau yang sudah diperbarui jika ingin mengganti (bisa pilih lebih dari 1 file tanpa tombol Ctrl, maks 10MB per file)</span>
+                                                <span class="text-danger"><i class="fa fa-warning me-2" data-bs-toggle="tooltip"></i>Harus memasukkan kembali file yang sama atau yang sudah diperbarui jika ingin mengganti (bisa pilih lebih dari 1 file tanpa tombol Ctrl, maks 2MB per file)</span>
                                             </td>
                                         </tr>
                                         <tr>

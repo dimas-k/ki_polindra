@@ -418,7 +418,6 @@ class UmumController extends Controller
             // Daftar field file untuk di-update
             $privateFiles = [
                 'ktp_inventor'           => 'ktp_inventor',
-                'gambar_img' => \App\Support\GambarImage::RULE,
                 'pengalihan_hak'         => 'pengalihan_hak',
                 'klaim'                  => 'klaim',
                 'pernyataan_kepemilikan' => 'pernyataan_kepemilikan',
@@ -565,7 +564,6 @@ class UmumController extends Controller
 
             $privateFiles = [
                 'ktp_inventor'      => 'ktp_inventor',
-                'gambar_img' => \App\Support\GambarImage::RULE,
                 'surat_kepemilikan' => 'surat_kepemilikan',
                 'surat_pengalihan'  => 'surat_pengalihan',
             ];
@@ -652,7 +650,6 @@ class UmumController extends Controller
 
             $privateFiles = [
                 'ktp_inventor'    => 'ktp_inventor',
-                'gambar_img' => \App\Support\GambarImage::RULE,
                 'surat_pengalihan' => 'surat_pengalihan',
                 'surat_pernyataan' => 'surat_pernyataan',
             ];
@@ -748,7 +745,6 @@ class UmumController extends Controller
             // Daftar file yang disimpan di private storage
             $privateFiles = [
                 'ktp_inventor' => 'ktp_inventor',
-                'gambar_img' => \App\Support\GambarImage::RULE,
                 'pengalihan_hak' => 'pengalihan_hak',
                 'klaim' => 'klaim',
                 'pernyataan_kepemilikan' => 'pernyataan_kepemilikan',
@@ -833,7 +829,6 @@ class UmumController extends Controller
 
             $privateFiles = [
                 'ktp_inventor'    => 'ktp_inventor',
-                'gambar_img' => \App\Support\GambarImage::RULE,
                 'surat_pengalihan' => 'surat_pengalihan',
                 'surat_pernyataan' => 'surat_pernyataan',
             ];
@@ -916,7 +911,6 @@ class UmumController extends Controller
 
             $privateFiles = [
                 'ktp_inventor'      => 'ktp_inventor',
-                'gambar_img' => \App\Support\GambarImage::RULE,
                 'data_pengaju2'     => 'data_pengaju2',
                 'surat_kepemilikan' => 'surat_kepemilikan',
                 'surat_pengalihan'  => 'surat_pengalihan',

@@ -94,7 +94,7 @@
                                             id="ktp" name="ktp_inventor">
                                         <span class="text-danger"><i class="fa fa-warning me-2"
                                                 data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                            dari 10mb</span>
+                                            dari 2mb</span>
                                         {{-- @error('ktp_inventor')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -174,7 +174,7 @@
                                             id="abstrak" placeholder="" name="abstrak_paten">
                                         <span class="text-danger"><i class="fa fa-warning me-2"
                                                 data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                            dari 10mb</span>
+                                            dari 2mb</span>
                                         {{-- @error('abstrak_paten')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -188,7 +188,7 @@
                                             id="deskripsi" placeholder="" name="deskripsi_paten">
                                         <span class="text-danger"><i class="fa fa-warning me-2"
                                                 data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                            dari 10mb</span>
+                                            dari 2mb</span>
                                         {{-- @error('deskripsi_paten')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -202,7 +202,7 @@
                                             id="pengalihan_hak" placeholder="" name="pengalihan_hak">
                                         <span class="text-danger"><i class="fa fa-warning me-2"
                                                 data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                            dari 10mb</span>
+                                            dari 2mb</span>
                                         {{-- @error('pengalihan_hak')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -216,7 +216,7 @@
                                             id="klaim" placeholder="" name="klaim">
                                         <span class="text-danger"><i class="fa fa-warning me-2"
                                                 data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                            dari 10mb</span>
+                                            dari 2mb</span>
                                         {{-- @error('klaim')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -231,7 +231,7 @@
                                             id="kepemilikan" placeholder="" name="pernyataan_kepemilikan">
                                         <span class="text-danger"><i class="fa fa-warning me-2"
                                                 data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                            dari 10mb</span>
+                                            dari 2mb</span>
                                         {{-- @error('pernyataan_kepemilikan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -245,7 +245,7 @@
                                             id="kuasa" placeholder="" name="surat_kuasa">
                                         <span class="text-danger"><i class="fa fa-warning me-2"
                                                 data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                            dari 10mb</span>
+                                            dari 2mb</span>
                                         {{-- @error('surat_kuasa')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -259,7 +259,7 @@
                                             id="g_paten" placeholder="" name="gambar_paten" accept=".pdf">
                                         <span class="text-danger"><i class="fa fa-warning me-2"
                                                 data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                            dari 10mb</span>
+                                            dari 2mb</span>
                                         {{-- @error('gambar_paten')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -271,7 +271,7 @@
                                         <input type="file"
                                             class="form-control"
                                             id="g_tampilan" placeholder="" name="gambar_tampilan[]" multiple accept=".pdf,.jpg,.jpeg,.png" data-filepond-multi>
-                                        <span class="text-muted"><i class="fa fa-info-circle me-1"></i>Boleh unggah lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png). Anda dapat memilih beberapa file sekaligus atau menambahkannya satu per satu tanpa tombol Ctrl. Maks 10MB per file.</span>
+                                        <span class="text-muted"><i class="fa fa-info-circle me-1"></i>Boleh unggah lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png). Anda dapat memilih beberapa file sekaligus atau menambahkannya satu per satu tanpa tombol Ctrl. Maks 2MB per file.</span>
                                     </div>
                                     <div class="mb-3">
                                         <label for="tanggalpengajuan" class="form-label">Tanggal Pengajuan</label>

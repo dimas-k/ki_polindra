@@ -120,7 +120,7 @@
                                         <input type="file" class="form-control" id="ktp" name="ktp_inventor">
                                         <span class="text-danger"><i class="fa fa-warning me-2"
                                                 data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                            dari 10mb</span>
+                                            dari 2mb</span>
                                         {{-- @error('ktp_inventor')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -215,7 +215,7 @@
                                             id="gambar_desain">
                                         <span class="text-danger"><i class="fa fa-warning me-2"
                                                 data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                            dari 10mb</span>
+                                            dari 2mb</span>
                                         {{-- @error('gambar_di')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -228,7 +228,7 @@
                                             id="uraian_desain">
                                         <span class="text-danger"><i class="fa fa-warning me-2"
                                                 data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                            dari 10mb</span>
+                                            dari 2mb</span>
                                         {{-- @error('uraian_di')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -242,7 +242,7 @@
                                             name="surat_kepemilikan" id="pernyataan_kepemilikan">
                                         <span class="text-danger"><i class="fa fa-warning me-2"
                                                 data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                            dari 10mb</span>
+                                            dari 2mb</span>
                                         {{-- @error('surat_kepemilikan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -255,7 +255,7 @@
                                             name="surat_pengalihan" id="pengalihan">
                                         <span class="text-danger"><i class="fa fa-warning me-2"
                                                 data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                            dari 10mb</span>
+                                            dari 2mb</span>
                                         {{-- @error('surat_pengalihan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -523,7 +523,7 @@
                     } else {
                         var allowedExtension = /(\.pdf)$/i; // Hanya memperbolehkan file berformat PDF
                         var allowedExtensionExel = /(\.xlsx)$/i; // Hanya memperbolehkan file berformat exel
-                        var maxSize = 10 * 1024 * 1024; // Maksimal ukuran file adalah 2 MB
+                        var maxSize = 2 * 1024 * 1024; // Maksimal ukuran file adalah 2 MB
     
                         // Validasi ekstensi file
                         // Cek apakah file diinputkan
@@ -589,7 +589,7 @@
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops... Ada yang salah...",
-                                text: "Ukuran File KTP Lebih Dari 10mb!",
+                                text: "Ukuran File KTP Lebih Dari 2mb!",
                                 position: "top-end",
                                 showConfirmButton: false,
                                 timer: 2500
@@ -600,7 +600,7 @@
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops... Ada yang salah...",
-                                text: "Ukuran File Gambar Desain Lebih Dari 10mb!",
+                                text: "Ukuran File Gambar Desain Lebih Dari 2mb!",
                                 position: "top-end",
                                 showConfirmButton: false,
                                 timer: 2500
@@ -611,7 +611,7 @@
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops... Ada yang salah...",
-                                text: "Ukuran Uraian Desain Lebih Dari 10mb!",
+                                text: "Ukuran Uraian Desain Lebih Dari 2mb!",
                                 position: "top-end",
                                 showConfirmButton: false,
                                 timer: 2500
@@ -622,7 +622,7 @@
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops... Ada yang salah...",
-                                text: "Ukuran File Pernyataan Kepemilikan Lebih Dari 10mb!",
+                                text: "Ukuran File Pernyataan Kepemilikan Lebih Dari 2mb!",
                                 position: "top-end",
                                 showConfirmButton: false,
                                 timer: 2500
@@ -633,7 +633,7 @@
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops... Ada yang salah...",
-                                text: "Ukuran File Surat Pengalihan Hak Lebih Dari 10mb!",
+                                text: "Ukuran File Surat Pengalihan Hak Lebih Dari 2mb!",
                                 position: "top-end",
                                 showConfirmButton: false,
                                 timer: 2500

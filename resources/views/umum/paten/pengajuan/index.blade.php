@@ -391,7 +391,7 @@
                     return false;
                 } else {
                     var allowedExtension = /(\.pdf)$/i; // Hanya memperbolehkan file berformat PDF
-                    var maxSize = 10 * 1024 * 1024; // Maksimal ukuran file adalah 2 MB
+                    var maxSize = 2 * 1024 * 1024; // Maksimal ukuran file adalah 2 MB
 
                     // Validasi ekstensi file
                     // Cek apakah file diinputkan
@@ -502,7 +502,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Ukuran File KTP Lebih Dari 10mb!",
+                            text: "Ukuran File KTP Lebih Dari 2mb!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500
@@ -513,7 +513,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Ukuran File Abstrak Paten Lebih Dari 10mb!",
+                            text: "Ukuran File Abstrak Paten Lebih Dari 2mb!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500
@@ -524,7 +524,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Ukuran Deskripsi paten Lebih Dari 10mb!",
+                            text: "Ukuran Deskripsi paten Lebih Dari 2mb!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500
@@ -535,7 +535,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Ukuran File Surat Pengalihan Hak Lebih Dari 10mb!",
+                            text: "Ukuran File Surat Pengalihan Hak Lebih Dari 2mb!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500
@@ -546,7 +546,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Ukuran File Klaim Lebih Dari 10mb!",
+                            text: "Ukuran File Klaim Lebih Dari 2mb!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500
@@ -557,7 +557,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Ukuran File Pernyataan Kepemilikan Lebih Dari 10mb!",
+                            text: "Ukuran File Pernyataan Kepemilikan Lebih Dari 2mb!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500
@@ -568,7 +568,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Ukuran File Surat Kuasa Lebih Dari 10mb!",
+                            text: "Ukuran File Surat Kuasa Lebih Dari 2mb!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500
@@ -579,7 +579,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Ukuran File Gambar Paten Lebih Dari 10mb!",
+                            text: "Ukuran File Gambar Paten Lebih Dari 2mb!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500
@@ -591,7 +591,7 @@
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops... Ada yang salah...",
-                                text: "Ukuran File Gambar Tampilan Lebih Dari 10mb (" + g_tampilan_files[i].name + ")!",
+                                text: "Ukuran File Gambar Tampilan Lebih Dari 2mb (" + g_tampilan_files[i].name + ")!",
                                 position: "top-end",
                                 showConfirmButton: false,
                                 timer: 2500

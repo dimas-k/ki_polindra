@@ -88,7 +88,7 @@
                                             class="form-control @error('ktp_inventor') is-invalid @enderror"
                                             id="ktp" name="ktp_inventor">
                                             <span class="text-danger"><i class="fa fa-warning me-2"
-                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 10mb</span>
+                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 2mb</span>
                                         @error('ktp_inventor')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -202,7 +202,7 @@
                                             class="form-control @error('dokumen_invensi') is-invalid @enderror"
                                             name="dokumen_invensi" id="invensi">
                                             <span class="text-danger"><i class="fa fa-warning me-2"
-                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 10mb</span>
+                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 2mb</span>
                                         @error('dokumen_invensi')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -228,7 +228,7 @@
                                             class="form-control @error('surat_pengalihan') is-invalid @enderror"
                                             name="surat_pengalihan" id="surat_pengalihan">
                                             <span class="text-danger"><i class="fa fa-warning me-2"
-                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 10mb</span>
+                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 2mb</span>
                                         @error('surat_pengalihan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -241,7 +241,7 @@
                                             class="form-control @error('surat_pernyataan') is-invalid @enderror"
                                             name="surat_pernyataan">
                                             <span class="text-danger"><i class="fa fa-warning me-2"
-                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 10mb</span>
+                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 2mb</span>
                                         @error('surat_pernyataan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}

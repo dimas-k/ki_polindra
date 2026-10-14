@@ -108,7 +108,7 @@
                                 <input type="file" class="form-control" id="ktp" name="ktp_inventor">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih
-                                    dari 10mb</span>
+                                    dari 2mb</span>
                                 {{-- @error('ktp_inventor')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -262,7 +262,7 @@
                                     id="gambar_desain">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih dari
-                                    10mb</span>
+                                    2mb</span>
                                 {{-- @error('gambar_di')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -275,7 +275,7 @@
                                     id="uraian_desain">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih dari
-                                    10mb</span>
+                                    2mb</span>
                                 {{-- @error('uraian_di')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -289,7 +289,7 @@
                                     id="pernyataan_kepemilikan">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih dari
-                                    10mb</span>
+                                    2mb</span>
                                 {{-- @error('surat_kepemilikan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -302,7 +302,7 @@
                                     id="pengalihan" value="{{ $di->surat_pengalihan }}">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih dari
-                                    10mb</span>
+                                    2mb</span>
                                 {{-- @error('surat_pengalihan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -409,7 +409,7 @@
                         surat_pengalihan: $('#pengalihan')[0].files[0]
                     };
 
-                    const maxSize = 10 * 1024 * 1024; // 10MB dalam byte
+                    const maxSize = 2 * 1024 * 1024; // 2MB dalam byte
                     const allowedPDF = ['pdf'];
                     const allowedExcel = ['xls', 'xlsx'];
 
@@ -433,7 +433,7 @@
                             }
                             if (fileData.size > maxSize) {
                                 showError("Ukuran File " + key.replace('_', ' ').toUpperCase() +
-                                    " Melebihi 10MB!");
+                                    " Melebihi 2MB!");
                                 return false;
                             }
                         }
@@ -452,7 +452,7 @@
                             }
                             if (fileData.size > maxSize) {
                                 showError("Ukuran File " + key.replace('_', ' ').toUpperCase() +
-                                    " Melebihi 10MB!");
+                                    " Melebihi 2MB!");
                                 return false;
                             }
                         }

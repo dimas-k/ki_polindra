@@ -88,7 +88,7 @@
                                             class="form-control "
                                             id="ktp" name="ktp_inventor">
                                             <span class="text-danger"><i class="fa fa-warning me-2"
-                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 10mb</span>
+                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 2mb</span>
                                         {{-- @error('ktp_inventor')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -169,7 +169,7 @@
                                             class="form-control "
                                             placeholder="" name="dokumen_invensi" id="invensi">
                                             <span class="text-danger"><i class="fa fa-warning me-2"
-                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 10mb</span>
+                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 2mb</span>
                                         {{-- @error('dokumen_invensi')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -181,7 +181,7 @@
                                         <input type="file"
                                             class="form-control"
                                             placeholder="" name="gambar_ciptaan[]" multiple accept=".pdf,.jpg,.jpeg,.png" id="gambar_ciptaan" data-filepond-multi>
-                                        <span class="text-muted"><i class="fa fa-info-circle me-1"></i>Boleh unggah lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png). Anda dapat memilih beberapa file sekaligus atau menambahkannya satu per satu tanpa tombol Ctrl. Maks 10MB per file.</span>
+                                        <span class="text-muted"><i class="fa fa-info-circle me-1"></i>Boleh unggah lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png). Anda dapat memilih beberapa file sekaligus atau menambahkannya satu per satu tanpa tombol Ctrl. Maks 2MB per file.</span>
                                     </div>
                                     <div class="mb-3">
                                         <label  class="form-label" for="surat_pengalihan">Surat Pengalihan Hak Cipta</label>
@@ -189,7 +189,7 @@
                                             class="form-control "
                                             placeholder="" name="surat_pengalihan" id="surat_pengalihan">
                                             <span class="text-danger"><i class="fa fa-warning me-2"
-                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 10mb</span>
+                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 2mb</span>
                                         {{-- @error('surat_pengalihan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -202,7 +202,7 @@
                                             class="form-control "
                                             placeholder="" name="surat_pernyataan">
                                             <span class="text-danger"><i class="fa fa-warning me-2"
-                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 10mb</span>
+                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 2mb</span>
                                         {{-- @error('surat_pernyataan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
