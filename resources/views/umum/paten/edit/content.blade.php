@@ -199,13 +199,27 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th>gambar tampilan</th>
+                                            <th>Gambar Tampilan</th>
                                             <td>
+                                                @if (!empty($p->gambar_tampilan))
+                                                    <div class="mb-2 small">
+                                                        <span class="text-muted fw-semibold">File saat ini:</span>
+                                                        <ul class="mb-1 ps-3">
+                                                            @foreach (\App\Support\MultiFileStorage::decode($p->gambar_tampilan) as $gf)
+                                                                <li>
+                                                                    <a href="{{ route('public_paten_umum', ['file' => basename($gf)]) }}" target="_blank" class="text-primary">
+                                                                        <i class="fa fa-file me-1"></i>{{ basename($gf) }}
+                                                                    </a>
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                @endif
                                                 <input type="file" class="form-control" id="g_tampilan"
-                                                    placeholder="" name="gambar_tampilan[]" multiple accept=".pdf,.jpg,.jpeg,.png">
+                                                    placeholder="" name="gambar_tampilan[]" multiple accept=".pdf,.jpg,.jpeg,.png" data-filepond-multi>
                                                 <span class="text-danger"><i class="fa fa-warning me-2"
                                                         data-bs-toggle="tooltip"></i>Harus memasukkan kembali file yang
-                                                    sama atau yang sudah di perbarui</span>
+                                                    sama atau yang sudah diperbarui (bisa pilih lebih dari 1 file tanpa tombol Ctrl, maks 10MB per file)</span>
                                             </td>
                                         </tr>
                                         <tr>

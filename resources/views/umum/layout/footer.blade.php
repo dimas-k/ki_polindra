@@ -7,3 +7,4 @@
         </div>
     </div>
 </footer>
+@include('layout.filepond')

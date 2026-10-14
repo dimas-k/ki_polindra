@@ -182,17 +182,10 @@
                                         @enderror --}}
                                     </div>
                                     <div class="mb-3">
-                                        <label for="gambar_desain" class="form-label">Gambar Desain Industri</label>
+                                        <label for="gambar_desain" class="form-label">Gambar Desain Industri (bisa lebih dari 1 file)</label>
                                         <input type="file" class="form-control" placeholder="" name="gambar_di[]" multiple accept=".pdf,.jpg,.jpeg,.png"
-                                            id="gambar_desain">
-                                        <span class="text-danger"><i class="fa fa-warning me-2"
-                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                            dari 10mb</span>
-                                        {{-- @error('gambar_di')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror --}}
+                                            id="gambar_desain" data-filepond-multi>
+                                        <span class="text-muted"><i class="fa fa-info-circle me-1"></i>Boleh unggah lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png). Anda dapat memilih beberapa file sekaligus atau menambahkannya satu per satu tanpa tombol Ctrl. Maks 10MB per file.</span>
                                     </div>
                                     <div class="mb-3">
                                         <label for="uraian_desain" class="form-label">Uraian Desain Industri</label>

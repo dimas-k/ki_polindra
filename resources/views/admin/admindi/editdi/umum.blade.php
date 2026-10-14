@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en" data-bs-theme="auto">
 
 <head>
@@ -624,6 +624,7 @@
                 });
             });
         </script>
+@include('layout.filepond')
 </body>
 
 </html>

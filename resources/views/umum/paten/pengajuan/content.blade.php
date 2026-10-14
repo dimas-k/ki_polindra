@@ -267,18 +267,11 @@
                                         @enderror --}}
                                     </div>
                                     <div class="mb-3">
-                                        <label for="g_tampilan" class="form-label">gambar Tampilan</label>
+                                        <label for="g_tampilan" class="form-label">Gambar Tampilan (bisa lebih dari 1 file)</label>
                                         <input type="file"
-                                            class="form-control "
-                                            id="g_tampilan" placeholder="" name="gambar_tampilan[]" multiple accept=".pdf,.jpg,.jpeg,.png">
-                                        <span class="text-danger"><i class="fa fa-warning me-2"
-                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                            dari 10mb</span>
-                                        {{-- @error('gambar_tampilan')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror --}}
+                                            class="form-control"
+                                            id="g_tampilan" placeholder="" name="gambar_tampilan[]" multiple accept=".pdf,.jpg,.jpeg,.png" data-filepond-multi>
+                                        <span class="text-muted"><i class="fa fa-info-circle me-1"></i>Boleh unggah lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png). Anda dapat memilih beberapa file sekaligus atau menambahkannya satu per satu tanpa tombol Ctrl. Maks 10MB per file.</span>
                                     </div>
                                     <div class="mb-3">
                                         <label for="tanggalpengajuan" class="form-label">Tanggal Pengajuan</label>

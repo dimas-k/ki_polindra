@@ -293,9 +293,9 @@
                                         <label for="g_tampilan" class="form-label">gambar Tampilan</label>
                                         <input type="file"
                                             class="form-control @error('gambar_tampilan') is-invalid @enderror"
-                                            id="g_tampilan" name="gambar_tampilan[]" multiple accept=".pdf,.jpg,.jpeg,.png" required>
+                                            id="g_tampilan" name="gambar_tampilan[]" multiple accept=".pdf,.jpg,.jpeg,.png" required data-filepond-multi>
                                         <span class="text-danger"><i class="fa fa-warning me-2"
-                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
+                                                data-bs-toggle="tooltip"></i>File bertipe .pdf/.jpg/.jpeg/.png dan tidak lebih
                                             dari 2mb</span>
                                         @error('gambar_tampilan')
                                             <div class="invalid-feedback">{{ $message }}</div>

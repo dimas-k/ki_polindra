@@ -172,7 +172,7 @@
                 var kepemilikan = $('#kepemilikan')[0].files[0];
                 var kuasa = $('#kuasa')[0].files[0];
                 var g_paten = $('#g_paten')[0].files[0];
-                var g_tampilan = $('#g_tampilan')[0].files[0];
+                var g_tampilan_files = $('#g_tampilan')[0].files;
 
                 // var errorMessage = ''; // Variabel untuk menyimpan pesan error
 
@@ -379,7 +379,7 @@
                     });
                     return false;
                 }
-                if (!g_tampilan) {
+                if (!g_tampilan_files || g_tampilan_files.length === 0) {
                     Swal.fire({
                         icon: "error",
                         title: "Oops... Ada yang salah...",
@@ -483,16 +483,18 @@
                         });
                         return false;
                     }
-                    if (!/(\.(pdf|jpe?g|png))$/i.exec(g_tampilan.name)) {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops... Ada yang salah...",
-                            text: "Tolong Masukkan Gambar Tampilan Paten Dengan Ekstensi .pdf/.jpg/.jpeg/.png!",
-                            position: "top-end",
-                            showConfirmButton: false,
-                            timer: 2500
-                        });
-                        return false;
+                    for (var i = 0; i < g_tampilan_files.length; i++) {
+                        if (!/(\.(pdf|jpe?g|png))$/i.exec(g_tampilan_files[i].name)) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops... Ada yang salah...",
+                                text: "Tolong Masukkan Gambar Tampilan Paten Dengan Ekstensi .pdf/.jpg/.jpeg/.png (" + g_tampilan_files[i].name + ")!",
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 2500
+                            });
+                            return false;
+                        }
                     }
 
                     // Validasi ukuran file
@@ -584,16 +586,18 @@
                         });
                         return false;
                     }
-                    if (g_tampilan.size > maxSize) {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops... Ada yang salah...",
-                            text: "Ukuran File Gambar Tampilan Lebih Dari 10mb!",
-                            position: "top-end",
-                            showConfirmButton: false,
-                            timer: 2500
-                        });
-                        return false;
+                    for (var i = 0; i < g_tampilan_files.length; i++) {
+                        if (g_tampilan_files[i].size > maxSize) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops... Ada yang salah...",
+                                text: "Ukuran File Gambar Tampilan Lebih Dari 10mb (" + g_tampilan_files[i].name + ")!",
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 2500
+                            });
+                            return false;
+                        }
                     }
 
                 }
