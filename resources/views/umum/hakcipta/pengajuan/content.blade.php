@@ -181,7 +181,7 @@
                                         <input type="file"
                                             class="form-control"
                                             placeholder="" name="gambar_ciptaan[]" multiple accept=".pdf,.jpg,.jpeg,.png" id="gambar_ciptaan" data-filepond-multi>
-                                        <span class="text-muted"><i class="fa fa-info-circle me-1"></i>Boleh unggah lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png). Anda dapat memilih beberapa file sekaligus atau menambahkannya satu per satu tanpa tombol Ctrl. Maks 2MB per file.</span>
+                                        <span class="text-muted"><i class="fa fa-info-circle me-1"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file maks 2MB. Khusus file gambar, ukurannya harus 1440px x 654px.</span>
                                     </div>
                                     <div class="mb-3">
                                         <label  class="form-label" for="surat_pengalihan">Surat Pengalihan Hak Cipta</label>

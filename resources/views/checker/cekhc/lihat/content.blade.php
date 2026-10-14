@@ -133,8 +133,8 @@
                                         <td>:
                                             @foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $__f)
 <a href="{{ route('public_hc_verifikator', ['file' => basename($__f)]) }}"
-                                                target="_blank">Lihat Gambar Ciptaan
-                                            </a>
+                                                target="_blank">Lihat Gambar Ciptaan {{ $loop->iteration }} ({{ \App\Support\MultiFileStorage::isImage($__f) ? 'Gambar' : 'PDF' }})
+                                            </a>@if (!$loop->last)<br>@endif
 @endforeach
                                     </tr>
 @endif

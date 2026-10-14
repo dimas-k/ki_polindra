@@ -200,7 +200,7 @@
                         <div class="detail-value mt-1 d-flex flex-wrap gap-2">
                             @foreach (\App\Support\MultiFileStorage::decode($di->gambar_di) as $__f)
 <a href="{{ asset('storage/' . $__f) }}" target="_blank" class="btn-doc">
-                                <i class="bi bi-image"></i> Lihat Gambar DI
+                                <i class="bi bi-{{ \App\Support\MultiFileStorage::isImage($__f) ? 'image' : 'file-earmark-pdf' }}"></i> Lihat {{ \App\Support\MultiFileStorage::isImage($__f) ? 'Gambar' : 'PDF' }} DI {{ $loop->iteration }}
                             </a>
 @endforeach
                             <a href="{{ asset('storage/' . $di->uraian_di) }}" target="_blank" class="btn-doc">

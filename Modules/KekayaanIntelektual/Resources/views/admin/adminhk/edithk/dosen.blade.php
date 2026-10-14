@@ -295,7 +295,7 @@
                                 <input type="file" class="form-control " placeholder="" name="gambar_ciptaan[]" multiple accept=".pdf,.jpg,.jpeg,.png"
                                     id="gambar_ciptaan">
                                     <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
-                                        data-bs-toggle="tooltip"></i>masukan file jika ada perubahan</span>
+                                        data-bs-toggle="tooltip"></i>Masukkan file baru jika ingin mengganti (boleh lebih dari 1 file, maks 2MB per file). Khusus file gambar, ukurannya harus 1440px x 654px.</span>
                                 {{-- @error('gambar_ciptaan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}

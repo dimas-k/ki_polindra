@@ -138,7 +138,7 @@
 @endforeach --}}
                                             @foreach (\App\Support\MultiFileStorage::decode($paten->gambar_paten) as $__f)
 <a href="{{ route('public_paten_dosen', ['filename' => basename($__f)]) }}"
-                                                target="_blank">Lihat Gambar Paten</a>@if (!$loop->last)<br>@endif
+                                                target="_blank">Lihat Gambar Paten {{ $loop->iteration }} ({{ \App\Support\MultiFileStorage::isImage($__f) ? 'Gambar' : 'PDF' }})</a>@if (!$loop->last)<br>@endif
 @endforeach
                                         </td>
                                     </tr>
@@ -151,7 +151,7 @@
 @endforeach --}}
                                             @foreach (\App\Support\MultiFileStorage::decode($paten->gambar_tampilan) as $__f)
 <a href="{{ route('public_paten_dosen', ['filename' => basename($__f)]) }}"
-                                                target="_blank">Lihat Gambar Tampilan</a>@if (!$loop->last)<br>@endif
+                                                target="_blank">Lihat Gambar Tampilan {{ $loop->iteration }} ({{ \App\Support\MultiFileStorage::isImage($__f) ? 'Gambar' : 'PDF' }})</a>@if (!$loop->last)<br>@endif
 @endforeach
                                         </td>
                                     </tr>

@@ -295,8 +295,7 @@
                                             class="form-control @error('gambar_tampilan') is-invalid @enderror"
                                             id="g_tampilan" name="gambar_tampilan[]" multiple accept=".pdf,.jpg,.jpeg,.png" required data-filepond-multi>
                                         <span class="text-danger"><i class="fa fa-warning me-2"
-                                                data-bs-toggle="tooltip"></i>File bertipe .pdf/.jpg/.jpeg/.png dan tidak lebih
-                                            dari 2mb</span>
+                                                data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file maks 2MB. Khusus file gambar, ukurannya harus 1440px x 654px.</span>
                                         @error('gambar_tampilan')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror

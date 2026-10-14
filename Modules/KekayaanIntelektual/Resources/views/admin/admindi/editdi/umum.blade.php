@@ -195,8 +195,7 @@
                                 <input type="file" class="form-control" placeholder="" name="gambar_di[]" multiple accept=".pdf,.jpg,.jpeg,.png"
                                     id="gambar_desain">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
-                                        data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih dari
-                                    2mb</span>
+                                        data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file maks 2MB. Khusus file gambar, ukurannya harus 1440px x 654px.</span>
                                 {{-- @error('gambar_di')
                                             <div class="invalid-feedback">
                                                 {{ $message }}

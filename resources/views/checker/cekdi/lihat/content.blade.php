@@ -116,7 +116,7 @@
                                         <th>Gambar desain Industri</th>
                                         <td>: @foreach (\App\Support\MultiFileStorage::decode($di->gambar_di) as $__f)
 <a href={{ route('private_di_verifikator', ['file' => basename($__f)]) }}
-                                                class="" target="_blank">Lihat Gambar Desain Industri</a>@if (!$loop->last)<br>@endif
+                                                class="" target="_blank">Lihat Gambar Desain Industri {{ $loop->iteration }} ({{ \App\Support\MultiFileStorage::isImage($__f) ? 'Gambar' : 'PDF' }})</a>@if (!$loop->last)<br>@endif
 @endforeach</td>
                                     </tr>
                                     <tr>

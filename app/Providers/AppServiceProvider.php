@@ -26,6 +26,16 @@ class AppServiceProvider extends ServiceProvider
         'admin.layout.prodi',
         'admin.layout.jurusan',
         'admin.adminhk.edithk.dosen',
+        // Admin sekarang me-render view ini lewat module KekayaanIntelektual
+        // (view('kekayaanintelektual::admin...')), jadi Laravel menyimpannya
+        // dengan nama yang BERBEDA (pakai prefix namespace). View::composer()
+        // mencocokkan nama secara persis, sehingga 3 baris tanpa prefix di
+        // atas TIDAK kena untuk view Admin ini — harus didaftarkan lagi
+        // dengan prefix 'kekayaanintelektual::' supaya $jurusanOptions dan
+        // $prodiOptions ikut disuntikkan juga di sini.
+        'kekayaanintelektual::admin.adminpaten.editpaten.index',
+        'kekayaanintelektual::admin.admindi.editdi.dosen',
+        'kekayaanintelektual::admin.adminhk.edithk.dosen',
         'umum-page.Desainindustri.jurusan.cari',
         'umum-page.Desainindustri.jurusan.index',
         'umum-page.Desainindustri.prodi.cari',

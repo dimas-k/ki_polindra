@@ -155,8 +155,7 @@
                                                 <input type="file" class="form-control" placeholder=""
                                                     name="gambar_di[]" multiple accept=".pdf,.jpg,.jpeg,.png" id="gambar_desain" data-filepond-multi>
                                                 <span class="text-danger"><i class="fa fa-warning me-2"
-                                                        data-bs-toggle="tooltip"></i>Harus memasukkan kembali file yang
-                                                    sama atau yang sudah diperbarui (bisa pilih lebih dari 1 file tanpa tombol Ctrl, maks 2MB per file)</span>
+                                                        data-bs-toggle="tooltip"></i>Masukkan file baru jika ingin mengganti (boleh lebih dari 1 file, maks 2MB per file). Khusus file gambar, ukurannya harus 1440px x 654px.</span>
                                             </td>
                                         </tr>
                                         <tr>

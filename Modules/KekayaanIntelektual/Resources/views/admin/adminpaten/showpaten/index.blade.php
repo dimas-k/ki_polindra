@@ -163,7 +163,7 @@
                                 <th>Gambar Paten</th>
                                 <td>: @foreach (\App\Support\MultiFileStorage::decode($p->gambar_paten) as $__f)
                                         <a href="{{ url('public/paten/' . basename($__f)) }}"
-                                            class="me-2" target="_blank">Lihat Gambar Paten {{ $loop->iteration }}</a>
+                                            class="me-2" target="_blank">Lihat Gambar Paten {{ $loop->iteration }} ({{ \App\Support\MultiFileStorage::isImage($__f) ? 'Gambar' : 'PDF' }})</a>
                                     @endforeach
                                 </td>
                             </tr>
@@ -173,7 +173,7 @@
                                 <th>Gambar Tampilan</th>
                                 <td>: @foreach (\App\Support\MultiFileStorage::decode($p->gambar_tampilan) as $__f)
                                         <a href="{{ url('public/paten/' . basename($__f)) }}"
-                                            class="me-2" target="_blank">Lihat Gambar Tampilan {{ $loop->iteration }}</a>
+                                            class="me-2" target="_blank">Lihat Gambar Tampilan {{ $loop->iteration }} ({{ \App\Support\MultiFileStorage::isImage($__f) ? 'Gambar' : 'PDF' }})</a>
                                     @endforeach
                                 </td>
                             </tr>

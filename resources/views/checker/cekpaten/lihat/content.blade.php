@@ -137,7 +137,7 @@
                                         <th>Gambar Paten</th>
                                         <td>:
                                             @foreach (\App\Support\MultiFileStorage::decode($paten->gambar_paten) as $__f)
-<a href="{{ route('public_paten_verifikator', ['file' => basename($__f)])  }}" target="_blank">Lihat Gambar paten</a>@if (!$loop->last)<br>@endif
+<a href="{{ route('public_paten_verifikator', ['file' => basename($__f)])  }}" target="_blank">Lihat Gambar Paten {{ $loop->iteration }} ({{ \App\Support\MultiFileStorage::isImage($__f) ? 'Gambar' : 'PDF' }})</a>@if (!$loop->last)<br>@endif
 @endforeach
                                         </td>
                                     </tr>
@@ -145,7 +145,7 @@
                                         <th>Gambar Tampilan</th>
                                         <td>:
                                             @foreach (\App\Support\MultiFileStorage::decode($paten->gambar_tampilan) as $__f)
-<a href="{{ route('public_paten_verifikator', ['file' => basename($__f)])  }}" target="_blank">Lihat Gambar Tampilan</a>@if (!$loop->last)<br>@endif
+<a href="{{ route('public_paten_verifikator', ['file' => basename($__f)])  }}" target="_blank">Lihat Gambar Tampilan {{ $loop->iteration }} ({{ \App\Support\MultiFileStorage::isImage($__f) ? 'Gambar' : 'PDF' }})</a>@if (!$loop->last)<br>@endif
 @endforeach
                                         </td>
                                     </tr>

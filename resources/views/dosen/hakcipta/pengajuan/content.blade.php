@@ -215,7 +215,7 @@
                                             class="form-control @error('gambar_ciptaan') is-invalid @enderror"
                                             name="gambar_ciptaan[]" multiple accept=".pdf,.jpg,.jpeg,.png" id="gambar_ciptaan">
                                             <span class="text-danger"><i class="fa fa-warning me-2"
-                                                data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file tidak lebih dari 2mb</span>
+                                                data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file maks 2MB. Khusus file gambar, ukurannya harus 1440px x 654px.</span>
                                         @error('gambar_ciptaan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}

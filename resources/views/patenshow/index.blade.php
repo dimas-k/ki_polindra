@@ -215,13 +215,13 @@
                             @foreach (\App\Support\MultiFileStorage::decode($paten->gambar_paten) as $__f)
 <a href="{{ route('public_paten_guest', ['filename' => basename($__f)]) }}"
                                 target="_blank" class="btn-doc">
-                                <i class="bi bi-image"></i> Gambar Paten
+                                <i class="bi bi-{{ \App\Support\MultiFileStorage::isImage($__f) ? 'image' : 'file-earmark-pdf' }}"></i> {{ \App\Support\MultiFileStorage::isImage($__f) ? 'Gambar' : 'PDF' }} Paten {{ $loop->iteration }}
                             </a>@if (!$loop->last)<br>@endif
 @endforeach
                             @foreach (\App\Support\MultiFileStorage::decode($paten->gambar_tampilan) as $__f)
 <a href="{{ route('public_paten_guest', ['filename' => basename($__f)]) }}"
                                 target="_blank" class="btn-doc">
-                                <i class="bi bi-display"></i> Gambar Tampilan
+                                <i class="bi bi-{{ \App\Support\MultiFileStorage::isImage($__f) ? 'image' : 'file-earmark-pdf' }}"></i> {{ \App\Support\MultiFileStorage::isImage($__f) ? 'Gambar' : 'PDF' }} Tampilan {{ $loop->iteration }}
                             </a>@if (!$loop->last)<br>@endif
 @endforeach
                         </div>
