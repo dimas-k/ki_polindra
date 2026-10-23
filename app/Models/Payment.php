@@ -20,12 +20,17 @@ class Payment extends Model
         'paid_at' => 'datetime',
         'raw_response' => 'array',
         'reminder_terkirim' => 'boolean',
+        'verified_at' => 'datetime',
     ];
 
     const STATUS_MENUNGGU = 'Menunggu Pembayaran';
+    const STATUS_MENUNGGU_VERIFIKASI = 'Menunggu Verifikasi';
     const STATUS_DIBAYAR = 'Dibayar';
     const STATUS_KADALUARSA = 'Kadaluarsa';
     const STATUS_DIBATALKAN = 'Dibatalkan';
+
+    const TIPE_MIDTRANS = 'midtrans';
+    const TIPE_MANUAL = 'manual';
 
     /**
      * Relasi ke pengajuan (Paten, HakCipta, atau DesainIndustri).
@@ -40,9 +45,31 @@ class Payment extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Rekening/kanal pembayaran manual (transfer/VA/QRIS) yang dipilih pengaju,
+     * jika tipe_pembayaran = manual.
+     */
+    public function bankAccount(): BelongsTo
+    {
+        return $this->belongsTo(PaymentBankAccount::class, 'bank_account_id');
+    }
+
+    /**
+     * Admin yang memverifikasi/menolak bukti pembayaran manual.
+     */
+    public function verifiedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'verified_by');
+    }
+
     public function isLunas(): bool
     {
         return $this->status === self::STATUS_DIBAYAR;
+    }
+
+    public function menungguVerifikasi(): bool
+    {
+        return $this->status === self::STATUS_MENUNGGU_VERIFIKASI;
     }
 
     public function sudahJatuhTempo(): bool

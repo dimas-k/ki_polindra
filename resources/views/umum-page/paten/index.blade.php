@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href={{ asset('assets/bootstrap/css/bootstrap.min.css') }} rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href={{ asset('assets/css/index.css') }}>
     <link rel="shortcut icon" href={{ asset('assets/logo-polindra.png') }}>
     <title>SIKI POLINDRA | Paten</title>
@@ -350,7 +351,7 @@
     <div class="container mt-4">
         <h3 class="fw-normal mb-3"><i class="bi bi-table me-2"></i>Daftar Paten</h3>
         <div class="table-responsive">
-            <table class="table table-hover">
+            <table id="tabel-paten" class="table table-hover w-100">
                 <thead>
                     <tr>
                         <th scope="col">No</th>
@@ -364,9 +365,7 @@
                 <tbody>
                     @forelse ($paten1 as $i => $p)
                         <tr>
-                            <th scope="row">
-                                {{ ($paten1->currentPage() - 1) * $paten1->perPage() + $loop->iteration }}
-                            </th>
+                            <th scope="row">{{ $loop->iteration }}</th>
                             <td>{{ $p->nama_lengkap }}</td>
                             <td>{{ $p->jenis_paten }}</td>
                             <td>{{ $p->judul_paten }}</td>
@@ -380,10 +379,6 @@
                     @endforelse
                 </tbody>
             </table>
-        </div>
-
-        <div class="d-flex justify-content-end mb-3">
-            {{ $paten1->links() }}
         </div>
 
         <div class="row mt-4">
@@ -433,8 +428,30 @@
         integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
 
     <script>
+        $(function () {
+            $('#tabel-paten').DataTable({
+                order: [[0, 'asc']], // default: No urut 1..N mengikuti data terbaru (latest()) dari server
+                language: {
+                    search: 'Cari:',
+                    lengthMenu: '_MENU_ entri per halaman',
+                    info: 'Menampilkan _START_ - _END_ dari _TOTAL_ data',
+                    infoEmpty: 'Tidak ada data',
+                    infoFiltered: '(disaring dari _MAX_ total data)',
+                    zeroRecords: 'Data tidak ditemukan',
+                    paginate: {
+                        first: 'Awal',
+                        last: 'Akhir',
+                        next: 'Berikutnya',
+                        previous: 'Sebelumnya',
+                    },
+                },
+            });
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             var options = {
                 chart: {

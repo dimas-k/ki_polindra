@@ -18,7 +18,7 @@ class PatenController extends Controller
      */
     public function index(Request $request)
     {
-        $paten1 = Paten::latest()->paginate(5);
+        $paten1 = Paten::latest()->get();
         $carijudul = $request->get('cari_judul');
         $carinama = $request->get('cari_nama');
 
@@ -88,7 +88,7 @@ class PatenController extends Controller
             ->when($carinama, function ($query, $carinama) {
                 return $query->orWhere('nama_lengkap', 'LIKE', "%" . $carinama . "%");
             })
-            ->paginate(5);
+            ->get();
         // $paten = DB::table('paten')->whereRaw('judul_paten','LIKE',"%".$carijudul."%")->orWhere('nama_lengkap','LIKE',"%".$carinama."%")->paginate(5); //penggunaan raw queri
 
         $hitung = Paten::all()->count();

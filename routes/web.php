@@ -305,9 +305,10 @@ Route::get("/reset-password/{token}", [ForgetPasswordManager::class, "resetPassw
 Route::post("/reset-password", [ForgetPasswordManager::class, "resetPasswordPost"])
     ->name("reset.password.post");
 
-// ==== Pembayaran (Midtrans) ====
+// ==== Pembayaran (Midtrans & Manual) ====
 Route::middleware(['auth'])->group(function () {
     Route::get('/pembayaran/{order_id}', [PaymentController::class, 'show'])->name('payment.show');
+    Route::post('/pembayaran/{order_id}/manual', [PaymentController::class, 'bayarManual'])->name('payment.manual');
 });
 
 // Webhook Midtrans - tanpa auth, CSRF di-exclude lewat bootstrap/app.php / VerifyCsrfToken

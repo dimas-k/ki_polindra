@@ -110,12 +110,12 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <span class="badge
-                                                @class([
-                                                    'text-bg-success' => $p->status === \App\Models\Payment::STATUS_DIBAYAR,
-                                                    'text-bg-warning' => in_array($p->status, [\App\Models\Payment::STATUS_MENUNGGU, \App\Models\Payment::STATUS_MENUNGGU_VERIFIKASI]),
-                                                    'text-bg-secondary' => in_array($p->status, [\App\Models\Payment::STATUS_KADALUARSA, \App\Models\Payment::STATUS_DIBATALKAN]),
-                                                ])">{{ $p->status }}</span>
+                                            <span @class([
+                                                'badge',
+                                                'text-bg-success' => $p->status === \App\Models\Payment::STATUS_DIBAYAR,
+                                                'text-bg-warning' => in_array($p->status, [\App\Models\Payment::STATUS_MENUNGGU, \App\Models\Payment::STATUS_MENUNGGU_VERIFIKASI]),
+                                                'text-bg-secondary' => in_array($p->status, [\App\Models\Payment::STATUS_KADALUARSA, \App\Models\Payment::STATUS_DIBATALKAN]),
+                                            ])>{{ $p->status }}</span>
                                         </td>
                                         <td>{{ $p->created_at->format('d/m/Y H:i') }}</td>
                                         <td>{{ $p->paid_at?->format('d/m/Y H:i') ?? '-' }}</td>

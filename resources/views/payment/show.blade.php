@@ -37,11 +37,69 @@
                     <div class="alert alert-secondary mb-0">
                         Tagihan ini sudah kedaluwarsa. Silakan hubungi admin untuk membuat tagihan baru.
                     </div>
+                @elseif ($payment->status === \App\Models\Payment::STATUS_MENUNGGU_VERIFIKASI)
+                    <div class="alert alert-info mb-0">
+                        <i class="bi bi-hourglass-split me-2"></i>Bukti transfer Anda sudah diunggah dan sedang
+                        menunggu diverifikasi admin.
+                    </div>
                 @else
-                    <button id="pay-button" class="btn w-100 py-2 fw-semibold text-white"
+                    @if (session()->has('success'))
+                        <div class="alert alert-success small">{{ session('success') }}</div>
+                    @endif
+
+                    @if ($payment->catatan_verifikasi && $payment->status === \App\Models\Payment::STATUS_MENUNGGU)
+                        <div class="alert alert-danger small">
+                            <strong>Bukti transfer sebelumnya ditolak:</strong> {{ $payment->catatan_verifikasi }}.
+                            Silakan unggah ulang bukti transfer yang valid.
+                        </div>
+                    @endif
+
+                    <button id="pay-button" class="btn w-100 py-2 fw-semibold text-white mb-3"
                         style="background:linear-gradient(135deg, rgb(255,99,132), #f83600); border:none;">
-                        Bayar Sekarang
+                        Bayar Sekarang (Otomatis via Midtrans)
                     </button>
+
+                    @if ($bankAccounts->isNotEmpty())
+                        <div class="text-center text-muted small mb-3">atau</div>
+
+                        <button class="btn btn-outline-dark w-100 py-2 fw-semibold mb-2" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#manualPaymentForm">
+                            <i class="bi bi-bank me-2"></i>Bayar via Transfer Manual / QRIS
+                        </button>
+
+                        <div class="collapse" id="manualPaymentForm">
+                            <form method="post" action="{{ route('payment.manual', $payment->order_id) }}"
+                                enctype="multipart/form-data" class="border rounded-3 p-3 mt-2">
+                                @csrf
+                                <div class="mb-3">
+                                    <label class="form-label small fw-semibold">Pilih Kanal Pembayaran</label>
+                                    <select name="bank_account_id" class="form-select form-select-sm" required>
+                                        <option value="" disabled selected>-- Pilih rekening/kanal --</option>
+                                        @foreach ($bankAccounts as $bank)
+                                            <option value="{{ $bank->id }}">
+                                                {{ $bank->nama_bank }}
+                                                @if ($bank->nomor_rekening)
+                                                    - {{ $bank->nomor_rekening }}
+                                                @endif
+                                                @if ($bank->atas_nama)
+                                                    a.n. {{ $bank->atas_nama }}
+                                                @endif
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-semibold">Unggah Bukti Transfer</label>
+                                    <input type="file" name="bukti_pembayaran" accept=".jpg,.jpeg,.png,.pdf"
+                                        class="form-control form-control-sm" required>
+                                    <div class="form-text">Format JPG, PNG, atau PDF. Maksimal 2MB.</div>
+                                </div>
+                                <button type="submit" class="btn btn-success btn-sm w-100">
+                                    <i class="bi bi-upload me-1"></i>Kirim Bukti Transfer
+                                </button>
+                            </form>
+                        </div>
+                    @endif
                 @endif
             </div>
         </div>

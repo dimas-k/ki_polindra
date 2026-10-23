@@ -7,6 +7,7 @@ use App\Mail\KiPaymentReceivedMail;
 use App\Models\DesainIndustri;
 use App\Models\HakCipta;
 use App\Models\Payment;
+use App\Models\PaymentBankAccount;
 use App\Models\Paten;
 use App\Services\MidtransService;
 use Illuminate\Http\Request;
@@ -129,7 +130,53 @@ class PaymentController extends Controller
             'payment' => $payment,
             'clientKey' => config('midtrans.client_key'),
             'isProduction' => config('midtrans.is_production'),
+            'bankAccounts' => PaymentBankAccount::aktif()->urut()->get(),
         ]);
+    }
+
+    /**
+     * Pengaju memilih bayar manual (transfer/VA/QRIS) & mengunggah bukti transfer.
+     * Status pembayaran diubah menjadi "Menunggu Verifikasi" sampai diperiksa admin.
+     *
+     * Route: POST /pembayaran/{order_id}/manual
+     */
+    public function bayarManual(Request $request, string $orderId)
+    {
+        $payment = Payment::where('order_id', $orderId)->firstOrFail();
+
+        abort_unless(
+            Auth::check() && (Auth::id() === $payment->user_id || Auth::user()->apakahAdmin()),
+            403
+        );
+
+        abort_unless(
+            in_array($payment->status, [Payment::STATUS_MENUNGGU, Payment::STATUS_MENUNGGU_VERIFIKASI], true),
+            422,
+            'Tagihan ini sudah tidak bisa dibayar manual.'
+        );
+
+        $request->validate([
+            'bank_account_id' => 'required|exists:payment_bank_accounts,id',
+            'bukti_pembayaran' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        ]);
+
+        if ($payment->bukti_pembayaran) {
+            \Illuminate\Support\Facades\Storage::disk('local')->delete($payment->bukti_pembayaran);
+        }
+
+        $path = $request->file('bukti_pembayaran')->store('payment-bukti', 'local');
+
+        $payment->update([
+            'tipe_pembayaran' => Payment::TIPE_MANUAL,
+            'bank_account_id' => $request->input('bank_account_id'),
+            'bukti_pembayaran' => $path,
+            'status' => Payment::STATUS_MENUNGGU_VERIFIKASI,
+            'verified_by' => null,
+            'verified_at' => null,
+            'catatan_verifikasi' => null,
+        ]);
+
+        return back()->with('success', 'Bukti transfer berhasil diunggah. Mohon tunggu admin memverifikasi pembayaran Anda.');
     }
 
     /**

@@ -17,7 +17,7 @@ class HakCiptaController extends Controller
         $tercatat = HakCipta::where('status', 'Tercatat')->count();
         $null = HakCipta::where('status', 'Keterangan Belum Lengkap')->count();
         $tolak = HakCipta::where('status', 'Ditolak')->count();
-        $hc = HakCipta::latest()->paginate(5);
+        $hc = HakCipta::latest()->get();
 
         $hcTolak = HakCipta::where('status', 'Ditolak')->count();
         $hcTerima = HakCipta::where('status', 'Tercatat')->count();
@@ -65,7 +65,7 @@ class HakCiptaController extends Controller
             ->when($carinama, function ($query, $carinama) {
                 return $query->orWhere('nama_lengkap', 'LIKE', "%" . $carinama . "%");
             })
-            ->paginate(5);
+            ->get();
         $itung = HakCipta::all()->count();
         $tercatat = HakCipta::where('status', 'Tercatat')->count();
         $null = HakCipta::where('status', 'Keterangan Belum Lengkap')->count();

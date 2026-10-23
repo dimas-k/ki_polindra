@@ -16,7 +16,7 @@ class DesainIndustriController extends Controller
      */
     public function index(Request $request)
     {
-        $di = DesainIndustri::latest()->paginate(5);
+        $di = DesainIndustri::latest()->get();
         $itung = DesainIndustri::all()->count();
         $beri = DesainIndustri::where('status','Diberi')->count();
         $proses = DesainIndustri::where('status','Dalam Proses Usulan')->count();
@@ -71,7 +71,7 @@ class DesainIndustriController extends Controller
         ->when($carinama, function ($query, $carinama) {
             return $query->orWhere('nama_lengkap', 'LIKE', "%" . $carinama . "%");
         })
-        ->paginate(5);
+        ->get();
 
         $itung = DesainIndustri::all()->count();
         $beri = DesainIndustri::where('status','Diberi')->count();
