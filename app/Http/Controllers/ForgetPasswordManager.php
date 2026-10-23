@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Routing\Controller;
+use App\Rules\Recaptcha;
 
 class ForgetPasswordManager extends Controller
 {
@@ -20,6 +21,7 @@ class ForgetPasswordManager extends Controller
     function forgetPasswordPost(Request $request) {
         $request->validate([
             'email' => "required|email|exists:users", // Corrected typo here
+            'g-recaptcha-response' => ['required', new Recaptcha()],
         ]);
 
         $token = Str::random(64);

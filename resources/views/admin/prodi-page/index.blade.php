@@ -35,6 +35,7 @@
                                 Selamat datang, {{ auth()->user()->nama_lengkap }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="/admin/dashboard"><i class="bi bi-grid me-2"></i>Pilih Aplikasi</a></li>
                                 <li><a class="dropdown-item" href="/logout"><i class="bi bi-arrow-bar-left me-2"></i>Log
                                         Out</a></li>
                             </ul>
@@ -52,15 +53,8 @@
             {{-- end of sidebar --}}
             <div class="col-12 col-lg-10 mt-2">
                 <div class="container bg-light rounded border pt-3">
-                    @if (session()->has('success'))
-                        <div class="alert alert-success alert-dismissible fade show rounded" role="alert">
-                            {{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                aria-label="Close"></button>
-                        </div>
-                    @endif
-
-                    <div class="d-flex justify-content-end">
+@include('admin.layout.sweetalert')
+<div class="d-flex justify-content-end">
                         <button type="button" class="btn btn-success" data-bs-toggle="modal"
                             data-bs-target="#tambahProdiModal"><i class="bi bi-plus-circle me-1"></i>Tambah
                             Prodi</button>

@@ -18,21 +18,8 @@
     <br>
     <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
-          @if(session()->has('success'))
-            <div class="alert alert-success alert-dismissible fade show rounded" role="alert">
-              {{ session('success') }}
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-          @endif
-
-          @if(session()->has('loginError'))
-            <div class="alert alert-danger alert-dismissible fade show rounded" role="alert">
-              {{ session('loginError') }}
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-          @endif
-
-          <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+@include('admin.layout.sweetalert')
+<div class="col-12 col-md-8 col-lg-6 col-xl-5">
             <div class="card bg-light text-black" style="border-radius: 1rem;">
               <div class="card-body p-5">
                 <form class="mb-md-5 mt-md-4 pb-5" method="post" action="/autentikasi">

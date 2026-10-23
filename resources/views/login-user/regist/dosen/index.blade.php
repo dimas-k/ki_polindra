@@ -246,6 +246,8 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+                    @include('partials.recaptcha')
+
                     <div class="d-grid">
                         <button class="btn btn-primary btn-lg" type="submit">Register</button>
                     </div>

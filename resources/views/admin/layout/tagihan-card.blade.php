@@ -10,20 +10,8 @@
     <h5 class="fw-normal font-family-Kokoro mb-3"><i class="bi bi-credit-card me-2"></i>Tagihan Pembayaran</h5>
 
     <div class="p-3">
-        @if (session()->has('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-        @if (session()->has('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        @if ($pembayaran)
+@include('admin.layout.sweetalert')
+@if ($pembayaran)
             <div class="table-responsive">
 <table class="table table-borderless mb-3">
                 <tr>

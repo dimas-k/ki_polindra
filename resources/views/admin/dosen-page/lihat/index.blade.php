@@ -36,6 +36,7 @@
                                 Selamat datang, {{ auth()->user()->nama_lengkap }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="/admin/dashboard"><i class="bi bi-grid me-2"></i>Pilih Aplikasi</a></li>
                                 <li><a class="dropdown-item" href="/logout"><i class="bi bi-arrow-bar-left me-2"></i>Log
                                         Out</a></li>
                             </ul>
@@ -98,8 +99,11 @@
                             </tr>
                         </table>
                         @unless ($dsn->is_verified)
-                            <a href="{{ route('dosen.verifikasi', $dsn->id) }}" class="btn btn-success mb-3"
-                                onclick="return confirm('Verifikasi akun ini? Email konfirmasi akan dikirim ke pengguna.')">
+                            <a href="{{ route('dosen.verifikasi', $dsn->id) }}" class="btn btn-success mb-3 js-sweetalert-confirm"
+                            data-title="Verifikasi Akun"
+                            data-message="Verifikasi akun ini? Email konfirmasi akan dikirim ke pengguna."
+                            data-confirm-text="Ya, verifikasi"
+                            data-icon="question">
                                 <i class="bi bi-check-circle me-2"></i>Verifikasi Akun
                             </a>
                         @endunless
@@ -116,6 +120,7 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js"
             integrity="sha384-eI7PSr3L1XLISH8JdDII5YN/njoSsxfbrkCTnJrzXt+ENP5MOVBxD+l6sEG4zoLp" crossorigin="anonymous">
         </script>
+    @include('admin.layout.sweetalert')
 </body>
 
 </html>

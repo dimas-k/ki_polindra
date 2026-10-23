@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\ActivityLog;
 use App\Mail\NewUserRegisteredMail;
+use App\Rules\Recaptcha;
 
 class LoginUserController extends Controller
 {
@@ -34,11 +35,13 @@ class LoginUserController extends Controller
     public function autentikasi(Request $request)
     {
 
+        $request->validate([
+            'g-recaptcha-response' => ['required', new Recaptcha()],
+        ]);
+
         $credentials = $request->validate([
             'username' => 'required|string',
             'password' => 'required|string',
-
-
         ]);
 
         // dd($request);
@@ -78,7 +81,8 @@ class LoginUserController extends Controller
             'email' => 'required|email:rfc|unique:users',
             'nip' => 'nullable|integer|unique:users',
             'username' => 'required|min:5|unique:users|string',
-            'password' => 'required|min:5|max:15'
+            'password' => 'required|min:5|max:15',
+            'g-recaptcha-response' => ['required', new Recaptcha()],
         ]);
 
         // Menentukan role berdasarkan logika backend

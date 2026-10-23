@@ -29,8 +29,11 @@
                 </td>
                 <td><a href={{ Route('umum.detail', $a->id) }} class="btn btn-primary"><i class="bi bi-eye"></i></a>
                     @unless ($a->is_verified)
-                        <a href="{{ route('umum.verifikasi', $a->id) }}" class="btn btn-success"
-                            onclick="return confirm('Verifikasi akun ini? Email konfirmasi akan dikirim ke pengguna.')">
+                        <a href="{{ route('umum.verifikasi', $a->id) }}" class="btn btn-success js-sweetalert-confirm"
+                            data-title="Verifikasi Akun"
+                            data-message="Verifikasi akun ini? Email konfirmasi akan dikirim ke pengguna."
+                            data-confirm-text="Ya, verifikasi"
+                            data-icon="question">
                             <i class="bi bi-check-circle"></i>
                         </a>
                     @endunless

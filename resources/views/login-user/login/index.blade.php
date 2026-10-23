@@ -208,6 +208,8 @@
                         @enderror
                     </div>
 
+                    @include('partials.recaptcha')
+
                     <div class="d-grid">
                         <button class="btn btn-primary" type="submit">Login</button>
                     </div>

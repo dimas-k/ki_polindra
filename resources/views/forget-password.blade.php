@@ -174,6 +174,9 @@
                         <input type="email" class="form-control" name="email"
                             placeholder="Masukkan email yang terdaftar" required>
                     </div>
+
+                    @include('partials.recaptcha')
+
                     <button type="submit" class="btn btn-primary w-100">Kirim</button>
                 </form>
                 <p class="text-center mt-3"><a href="/login" class="fw-bold">Kembali ke Login</a></p>

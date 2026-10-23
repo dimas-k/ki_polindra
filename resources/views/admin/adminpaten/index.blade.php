@@ -36,6 +36,7 @@
                                 Selamat datang, {{ auth()->user()->nama_lengkap }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="/admin/dashboard"><i class="bi bi-grid me-2"></i>Pilih Aplikasi</a></li>
                                 <li><a class="dropdown-item" href="/logout"><i class="bi bi-arrow-bar-left me-2"></i>Log
                                         Out</a></li>
                             </ul>
@@ -303,14 +304,8 @@
                     </div>
                 </div>
                 <div class="container bg-light rounded border pt-3 mt-3">
-                    @if (session()->has('success'))
-                        <div class="alert alert-success alert-dismissible fade show rounded" role="alert">
-                            {{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                aria-label="Close"></button>
-                        </div>
-                    @endif
-                    <h3 class="fw-normal font-family-Kokoro mb-3"><i class="bi bi-table me-3"></i>Daftar Paten</h3>
+@include('admin.layout.sweetalert')
+<h3 class="fw-normal font-family-Kokoro mb-3"><i class="bi bi-table me-3"></i>Daftar Paten</h3>
                     <div class="d-flex justify-content-start">
                         <a class="btn btn-success mb-2" href="/admin/paten/tambah/dosen/"><i
                                 class="bi bi-plus-circle me-2"></i>Tambah Paten Dosen</a>

@@ -37,6 +37,7 @@
                                 Selamat datang, {{ auth()->user()->nama_lengkap }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="/admin/dashboard"><i class="bi bi-grid me-2"></i>Pilih Aplikasi</a></li>
                                 <li><a class="dropdown-item" href="/logout"><i class="bi bi-arrow-bar-left me-2"></i>Log
                                         Out</a></li>
                             </ul>
@@ -97,14 +98,8 @@
             <div class="col-12 col-lg-10 mt-2">
                 <div class="container bg-light rounded border pt-3">
                     <a href="/admin/desain-industri" class="link-dark link-underline link-underline-opacity-0 mb-3 "><i class="bi bi-arrow-left-circle mb-3" style="font-size: 30px;"></i></a>
-                    @if (session()->has('success'))
-                        <div class="alert alert-success alert-dismissible fade show rounded" role="alert">
-                            {{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                aria-label="Close"></button>
-                        </div>
-                    @endif
-                    <h3 class="fw-normal font-family-Kokoro mb-3 mt-3"><i class="bi bi-table me-3"></i>Daftar Desain Industri</h3>
+@include('admin.layout.sweetalert')
+<h3 class="fw-normal font-family-Kokoro mb-3 mt-3"><i class="bi bi-table me-3"></i>Daftar Desain Industri</h3>
                     <div class="table-responsive">
 <table class="table table-hover font-family-Kokoro">
                         <thead>
