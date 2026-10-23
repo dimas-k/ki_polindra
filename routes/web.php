@@ -142,12 +142,14 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::post('/admin/pengguna/umum/update/{id}', [AdminController::class, 'updateUmum'])->name('umum.akun.update');
     Route::get('/admin/pengguna/umum/{id}', [AdminController::class, 'detailUmum'])->name('umum.detail');
     Route::get('/admin/pengguna/umum/hapus/{id}', [AdminController::class, 'hapusUmum'])->name('umum.hapus');
+    Route::get('/admin/pengguna/umum/verifikasi/{id}', [AdminController::class, 'verifikasiUmum'])->name('umum.verifikasi');
 
     Route::get('/admin/pengguna/dosen', [AdminController::class, 'lihatDosen'])->name('lihat.dosen');
     Route::get('/admin/pengguna/dosen/{id}', [AdminController::class, 'detailDosen'])->name('detail.Dosen');
     Route::post('/admin/pengguna/dosen/tambah', [AdminController::class, 'dosenNew'])->name('tambah.dosen');
     Route::get('/admin/pengguna/dosen/hapus/{id}', [AdminController::class, 'hapusDosen'])->name('dosen.hapus');
     Route::post('admin/pengguna/dosen/edit/{id}', [AdminController::class, 'editDosen'])->name('dosen.edit');
+    Route::get('/admin/pengguna/dosen/verifikasi/{id}', [AdminController::class, 'verifikasiDosen'])->name('dosen.verifikasi');
 
     Route::get('/admin/verif', [AdminVerifController::class, 'lamanVerif']);
     Route::post('admin/verif/simpan', [AdminVerifController::class, 'tambahVerif'])->name('simpan.verif');

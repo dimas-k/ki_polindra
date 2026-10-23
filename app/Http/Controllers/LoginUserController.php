@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 // use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\ActivityLog;
+use App\Mail\NewUserRegisteredMail;
 
 class LoginUserController extends Controller
 {
@@ -41,6 +43,12 @@ class LoginUserController extends Controller
 
         // dd($request);
         if (Auth::attempt($credentials)) {
+            if (!Auth::user()->is_verified) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                return back()->with('loginError', 'Akun Anda belum diverifikasi oleh admin. Silakan tunggu email konfirmasi verifikasi sebelum masuk.');
+            }
             $request->session()->regenerate();
             if (Auth::user()->role == 'Dosen' && Auth::user()->apakahKetuaKbk()) {
                 return redirect('/ketua-kbk/portal');
@@ -86,15 +94,31 @@ class LoginUserController extends Controller
             'nip' => $request->nip,
             'username' => $request->username,
             'password' => Hash::make($request->password),
-            'role' => $role // Role dari backend
+            'role' => $role, // Role dari backend
+            'is_verified' => false,
         ]);
         $user->save($validasidata);
 
+        // Kirim notifikasi ke semua admin bahwa ada akun baru yang perlu diverifikasi
+        $admins = User::where('role', 'Admin')->whereNotNull('email')->get();
+        foreach ($admins as $admin) {
+            Mail::to($admin->email)->send(new NewUserRegisteredMail(
+                $user->nama_lengkap,
+                $user->email,
+                $user->role,
+                url('/admin/pengguna/' . ($role == 'Dosen' ? 'dosen' : 'umum') . '/' . $user->id),
+                $user->no_telepon,
+                $user->username,
+                $user->nip,
+                $user->alamat,
+            ));
+        }
+
         // Mengarahkan pengguna berdasarkan role
         if ($role == 'Dosen') {
-            return redirect()->intended('register/dosen/')->with('success', 'Data anda telah ditambahkan');
+            return redirect()->intended('register/dosen/')->with('success', 'Pendaftaran berhasil! Akun Anda akan aktif setelah diverifikasi oleh admin. Kami akan mengirimkan email konfirmasi setelah akun Anda diverifikasi.');
         } else {
-            return redirect()->intended('register/umum/')->with('success', 'Data anda telah ditambahkan');
+            return redirect()->intended('register/umum/')->with('success', 'Pendaftaran berhasil! Akun Anda akan aktif setelah diverifikasi oleh admin. Kami akan mengirimkan email konfirmasi setelah akun Anda diverifikasi.');
         }
     }
 

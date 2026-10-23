@@ -7,6 +7,7 @@
             <th scope="col">Bekerja Sebagai</th>
             <th scope="col">Alamat</th>
             <th scope="col">No telepon</th>
+            <th scope="col">Status</th>
             <th scope="col">Action</th>
         </tr>
     </thead>
@@ -19,7 +20,20 @@
                 <td>{{ $a->kerjaan }}</td>
                 <td>{{ $a->alamat }}</td>
                 <td>{{ $a->no_telepon }}</td>
+                <td>
+                    @if ($a->is_verified)
+                        <span class="badge bg-success">Terverifikasi</span>
+                    @else
+                        <span class="badge bg-warning text-dark">Menunggu</span>
+                    @endif
+                </td>
                 <td><a href={{ Route('umum.detail', $a->id) }} class="btn btn-primary"><i class="bi bi-eye"></i></a>
+                    @unless ($a->is_verified)
+                        <a href="{{ route('umum.verifikasi', $a->id) }}" class="btn btn-success"
+                            onclick="return confirm('Verifikasi akun ini? Email konfirmasi akan dikirim ke pengguna.')">
+                            <i class="bi bi-check-circle"></i>
+                        </a>
+                    @endunless
                     <button type="button" class="btn btn-warning" data-bs-toggle="modal"
                         data-bs-target="#exampleModal{{ $a->id }}">
                         <i class="bi bi-pencil"></i>

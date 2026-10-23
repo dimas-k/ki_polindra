@@ -6,6 +6,9 @@ use Modules\KekayaanIntelektual\app\Http\Controllers\AdminHaKCiptaController;
 use Modules\KekayaanIntelektual\app\Http\Controllers\AdminDesainIndustriController;
 use Modules\KekayaanIntelektual\app\Http\Controllers\AdminJurusanController;
 use Modules\KekayaanIntelektual\app\Http\Controllers\AdminProdiController;
+use Modules\KekayaanIntelektual\app\Http\Controllers\AdminPaymentBankAccountController;
+use Modules\KekayaanIntelektual\app\Http\Controllers\AdminPaymentVerifikasiController;
+use Modules\KekayaanIntelektual\app\Http\Controllers\AdminPaymentRiwayatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +58,20 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::post('/admin/prodi', [AdminProdiController::class, 'store'])->name('admin_prodi.store');
     Route::put('/admin/prodi/{id}', [AdminProdiController::class, 'update'])->name('admin_prodi.update');
     Route::delete('/admin/prodi/{id}', [AdminProdiController::class, 'destroy'])->name('admin_prodi.delete');
+
+    // ==== Menu Payment (kelola kanal pembayaran, verifikasi, & riwayat) ====
+    Route::get('/admin/payment/bank-accounts', [AdminPaymentBankAccountController::class, 'index'])->name('admin_payment_bank.index');
+    Route::post('/admin/payment/bank-accounts', [AdminPaymentBankAccountController::class, 'store'])->name('admin_payment_bank.store');
+    Route::put('/admin/payment/bank-accounts/{id}', [AdminPaymentBankAccountController::class, 'update'])->name('admin_payment_bank.update');
+    Route::delete('/admin/payment/bank-accounts/{id}', [AdminPaymentBankAccountController::class, 'destroy'])->name('admin_payment_bank.delete');
+    Route::patch('/admin/payment/bank-accounts/{id}/toggle-aktif', [AdminPaymentBankAccountController::class, 'toggleAktif'])->name('admin_payment_bank.toggle');
+
+    Route::get('/admin/payment/verifikasi', [AdminPaymentVerifikasiController::class, 'index'])->name('admin_payment_verifikasi.index');
+    Route::get('/admin/payment/verifikasi/{id}/bukti', [AdminPaymentVerifikasiController::class, 'bukti'])->name('admin_payment_verifikasi.bukti');
+    Route::post('/admin/payment/verifikasi/{id}/setujui', [AdminPaymentVerifikasiController::class, 'setujui'])->name('admin_payment_verifikasi.setujui');
+    Route::post('/admin/payment/verifikasi/{id}/tolak', [AdminPaymentVerifikasiController::class, 'tolak'])->name('admin_payment_verifikasi.tolak');
+
+    Route::get('/admin/payment/riwayat', [AdminPaymentRiwayatController::class, 'index'])->name('admin_payment_riwayat.index');
     Route::get("/admin/hak-cipta", [AdminHaKCiptaController::class, 'index']);
     Route::get('/admin/hak-cipta/delete/{id}', [AdminHaKCiptaController::class, 'destroy'])->name('admin_hakcipta.delete');
     Route::get('/admin/hak-cipta/edit/{id}', [AdminHaKCiptaController::class, 'edit'])->name('admin_hakcipta.edit');

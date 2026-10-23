@@ -86,7 +86,23 @@
                                 <th>Username</th>
                                 <td>: {{ $dsn->username }}</td>
                             </tr>
+                            <tr>
+                                <th>Status Verifikasi</th>
+                                <td>:
+                                    @if ($dsn->is_verified)
+                                        <span class="badge bg-success">Terverifikasi</span>
+                                    @else
+                                        <span class="badge bg-warning text-dark">Menunggu Verifikasi</span>
+                                    @endif
+                                </td>
+                            </tr>
                         </table>
+                        @unless ($dsn->is_verified)
+                            <a href="{{ route('dosen.verifikasi', $dsn->id) }}" class="btn btn-success mb-3"
+                                onclick="return confirm('Verifikasi akun ini? Email konfirmasi akan dikirim ke pengguna.')">
+                                <i class="bi bi-check-circle me-2"></i>Verifikasi Akun
+                            </a>
+                        @endunless
                     </div>
                 </div>
             </div>

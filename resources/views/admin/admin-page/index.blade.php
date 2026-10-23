@@ -96,6 +96,16 @@
                                                 <input type="text" id="" class="form-control" name="no_telepon"/>
                                             </div>
                                             <div class="form-outline form-white mb-4">
+                                                <label class="form-label" for="">Email</label>
+                                                <input type="email" id="" class="form-control @error('email') is-invalid @enderror" name="email"/>
+                                                @error('email')
+                                                    <div class="invalid-feedback">
+                                                      {{ $message }}
+                                                    </div>
+                                                    @enderror
+                                                <div class="form-text">Email ini digunakan untuk menerima notifikasi verifikasi akun baru.</div>
+                                            </div>
+                                            <div class="form-outline form-white mb-4">
                                                 <label class="form-label" for="">Username</label>
                                                 <input type="text" id="" class="form-control @error('username') is-invalid @enderror" name="username"/>
                                                 @error('username')
@@ -136,6 +146,7 @@
                                 <th scope="col">Jabatan</th>
                                 <th scope="col">Alamat</th>
                                 <th scope="col">No telepon</th>
+                                <th scope="col">Email</th>
                                 <th scope="col">Username</th>
                                 <th scope="col">Action</th>
                             </tr>
@@ -148,6 +159,7 @@
                                     <td>{{ $a->jabatan }}</td>
                                     <td>{{ $a->alamat }}</td>
                                     <td>{{ $a->no_telepon }}</td>
+                                    <td>{{ $a->email }}</td>
                                     <td>{{ $a->username }}</td>
                                     <td><a href={{ Route('admin.show', $a->id) }} class="btn btn-info"><i
                                         class="bi bi-eye"></i></a>
@@ -197,6 +209,18 @@
                                                                 <input type="text" id=""
                                                                     class="form-control" name="no_telepon"
                                                                     value="{{ $a->no_telepon }}">
+                                                            </div>
+                                                            <div class="form-outline form-white mb-3">
+                                                                <label class="form-label"
+                                                                    for="">Email</label>
+                                                                <input type="email" id=""
+                                                                    class="form-control @error('email') is-invalid @enderror" name="email"
+                                                                    value="{{ $a->email }}">
+                                                                @error('email')
+                                                                    <div class="invalid-feedback">
+                                                                      {{ $message }}
+                                                                    </div>
+                                                                    @enderror
                                                             </div>
                                                             <div class="form-outline form-white mb-3">
                                                                 <label class="form-label"

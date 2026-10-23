@@ -82,7 +82,23 @@
                                 <th>Username</th>
                                 <td>: {{ $um->username }}</td>
                             </tr>
+                            <tr>
+                                <th>Status Verifikasi</th>
+                                <td>:
+                                    @if ($um->is_verified)
+                                        <span class="badge bg-success">Terverifikasi</span>
+                                    @else
+                                        <span class="badge bg-warning text-dark">Menunggu Verifikasi</span>
+                                    @endif
+                                </td>
+                            </tr>
                         </table>
+                        @unless ($um->is_verified)
+                            <a href="{{ route('umum.verifikasi', $um->id) }}" class="btn btn-success mb-3"
+                                onclick="return confirm('Verifikasi akun ini? Email konfirmasi akan dikirim ke pengguna.')">
+                                <i class="bi bi-check-circle me-2"></i>Verifikasi Akun
+                            </a>
+                        @endunless
                     </div>
                 </div>
             </div>

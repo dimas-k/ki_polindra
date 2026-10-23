@@ -10,6 +10,8 @@ use App\Models\DesainIndustri;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UserAccountVerifiedMail;
 
 class AdminController extends Controller
 {
@@ -131,6 +133,47 @@ class AdminController extends Controller
         return view('admin.umum.lihat.index', compact('um'));
     }
 
+    /**
+     * Verifikasi akun Dosen yang baru mendaftar.
+     */
+    public function verifikasiDosen(string $id)
+    {
+        $user = User::findOrFail($id);
+        $this->verifikasiAkun($user);
+
+        return redirect('/admin/pengguna/dosen')->with('success', 'Akun dosen telah diverifikasi');
+    }
+
+    /**
+     * Verifikasi akun Umum yang baru mendaftar.
+     */
+    public function verifikasiUmum(string $id)
+    {
+        $user = User::findOrFail($id);
+        $this->verifikasiAkun($user);
+
+        return redirect('/admin/pengguna/umum')->with('success', 'Akun umum telah diverifikasi');
+    }
+
+    /**
+     * Tandai sebuah akun sebagai terverifikasi dan kirim email notifikasi ke pengguna.
+     */
+    private function verifikasiAkun(User $user): void
+    {
+        if (!$user->is_verified) {
+            $user->is_verified = true;
+            $user->verified_at = now();
+            $user->save();
+
+            if ($user->email) {
+                Mail::to($user->email)->send(new UserAccountVerifiedMail(
+                    $user->nama_lengkap,
+                    url('/login'),
+                ));
+            }
+        }
+    }
+
     public function dosenNew(Request $request)
     {
         $validasidata = $request->validate([
@@ -151,6 +194,8 @@ class AdminController extends Controller
         $user->username = $request->username;
         $user->password = Hash::make($request->password);
         $user->role = 'Dosen';
+        $user->is_verified = true;
+        $user->verified_at = now();
         $ubahKbk = $request->has('kbk_id');
         if ($ubahKbk) {
             $user->kbk_id = $request->kbk_id ?: null;
@@ -244,6 +289,8 @@ class AdminController extends Controller
         $user->username = $request->username;
         $user->password = Hash::make($request->password);
         $user->role = $request->role;
+        $user->is_verified = true;
+        $user->verified_at = now();
         $user->save($validasidata);
 
         return redirect('/admin/pengguna/umum')->with('success', 'Data umum telah ditambahkan');
@@ -289,6 +336,7 @@ class AdminController extends Controller
     public function store(Request $request)
     {
         $validasidata = $request->validate([
+            'email' => 'required|email|unique:users,email',
             'username' => 'required|min:3|unique:users,username',
             'password' => 'required|min:5|max:10'
         ]);
@@ -297,9 +345,12 @@ class AdminController extends Controller
         $user->jabatan = $request->jabatan;
         $user->alamat = $request->alamat;
         $user->no_telepon = $request->no_telepon;
+        $user->email = $request->email;
         $user->username = $request->username;
         $user->password = Hash::make($request->password);
         $user->role = 'Admin';
+        $user->is_verified = true;
+        $user->verified_at = now();
         $user->save($validasidata);
 
         return redirect('/admin/listadmin')->with('success', 'Data admin telah ditabahkan');
@@ -329,13 +380,21 @@ class AdminController extends Controller
     public function update(Request $request, string $id)
     {
         $user = User::find($id);
-        $user->nama_lengkap = $request->nama_lengkap;
-        $user->jabatan = $request->jabatan;
-        $user->alamat = $request->alamat;
-        $user->no_telepon = $request->no_telepon;
-        $user->username = $request->username;
-        $user->password = Hash::make($request->password);
-        $user->save();
+        $validasidata = $request->validate([
+            'email' => 'required|email|unique:users,email,' . $user->id,
+        ]);
+        // Pertahankan nilai lama jika field tidak dikirim/kosong, supaya kolom
+        // yang wajib diisi (not null) di database tidak pernah ditimpa NULL.
+        $user->nama_lengkap = $request->filled('nama_lengkap') ? $request->nama_lengkap : $user->nama_lengkap;
+        $user->jabatan = $request->filled('jabatan') ? $request->jabatan : $user->jabatan;
+        $user->alamat = $request->filled('alamat') ? $request->alamat : $user->alamat;
+        $user->no_telepon = $request->filled('no_telepon') ? $request->no_telepon : $user->no_telepon;
+        $user->email = $request->email;
+        $user->username = $request->filled('username') ? $request->username : $user->username;
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+        $user->save($validasidata);
 
         return redirect('/admin/listadmin')->with('success', 'Data admin berhasil di update');
     }

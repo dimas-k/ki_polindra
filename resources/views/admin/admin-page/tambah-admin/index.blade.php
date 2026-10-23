@@ -33,6 +33,16 @@
                 <input type="text" id="" class="form-control" name="no_telepon"/>
             </div>
             <div class="form-outline form-white mb-4">
+                <label class="form-label" for="">Email</label>
+                <input type="email" id="" class="form-control @error('email') is-invalid @enderror" name="email"/>
+                @error('email')
+                    <div class="invalid-feedback">
+                      {{ $message }}
+                    </div>
+                    @enderror
+                <div class="form-text">Email ini digunakan untuk menerima notifikasi verifikasi akun baru.</div>
+            </div>
+            <div class="form-outline form-white mb-4">
                 <label class="form-label" for="">Username</label>
                 <input type="text" id="" class="form-control @error('username') is-invalid @enderror" name="username"/>
                 @error('username')
