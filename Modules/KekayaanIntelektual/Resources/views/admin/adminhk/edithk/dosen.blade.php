@@ -256,6 +256,12 @@
                                         @enderror --}}
                             </div>
                             <div class="mb-3">
+                                <label for="no_pendaftaran" class="form-label">No Pendaftaran</label>
+                                <input type="text" class="form-control" placeholder="Masukkan No Pendaftaran"
+                                    name="no_pendaftaran" id="no_pendaftaran"
+                                    value="{{ old('no_pendaftaran', $hk->no_pendaftaran) }}">
+                            </div>
+                            <div class="mb-3">
                                 <label for="uraian" class="form-label">Uraian Singkat Ciptaan</label>
                                 <textarea class="form-control " placeholder="Masukkan Uraian Singkat" name="uraian_singkat" id="uraian"
                                     style="height: 150px">{{ $hk->uraian_singkat }}</textarea>

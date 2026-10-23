@@ -77,6 +77,31 @@
                                 href="/admin/hak-cipta"><i class="bi bi-table me-4"></i>Hak
                                 Cipta</a>
                         </li>
+                        <li class="nav-item list-unstyled">
+                            <a class="nav-link btn-toggle d-inline-flex align-items-center rounded border-0 {{ request()->is('admin/payment*') ? '' : 'collapsed' }}"
+                                href="#" data-bs-toggle="collapse" data-bs-target="#payment-collapse"
+                                aria-expanded="{{ request()->is('admin/payment*') ? 'true' : 'false' }}"><i
+                                    class="bi bi-credit-card me-4"></i>
+                                Payment
+                            </a>
+                            <div class="collapse {{ request()->is('admin/payment*') ? 'show' : '' }}"
+                                id="payment-collapse">
+                                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                    <li><a href="{{ route('admin_payment_bank.index') }}"
+                                            class="link-body-emphasis d-inline-flex text-decoration-none rounded ms-5 mb-2 {{ request()->is('admin/payment/bank-accounts*') ? 'fw-bold' : '' }}">Rekening
+                                            Bank</a>
+                                    </li>
+                                    <li><a href="{{ route('admin_payment_verifikasi.index') }}"
+                                            class="link-body-emphasis d-inline-flex text-decoration-none rounded ms-5 mb-2 {{ request()->is('admin/payment/verifikasi*') ? 'fw-bold' : '' }}">Verifikasi
+                                            Pembayaran</a>
+                                    </li>
+                                    <li><a href="{{ route('admin_payment_riwayat.index') }}"
+                                            class="link-body-emphasis d-inline-flex text-decoration-none rounded ms-5 {{ request()->is('admin/payment/riwayat*') ? 'fw-bold' : '' }}">Riwayat
+                                            Pembayaran</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
 
                     </ul>
                 </div>

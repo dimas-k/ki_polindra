@@ -191,6 +191,18 @@
                                         @enderror --}}
                             </div>
                             <div class="mb-3">
+                                <label for="no_pendaftaran" class="form-label">No Pendaftaran</label>
+                                <input type="text" class="form-control" placeholder="Masukkan No Pendaftaran"
+                                    name="no_pendaftaran" id="no_pendaftaran"
+                                    value="{{ old('no_pendaftaran', $di->no_pendaftaran) }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="no_antrian" class="form-label">No Antrian</label>
+                                <input type="text" class="form-control" placeholder="Masukkan No Antrian"
+                                    name="no_antrian" id="no_antrian"
+                                    value="{{ old('no_antrian', $di->no_antrian) }}">
+                            </div>
+                            <div class="mb-3">
                                 <label for="gambar_desain" class="form-label">Gambar Desain Industri</label>
                                 <input type="file" class="form-control" placeholder="" name="gambar_di[]" multiple accept=".pdf,.jpg,.jpeg,.png"
                                     id="gambar_desain">

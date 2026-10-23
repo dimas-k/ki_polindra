@@ -163,6 +163,7 @@ class AdminHaKCiptaController extends Controller
             'prodi' => 'required|exists:prodi,nama_prodi',
             'jenis_ciptaan' => 'required',
             'judul_ciptaan' => 'required',
+            'no_pendaftaran' => 'nullable|string|max:255',
             'uraian_singkat' => 'required|max:60000',
             'dokumen_invensi' => 'nullable|mimes:pdf|max:2028',
             'gambar_ciptaan' => \App\Support\MultiFileStorage::RULE_NULLABLE,
@@ -188,6 +189,7 @@ class AdminHaKCiptaController extends Controller
             $hc->prodi_id = Prodi::findIdByName($request->prodi);
             $hc->jenis_ciptaan = $request->jenis_ciptaan;
             $hc->judul_ciptaan = $request->judul_ciptaan;
+            $hc->no_pendaftaran = $request->no_pendaftaran;
             $hc->uraian_singkat = $request->uraian_singkat;
             $hc->tanggal_permohonan = $request->tanggal_permohonan;
     
@@ -250,6 +252,7 @@ class AdminHaKCiptaController extends Controller
             'institusi' => 'required',
             'jenis_ciptaan' => 'required',
             'judul_ciptaan' => 'required',
+            'no_pendaftaran' => 'nullable|string|max:255',
             'uraian_singkat' => 'required|max:60000',
             'dokumen_invensi' => 'required|mimes:pdf',
             'gambar_ciptaan' => \App\Support\MultiFileStorage::RULE_NULLABLE,
@@ -271,6 +274,7 @@ class AdminHaKCiptaController extends Controller
         $hc->institusi = $request->institusi;
         $hc->jenis_ciptaan = $request->jenis_ciptaan;
         $hc->judul_ciptaan = $request->judul_ciptaan;
+        $hc->no_pendaftaran = $request->no_pendaftaran;
         $hc->uraian_singkat = $request->uraian_singkat;
         $hc->tanggal_permohonan = $request->tanggal_permohonan;
 

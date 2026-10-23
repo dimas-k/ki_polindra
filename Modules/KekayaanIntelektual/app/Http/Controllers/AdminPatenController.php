@@ -549,6 +549,8 @@ class AdminPatenController extends Controller
             'prodi'                     => 'required|exists:prodi,nama_prodi',
             'jenis_paten'               => 'required',
             'judul_paten'               => 'required',
+            'no_pendaftaran'            => 'nullable|string|max:255',
+            'no_antrian'                => 'nullable|string|max:255',
             'deskripsi_paten'           => 'nullable|mimes:pdf|max:2028',
             'abstrak_paten'             => 'nullable|mimes:pdf|max:2028',
             'pengalihan_hak'            => 'nullable|mimes:pdf|max:2028',
@@ -577,6 +579,8 @@ class AdminPatenController extends Controller
         $paten->prodi                = $request->prodi;
         $paten->jenis_paten          = $request->jenis_paten;
         $paten->judul_paten          = $request->judul_paten;
+        $paten->no_pendaftaran       = $request->no_pendaftaran;
+        $paten->no_antrian           = $request->no_antrian;
         $paten->tanggal_permohonan   = $request->tanggal_permohonan;
 
         $privateFiles = [
@@ -648,6 +652,8 @@ class AdminPatenController extends Controller
             'institusi' => 'required',
             'jenis_paten' => 'required',
             'judul_paten' => 'required',
+            'no_pendaftaran' => 'nullable|string|max:255',
+            'no_antrian' => 'nullable|string|max:255',
             'deskripsi_paten' => 'required|mimes:pdf|max:2028',
             'abstrak_paten' => 'required|mimes:pdf|max:2028',
             'pengalihan_hak' => 'required|mimes:pdf|max:2028',
@@ -672,6 +678,8 @@ class AdminPatenController extends Controller
         $paten->institusi = $request->institusi;
         $paten->jenis_paten = $request->jenis_paten;
         $paten->judul_paten = $request->judul_paten;
+        $paten->no_pendaftaran = $request->no_pendaftaran;
+        $paten->no_antrian = $request->no_antrian;
         $paten->tanggal_permohonan = $request->tanggal_permohonan;
 
         // Daftar field file untuk di-update

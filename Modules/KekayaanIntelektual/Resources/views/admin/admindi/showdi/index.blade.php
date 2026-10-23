@@ -143,6 +143,14 @@
                                 <td>: {{ $di->judul_di }}</td>
                             </tr>
                             <tr>
+                                <th>No Pendaftaran</th>
+                                <td>: {{ $di->no_pendaftaran ?? '-' }}</td>
+                            </tr>
+                            <tr>
+                                <th>No Antrian</th>
+                                <td>: {{ $di->no_antrian ?? '-' }}</td>
+                            </tr>
+                            <tr>
                                 <th>Gambar desain Industri</th>
                                 <td>: @foreach (\App\Support\MultiFileStorage::decode($di->gambar_di) as $__f)
 <a href={{ route('public_di', ['file' => basename($__f)]) }} class=""

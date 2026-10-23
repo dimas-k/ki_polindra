@@ -147,6 +147,10 @@
                                 <td>: {{ $hc->judul_ciptaan }}</td>
                             </tr>
                             <tr>
+                                <th>No Pendaftaran</th>
+                                <td>: {{ $hc->no_pendaftaran ?? '-' }}</td>
+                            </tr>
+                            <tr>
                                 <th>Uraian singkat ciptaan</th>
                                 <td>: {{ $hc->uraian_singkat }}</td>
                             </tr>

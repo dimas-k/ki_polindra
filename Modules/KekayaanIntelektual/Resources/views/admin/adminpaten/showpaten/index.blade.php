@@ -147,6 +147,14 @@
                                 <td>: {{ $p->judul_paten }}</td>
                             </tr>
                             <tr>
+                                <th>No Pendaftaran</th>
+                                <td>: {{ $p->no_pendaftaran ?? '-' }}</td>
+                            </tr>
+                            <tr>
+                                <th>No Antrian</th>
+                                <td>: {{ $p->no_antrian ?? '-' }}</td>
+                            </tr>
+                            <tr>
                                 <th>Abstrak Paten</th>
                                 <td>: <a href="{{ url('public/paten/' . basename($p->abstrak_paten)) }}"
                                         class="" target="_blank">Lihat Abstrak Paten</a>

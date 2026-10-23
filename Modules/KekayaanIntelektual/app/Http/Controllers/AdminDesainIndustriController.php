@@ -171,6 +171,8 @@ class AdminDesainIndustriController extends Controller
             'prodi' => 'required|exists:prodi,nama_prodi',
             'jenis_di' => 'required',
             'judul_di' => 'required',
+            'no_pendaftaran' => 'nullable|string|max:255',
+            'no_antrian' => 'nullable|string|max:255',
             'uraian_di' => 'nullable|mimes:pdf',
             'gambar_di' => MultiFileStorage::RULE_NULLABLE,
             'gambar_di.*' => MultiFileStorage::RULE_EACH_FILE,
@@ -192,6 +194,8 @@ class AdminDesainIndustriController extends Controller
         $di->prodi_id = Prodi::findIdByName($request->prodi);
         $di->jenis_di = $request->jenis_di;
         $di->judul_di = $request->judul_di;
+        $di->no_pendaftaran = $request->no_pendaftaran;
+        $di->no_antrian = $request->no_antrian;
         $di->tanggal_permohonan = $request->tanggal_permohonan;
 
         $privateFiles = [
@@ -254,6 +258,8 @@ class AdminDesainIndustriController extends Controller
             'institusi' => 'required',
             'jenis_di' => 'required',
             'judul_di' => 'required',
+            'no_pendaftaran' => 'nullable|string|max:255',
+            'no_antrian' => 'nullable|string|max:255',
             'uraian_di' => 'required|mimes:pdf',
             'gambar_di' => MultiFileStorage::RULE_NULLABLE,
             'gambar_di.*' => MultiFileStorage::RULE_EACH_FILE,
@@ -273,6 +279,8 @@ class AdminDesainIndustriController extends Controller
         $di->institusi = $request->institusi;
         $di->jenis_di = $request->jenis_di;
         $di->judul_di = $request->judul_di;
+        $di->no_pendaftaran = $request->no_pendaftaran;
+        $di->no_antrian = $request->no_antrian;
         $di->tanggal_permohonan = $request->tanggal_permohonan;
 
         $privateFiles = [
