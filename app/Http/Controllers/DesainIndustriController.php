@@ -163,7 +163,7 @@ class DesainIndustriController extends Controller
      {
         $cario = $request->input('nama');
         $nama = DesainIndustri::orderBy('nama_lengkap','asc')->paginate(10);
-        $orang = DesainIndustri::where('nama_lengkap',$cario)->orderBy('nama_lengkap', 'asc')->paginate(15);
+        $orang = DesainIndustri::where('nama_lengkap',$cario)->orderBy('nama_lengkap', 'asc')->get();
         return view('umum-page.Desainindustri.perorangan.cari', compact('nama', 'orang', 'cario'));
      }
      public function jurusan()
@@ -173,7 +173,7 @@ class DesainIndustriController extends Controller
      public function cariJurusan(Request $request)
      {
         $carij = $request->input('jurusan');
-        $jurusan = DesainIndustri::where('jurusan',$carij)->paginate(10);
+        $jurusan = DesainIndustri::where('jurusan',$carij)->get();
         return view('umum-page.Desainindustri.jurusan.cari', compact('jurusan','carij'));
     }
     public function prodi()
@@ -183,7 +183,7 @@ class DesainIndustriController extends Controller
     public function cariProdi(Request $request)
     {
         $cariprodi = $request->input('prodi');
-        $prodi = DesainIndustri::where('prodi',$cariprodi)->paginate(10);
+        $prodi = DesainIndustri::where('prodi',$cariprodi)->get();
         return view('umum-page.Desainindustri.prodi.cari', compact('prodi', 'cariprodi'));
     }
     public function pengajuan()

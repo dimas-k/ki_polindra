@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
@@ -76,10 +77,11 @@
                 </b>
             </h3>
             <div class="table-responsive">
-                <table class="table table-hover font-family-Kokoro">
+                <table id="tabel-di-perorangan" class="table table-hover font-family-Kokoro w-100">
                     <thead>
                         <tr>
                             <th scope="col">No</th>
+                            <th scope="col">No. Pendaftaran</th>
                             <th scope="col">Nama lengkap</th>
                             <th scope="col">Jenis Desain</th>
                             <th scope="col">Judul Desain</th>
@@ -91,11 +93,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($orang as $i => $or)
+                        @foreach ($orang as $i => $or)
                             <tr>
                                 <th scope="row">
-                                    {{ ($orang->currentPage() - 1) * $orang->perPage() + $loop->iteration }}
+                                    {{ $loop->iteration }}
                                 </th>
+                                <td>{{ $or->no_pendaftaran ?? '-' }}</td>
                                 <td>{{ $or->nama_lengkap }}</td>
                                 <td>{{ $or->jenis_di }}</td>
                                 <td>{{ $or->judul_di }}</td>
@@ -105,15 +108,10 @@
                                 <td>{{ $or->status }}</td>
                                 {{-- <td><a class="btn btn-primary" href={{ Route('paten.show', $p->id) }}>Selengkapnya</a></td> --}}
                             </tr>
-                        @empty
-                            <td colspan="10" class="text-center">
-                                <img src="{{ asset('assets/no-data.png') }}" style="width:30%; height:auto">
-                            </td>
-                        @endforelse
+                        @endforeach
                     </tbody>
                 </table>
             </div>
-            {{ $orang->links() }}
         </div>
     </div>
 
@@ -136,6 +134,31 @@
             });
         });
     </script>
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(function () {
+            $('#tabel-di-perorangan').DataTable({
+                order: [[0, 'asc']],
+                dom: 'lrtip',
+                language: {
+                    search: 'Cari:',
+                    lengthMenu: '_MENU_ entri per halaman',
+                    info: 'Menampilkan _START_ - _END_ dari _TOTAL_ data',
+                    infoEmpty: 'Tidak ada data',
+                    infoFiltered: '(disaring dari _MAX_ total data)',
+                    zeroRecords: 'Data tidak ditemukan',
+                    emptyTable: '<img src="{{ asset('assets/no-data.png') }}" style="width:30%; height:auto">',
+                    paginate: {
+                        first: 'Awal',
+                        last: 'Akhir',
+                        next: 'Berikutnya',
+                        previous: 'Sebelumnya',
+                    },
+                },
+            });
+        });
+    </script>
+
 </body>
 
 </html>
