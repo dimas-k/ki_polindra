@@ -319,11 +319,15 @@ class AdminDesainIndustriController extends Controller
             
             'status'=>'required',
             'sertifikat_desain'=>'mimes:pdf',
+            'no_pendaftaran'=>'nullable|string|max:255',
 
         ]);
 
         $di = DesainIndustri::find($id);
         $di->status = $request->status;
+        if ($request->filled('no_pendaftaran')) {
+            $di->no_pendaftaran = $request->no_pendaftaran;
+        }
         if ($request->file('sertifikat_desain') == null) {
             $di->sertifikat_desain = "";
         }else{

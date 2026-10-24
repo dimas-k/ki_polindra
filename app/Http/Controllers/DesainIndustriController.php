@@ -16,7 +16,8 @@ class DesainIndustriController extends Controller
      */
     public function index(Request $request)
     {
-        $di = DesainIndustri::latest()->get();
+        // Tabel publik: semua status ditampilkan kecuali "Menunggu Verifikasi Data Oleh Verifikator"
+        $di = DesainIndustri::where('status', '!=', 'Menunggu Verifikasi Data Oleh Verifikator')->latest()->get();
         $itung = DesainIndustri::all()->count();
         $beri = DesainIndustri::where('status','Diberi')->count();
         $proses = DesainIndustri::where('status','Dalam Proses Usulan')->count();
@@ -65,13 +66,16 @@ class DesainIndustriController extends Controller
         $caridesain = $request->input('cari_di');
         $carinama = $request->input('cari_nama');
         // $di = DesainIndustri::where('judul_di','LIKE',"%".$caridesain."%")->orWhere('nama_lengkap','LIKE',"%".$carinama."%")->paginate(5);
-        $di = DesainIndustri::when($caridesain, function ($query, $caridesain) {
-            return $query->where('judul_di', 'LIKE', "%" . $caridesain . "%");
-        })
-        ->when($carinama, function ($query, $carinama) {
-            return $query->orWhere('nama_lengkap', 'LIKE', "%" . $carinama . "%");
-        })
-        ->get();
+        $di = DesainIndustri::where('status', '!=', 'Menunggu Verifikasi Data Oleh Verifikator')
+            ->where(function ($query) use ($caridesain, $carinama) {
+                $query->when($caridesain, function ($query, $caridesain) {
+                    return $query->where('judul_di', 'LIKE', "%" . $caridesain . "%");
+                })
+                    ->when($carinama, function ($query, $carinama) {
+                        return $query->orWhere('nama_lengkap', 'LIKE', "%" . $carinama . "%");
+                    });
+            })
+            ->get();
 
         $itung = DesainIndustri::all()->count();
         $beri = DesainIndustri::where('status','Diberi')->count();

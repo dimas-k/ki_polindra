@@ -251,6 +251,7 @@
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>No. Pendaftaran</th>
                         <th>Nama lengkap</th>
                         <th>Jenis Ciptaan</th>
                         <th>Judul Ciptaan</th>
@@ -259,20 +260,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($hc as $i => $p)
+                    @foreach ($hc as $i => $p)
                         <tr>
                             <th>{{ $loop->iteration }}</th>
+                            <td>{{ $p->no_pendaftaran ?? '-' }}</td>
                             <td>{{ $p->nama_lengkap }}</td>
                             <td>{{ $p->jenis_ciptaan }}</td>
                             <td>{{ $p->judul_ciptaan }}</td>
                             <td>{{ \Carbon\Carbon::parse($p->tanggal_permohonan)->format('d-m-Y') }}</td>
                             <td>{{ $p->status }}</td>
                         </tr>
-                        @empty
-                            <td colspan="10" class="text-center">
-                                <img src="{{ asset('assets/no-data.png') }}" style="width:30%; height:auto">
-                            </td>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -325,7 +323,8 @@
     <script>
         $(function () {
             $('#tabel-hakcipta').DataTable({
-                order: [[0, 'asc']], // default: No urut 1..N mengikuti data terbaru (latest()) dari server
+                order: [[0, 'asc']],
+                dom: 'lrtip',
                 language: {
                     search: 'Cari:',
                     lengthMenu: '_MENU_ entri per halaman',
@@ -333,6 +332,7 @@
                     infoEmpty: 'Tidak ada data',
                     infoFiltered: '(disaring dari _MAX_ total data)',
                     zeroRecords: 'Data tidak ditemukan',
+                    emptyTable: '<img src="{{ asset("assets/no-data.png") }}" style="width:30%; height:auto">',
                     paginate: {
                         first: 'Awal',
                         last: 'Akhir',
