@@ -361,7 +361,8 @@ class AdminHaKCiptaController extends Controller
         // Validasi input, file sertifikat_paten bersifat opsional
         $data = $request->validate([
             'status' => 'required',
-            'sertifikat_hakcipta' => 'nullable|mimes:pdf'
+            'sertifikat_hakcipta' => 'nullable|mimes:pdf',
+            'no_pendaftaran' => 'nullable|string|max:255'
         ]);
 
         // Cari data paten, jika tidak ditemukan otomatis error 404
@@ -369,6 +370,11 @@ class AdminHaKCiptaController extends Controller
 
         // Update status
         $hc->status = $data['status'];
+
+        // Update no pendaftaran jika diisi
+        if ($request->filled('no_pendaftaran')) {
+            $hc->no_pendaftaran = $data['no_pendaftaran'];
+        }
 
         // Daftar field file yang ingin diproses
         $publicFiles = [

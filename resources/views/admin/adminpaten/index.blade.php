@@ -459,7 +459,13 @@
                                                                         </div>
                                                                     @enderror
                                                                 </div>
-                                                                <div class="mb-3">
+                                                                                                                                <div class="mb-3">
+                                                                    <label for="" class="form-label">No. Pendaftaran Paten</label>
+                                                                    <input type="text" class="form-control" name="no_pendaftaran"
+                                                                        placeholder="Masukkan nomor pendaftaran"
+                                                                        value="{{ old('no_pendaftaran', $p->no_pendaftaran ?? '') }}">
+                                                                </div>
+<div class="mb-3">
                                                                     <label for="" class="form-label">Serifikat
                                                                         Paten</label><br>
                                                                         File :

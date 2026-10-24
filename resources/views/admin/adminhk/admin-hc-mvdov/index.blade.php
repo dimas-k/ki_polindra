@@ -146,7 +146,13 @@
                                                             </div>
                                                         @enderror
                                                     </div>
-                                                    <div class="mb-3">
+                                                                                                        <div class="mb-3">
+                                                        <label for="" class="form-label">No. Pendaftaran Hak Cipta</label>
+                                                        <input type="text" class="form-control" name="no_pendaftaran"
+                                                            placeholder="Masukkan nomor pendaftaran"
+                                                            value="{{ old('no_pendaftaran', $hk->no_pendaftaran ?? '') }}">
+                                                    </div>
+<div class="mb-3">
                                                         <label for="" class="form-label">Sertifikat
                                                             Hak Cipta</label>
                                                         <input type="file"

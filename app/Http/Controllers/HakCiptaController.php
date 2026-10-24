@@ -17,7 +17,8 @@ class HakCiptaController extends Controller
         $tercatat = HakCipta::where('status', 'Tercatat')->count();
         $null = HakCipta::where('status', 'Keterangan Belum Lengkap')->count();
         $tolak = HakCipta::where('status', 'Ditolak')->count();
-        $hc = HakCipta::latest()->get();
+        // Tabel publik: semua status ditampilkan kecuali "Menunggu Verifikasi Data Oleh Verifikator"
+        $hc = HakCipta::where('status', '!=', 'Menunggu Verifikasi Data Oleh Verifikator')->latest()->get();
 
         $hcTolak = HakCipta::where('status', 'Ditolak')->count();
         $hcTerima = HakCipta::where('status', 'Tercatat')->count();
@@ -59,11 +60,14 @@ class HakCiptaController extends Controller
         $carijudul = $request->input('cari_hc');
         $carinama = $request->input('cari_nama');
         // $hc = HakCipta::where('judul_ciptaan','LIKE',"%".$carijudul."%")->orWhere('nama_lengkap','LIKE',"%".$carinama."%")->paginate(5);
-        $hc = HakCipta::when($carijudul, function ($query, $carijudul) {
-            return $query->where('judul_ciptaan', 'LIKE', "%" . $carijudul . "%");
-        })
-            ->when($carinama, function ($query, $carinama) {
-                return $query->orWhere('nama_lengkap', 'LIKE', "%" . $carinama . "%");
+        $hc = HakCipta::where('status', '!=', 'Menunggu Verifikasi Data Oleh Verifikator')
+            ->where(function ($query) use ($carijudul, $carinama) {
+                $query->when($carijudul, function ($query, $carijudul) {
+                    return $query->where('judul_ciptaan', 'LIKE', "%" . $carijudul . "%");
+                })
+                    ->when($carinama, function ($query, $carinama) {
+                        return $query->orWhere('nama_lengkap', 'LIKE', "%" . $carinama . "%");
+                    });
             })
             ->get();
         $itung = HakCipta::all()->count();

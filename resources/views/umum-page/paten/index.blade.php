@@ -355,6 +355,7 @@
                 <thead>
                     <tr>
                         <th scope="col">No</th>
+                        <th scope="col">No. Pendaftaran</th>
                         <th scope="col">Nama lengkap</th>
                         <th scope="col">Jenis Paten</th>
                         <th scope="col">Judul paten</th>
@@ -363,20 +364,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($paten1 as $i => $p)
+                    @foreach ($paten1 as $i => $p)
                         <tr>
                             <th scope="row">{{ $loop->iteration }}</th>
+                            <td>{{ $p->no_pendaftaran ?? '-' }}</td>
                             <td>{{ $p->nama_lengkap }}</td>
                             <td>{{ $p->jenis_paten }}</td>
                             <td>{{ $p->judul_paten }}</td>
                             <td>{{ \Carbon\Carbon::parse($p->tanggal_permohonan)->format('d-m-Y') }}</td>
                             <td>{{ $p->status }}</td>
                         </tr>
-                        @empty
-                            <td colspan="10" class="text-center">
-                                <img src="{{ asset('assets/no-data.png') }}" style="width:30%; height:auto">
-                            </td>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -434,7 +432,8 @@
     <script>
         $(function () {
             $('#tabel-paten').DataTable({
-                order: [[0, 'asc']], // default: No urut 1..N mengikuti data terbaru (latest()) dari server
+                order: [[0, 'asc']],
+                dom: 'lrtip',
                 language: {
                     search: 'Cari:',
                     lengthMenu: '_MENU_ entri per halaman',
@@ -442,6 +441,7 @@
                     infoEmpty: 'Tidak ada data',
                     infoFiltered: '(disaring dari _MAX_ total data)',
                     zeroRecords: 'Data tidak ditemukan',
+                    emptyTable: '<img src="{{ asset("assets/no-data.png") }}" style="width:30%; height:auto">',
                     paginate: {
                         first: 'Awal',
                         last: 'Akhir',

@@ -18,7 +18,8 @@ class PatenController extends Controller
      */
     public function index(Request $request)
     {
-        $paten1 = Paten::latest()->get();
+        // Tabel publik: semua status ditampilkan kecuali "Menunggu Verifikasi Data Oleh Verifikator"
+        $paten1 = Paten::where('status', '!=', 'Menunggu Verifikasi Data Oleh Verifikator')->latest()->get();
         $carijudul = $request->get('cari_judul');
         $carinama = $request->get('cari_nama');
 
@@ -82,11 +83,14 @@ class PatenController extends Controller
     {
         $carijudul = $request->input('cari_judul');
         $carinama = $request->input('cari_nama');
-        $paten1 = Paten::when($carijudul, function ($query, $carijudul) {
-            return $query->where('judul_paten', 'LIKE', "%" . $carijudul . "%");
-        })
-            ->when($carinama, function ($query, $carinama) {
-                return $query->orWhere('nama_lengkap', 'LIKE', "%" . $carinama . "%");
+        $paten1 = Paten::where('status', '!=', 'Menunggu Verifikasi Data Oleh Verifikator')
+            ->where(function ($query) use ($carijudul, $carinama) {
+                $query->when($carijudul, function ($query, $carijudul) {
+                    return $query->where('judul_paten', 'LIKE', "%" . $carijudul . "%");
+                })
+                    ->when($carinama, function ($query, $carinama) {
+                        return $query->orWhere('nama_lengkap', 'LIKE', "%" . $carinama . "%");
+                    });
             })
             ->get();
         // $paten = DB::table('paten')->whereRaw('judul_paten','LIKE',"%".$carijudul."%")->orWhere('nama_lengkap','LIKE',"%".$carinama."%")->paginate(5); //penggunaan raw queri
