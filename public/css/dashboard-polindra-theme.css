@@ -1,0 +1,212 @@
+/*
+ * SIKI/Dashboard Produk Inovasi & Penelitian - Polindra Theme
+ * Palet warna diambil dari logo Politeknik Negeri Indramayu (navy blue).
+ * Flat & solid, tanpa gradasi. Override dashboard.css bawaan template.
+ * Load file ini SETELAH css/dashboard.css.
+ */
+
+:root {
+    --primary: #0d3b8c;
+    --primary-dark: #000f56;
+    --secondary: #5b6779;
+    --light: #f4f7fd;
+    --dark: #1c2536;
+    --accent: #c8952b;
+    --border: #d7e0f0;
+}
+
+body {
+    color: var(--dark);
+}
+
+a {
+    color: var(--dark);
+}
+
+/*** Buttons: flat, sharp-ish corners, no shadow/gradient ***/
+.btn {
+    border-radius: 3px;
+    box-shadow: none !important;
+}
+
+.btn.btn-primary,
+.btn-primary {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn.btn-primary:hover,
+.btn-primary:hover {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+.btn-square,
+.btn-sm-square,
+.btn-lg-square {
+    border-radius: 3px;
+}
+
+/*** Navbar: solid navy, no glass/blur ***/
+.top-bar,
+.container-fluid.py-4.px-5 {
+    background: #ffffff;
+}
+
+.navbar {
+    background: var(--primary-dark) !important;
+    border-radius: 3px;
+}
+
+.navbar .navbar-nav .nav-link {
+    color: #ffffff;
+}
+
+.navbar .navbar-nav .nav-link:hover,
+.navbar .navbar-nav .nav-link.active {
+    color: var(--accent);
+}
+
+.navbar .nav-item .dropdown-menu {
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    box-shadow: none;
+}
+
+/*** Hero / carousel: solid navy overlay, no black gradient ***/
+#header-carousel .carousel-caption {
+    background: rgba(0, 15, 86, .72);
+}
+
+#header-carousel .carousel-indicators [data-bs-target] {
+    border-radius: 3px;
+    border-color: #ffffff;
+}
+
+.page-header {
+    background: linear-gradient(rgba(0, 15, 86, .78), rgba(0, 15, 86, .78)), url('/assets/gedung.jpg') center center no-repeat;
+    background-size: cover;
+}
+
+/*** Section title: solid line, no faded gradient ***/
+.section-title::before,
+.section-title::after {
+    background: var(--primary);
+}
+
+.section-title.bg-white {
+    background: #ffffff !important;
+    color: var(--primary-dark) !important;
+}
+
+/*** Facts: flat card, solid icon block, subtle border instead of soft shadow ***/
+.fact-item {
+    background: #ffffff !important;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: border-color .25s ease, transform .25s ease;
+}
+
+.fact-item:hover {
+    margin-top: -6px;
+    box-shadow: none;
+    border-color: var(--primary);
+    background: #ffffff !important;
+}
+
+.fact-item i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 84px;
+    height: 84px;
+    border-radius: 4px;
+    background: var(--primary);
+    color: #ffffff !important;
+}
+
+.fact-item h5 {
+    color: var(--dark);
+}
+
+.fact-item h1 {
+    color: var(--primary-dark);
+}
+
+/*** Project / research cards: flat border, solid navy overlay on hover ***/
+.project-item-new {
+    border: 1px solid var(--border) !important;
+    border-radius: 4px;
+    transition: border-color .2s ease, transform .2s ease;
+    box-shadow: none !important;
+}
+
+.project-item-new:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary) !important;
+    box-shadow: none !important;
+}
+
+.project-item-new img {
+    border-radius: 2px;
+}
+
+.project-item a {
+    background: rgba(0, 15, 86, .75);
+    border-radius: 4px;
+}
+
+.project-carousel .owl-dot {
+    border-radius: 3px;
+    border-color: var(--border);
+}
+
+.project-carousel .owl-dot:hover,
+.project-carousel .owl-dot.active {
+    border-color: var(--primary);
+    background: var(--primary);
+}
+
+/*** Testimonial (kalau dipakai lagi nanti) ***/
+.testimonial-carousel .owl-item.center .testimonial-item {
+    background: var(--primary) !important;
+}
+
+.testimonial-carousel .owl-nav .owl-prev,
+.testimonial-carousel .owl-nav .owl-next {
+    border-radius: 3px;
+    border-color: var(--border);
+}
+
+.testimonial-carousel .owl-nav .owl-prev:hover,
+.testimonial-carousel .owl-nav .owl-next:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+/*** Footer: solid navy, no bg-dark generic black ***/
+.footer.bg-dark {
+    background: var(--primary-dark) !important;
+}
+
+.footer .btn.btn-link {
+    color: rgba(255, 255, 255, .75);
+}
+
+.footer .btn.btn-link::before {
+    color: rgba(255, 255, 255, .75);
+}
+
+.footer .btn.btn-link:hover {
+    color: var(--accent);
+}
+
+.footer .copyright {
+    border-top-color: rgba(255, 255, 255, .12);
+}
+
+.footer .copyright a:hover {
+    color: var(--accent);
+}
+
+/*** Spinner logo container tetap solid putih (sudah di-set inline di header.blade.php) ***/
