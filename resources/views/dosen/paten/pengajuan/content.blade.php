@@ -66,7 +66,7 @@
                                 <div class="container">
                                     <div class="mb-3">
                                         <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
-                                        <input type="text" value="{{ old('nama_lengkap', \App\Helpers\GelarHelper::stripGelar(auth()->user()->nama_lengkap)) }}"
+                                        <input type="text" value="{{ old('nama_lengkap', \App\Helpers\GelarHelper::stripGelar(auth()->user()->nama_lengkap ?? '')) }}"
                                             class="form-control @error('nama_lengkap') is-invalid @enderror"
                                             id="nama_lengkap" placeholder="Masukkan Nama" name="nama_lengkap" required>
                                         @error('nama_lengkap')
@@ -77,7 +77,7 @@
                                         <label for="alamat" class="form-label">Alamat</label>
                                         <input type="text" class="form-control @error('alamat') is-invalid @enderror"
                                             id="alamat" placeholder="Masukkan Alamat" name="alamat"
-                                            value="{{ old('alamat', auth()->user()->alamat) }}" required>
+                                            value="{{ old('alamat', auth()->user()->alamat ?? '') }}" required>
                                         @error('alamat')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -87,7 +87,7 @@
                                         <input type="number"
                                             class="form-control @error('no_telepon') is-invalid @enderror"
                                             id="no_telepon" placeholder="Masukkan No telepon" name="no_telepon"
-                                            value="{{ old('no_telepon', auth()->user()->no_telepon) }}" required>
+                                            value="{{ old('no_telepon', auth()->user()->no_telepon ?? '') }}" required>
                                         @error('no_telepon')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -117,7 +117,7 @@
                                         <label for="email" class="form-label">Email</label>
                                         <input type="email" class="form-control @error('email') is-invalid @enderror"
                                             id="email" placeholder="Masukkan Email" name="email"
-                                            value="{{ old('email', auth()->user()->email) }}" required>
+                                            value="{{ old('email', auth()->user()->email ?? '') }}" required>
                                         @error('email')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror

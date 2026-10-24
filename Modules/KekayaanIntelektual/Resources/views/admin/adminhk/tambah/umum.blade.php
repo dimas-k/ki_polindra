@@ -66,7 +66,7 @@
                                     <select name="user_id" id="user_id" class="form-control" onchange="updateNamaLengkap()">
                                         <option value="" selected disabled>Pilih Nama</option>
                                         @foreach ($users as $user)
-                                            <option value="{{ $user->id }}" data-nama="{{ $user->nama_lengkap }}">
+                                            <option value="{{ $user->id }}" data-nama="{{ $user->nama_lengkap }}" data-alamat="{{ $user->alamat }}" data-telp="{{ $user->no_telepon }}" data-email="{{ $user->email }}">
                                                 {{ $user->nama_lengkap }}
                                             </option>
                                         @endforeach
@@ -306,7 +306,14 @@
                 var selectedOption = select.options[select.selectedIndex];
                 var namaLengkap = selectedOption.getAttribute("data-nama");
         
-                document.getElementById("nama_lengkap").value = namaLengkap;
+                
+                var alamat = selectedOption.getAttribute("data-alamat");
+                var noTelepon = selectedOption.getAttribute("data-telp");
+                var email = selectedOption.getAttribute("data-email");
+document.getElementById("nama_lengkap").value = namaLengkap;
+                if (document.getElementById("alamat")) { document.getElementById("alamat").value = alamat || ""; }
+                if (document.getElementById("no_telepon")) { document.getElementById("no_telepon").value = noTelepon || ""; }
+                if (document.getElementById("email")) { document.getElementById("email").value = email || ""; }
             }
         </script>
         <script>

@@ -405,7 +405,7 @@ class AdminHaKCiptaController extends Controller
     public function tambahDosen()
     {
         $users = DB::table('users')
-        ->select('id', 'nama_lengkap')
+        ->select('id', 'nama_lengkap', 'alamat', 'no_telepon', 'email')
         ->where('role', '=', 'Dosen')
         ->get();
         return view('kekayaanintelektual::admin.adminhk.tambah.dosen', compact('users'));
@@ -413,7 +413,7 @@ class AdminHaKCiptaController extends Controller
     public function tambahHcUmum()
     {
         $users = DB::table('users')
-        ->select('id', 'nama_lengkap')
+        ->select('id', 'nama_lengkap', 'alamat', 'no_telepon', 'email')
         ->where('role', '=', 'Umum')
         ->get();
         return view('kekayaanintelektual::admin.adminhk.tambah.umum', compact('users'));

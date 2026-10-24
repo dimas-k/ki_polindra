@@ -45,7 +45,7 @@
                                 <div class="container">
                                     <div class="mb-3">
                                         <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
-                                        <input type="text" value="{{ auth()->user()->nama_lengkap }}"
+                                        <input type="text" value="{{ old('nama_lengkap', auth()->user()->nama_lengkap ?? '') }}"
                                             class="form-control"
                                             id="nama_lengkap" placeholder="Masukkan Nama"name="nama_lengkap">
                                         {{-- @error('nama_lengkap')
@@ -58,7 +58,7 @@
                                         <label for="alamat" class="form-label">Alamat</label>
                                         <input type="text" class="form-control"
                                             id="alamat" placeholder="Masukkan Alamat" name="alamat"
-                                            value="{{ auth()->user()->alamat }}">
+                                            value="{{ old('alamat', auth()->user()->alamat ?? '') }}">
                                         {{-- @error('alamat')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -70,7 +70,7 @@
                                         <input type="number"
                                             class="form-control "
                                             id="no_telepon" placeholder="Masukkan No telepon" name="no_telepon"
-                                            value="{{ auth()->user()->no_telepon }}">
+                                            value="{{ old('no_telepon', auth()->user()->no_telepon ?? '') }}">
                                         {{-- @error('no_telepon')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -105,7 +105,7 @@
                                         <label for="email" class="form-label">Email</label>
                                         <input type="email" class="form-control "
                                             id="email" placeholder="Masukkan Email" name="email"
-                                            value="{{ auth()->user()->email }}">
+                                            value="{{ old('email', auth()->user()->email ?? '') }}">
                                         {{-- @error('email')
                                             <div class="invalid-feedback">
                                                 {{ $message }}

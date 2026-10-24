@@ -357,7 +357,7 @@ class AdminDesainIndustriController extends Controller
     public function tambahDiDosen()
     {
         $users = DB::table('users')
-        ->select('id', 'nama_lengkap')
+        ->select('id', 'nama_lengkap', 'alamat', 'no_telepon', 'email')
         ->where('role', '=', 'Dosen')
         ->get();
         return view('admin.admindi.tambah.dosen', compact('users'));
@@ -365,7 +365,7 @@ class AdminDesainIndustriController extends Controller
     public function tambahDiUmum()
     {
         $users = DB::table('users')
-        ->select('id', 'nama_lengkap')
+        ->select('id', 'nama_lengkap', 'alamat', 'no_telepon', 'email')
         ->Where('role','=','Umum')
         ->get();
         return view('admin.admindi.tambah.umum', compact('users'));

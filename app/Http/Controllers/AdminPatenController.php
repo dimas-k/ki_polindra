@@ -115,7 +115,7 @@ class AdminPatenController extends Controller
     public function tambahPatenDosen()
     {
         $users = DB::table('users')
-            ->select('id', 'nama_lengkap')
+            ->select('id', 'nama_lengkap', 'alamat', 'no_telepon', 'email')
             ->where('role', '=', 'Dosen')
             ->get();
         // dd($users);
@@ -124,7 +124,7 @@ class AdminPatenController extends Controller
     public function tambahPatenUmum()
     {
         $users = DB::table('users')
-            ->select('id', 'nama_lengkap')
+            ->select('id', 'nama_lengkap', 'alamat', 'no_telepon', 'email')
             ->Where('role', '=', 'Umum')
             ->get();
         return view('admin.adminpaten.tambah.umum', compact('users'));
