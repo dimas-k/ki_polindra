@@ -163,7 +163,8 @@ class AdminPatenController extends Controller
         ]);
         $paten = new Paten();
         $paten->user_id = $request->user_id;
-        $paten->nama_lengkap = $request->nama_lengkap;
+        // Pengajuan oleh admin untuk dosen: nama lengkap disimpan TANPA gelar.
+        $paten->nama_lengkap = \App\Helpers\GelarHelper::stripGelar($request->nama_lengkap);
         $paten->alamat = $request->alamat;
         $paten->no_telepon = $request->no_telepon;
         $paten->tanggal_lahir = $request->tanggal_lahir;

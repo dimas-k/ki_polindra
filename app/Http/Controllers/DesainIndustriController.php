@@ -212,7 +212,12 @@ class DesainIndustriController extends Controller
             'tanggal_permohonan'=>'required'
         ]);
         $di = new DesainIndustri();
-        $di->nama_lengkap = $request->nama_lengkap;
+        $namaLengkapInput = $request->nama_lengkap;
+        if (\Illuminate\Support\Facades\Auth::user() && \Illuminate\Support\Facades\Auth::user()->apakahDosen()) {
+            // Khusus pengajuan dosen: nama lengkap disimpan TANPA gelar.
+            $namaLengkapInput = \App\Helpers\GelarHelper::stripGelar($namaLengkapInput);
+        }
+        $di->nama_lengkap = $namaLengkapInput;
         $di->alamat = $request->alamat;
         $di->no_telepon = $request->no_telepon;
         $di->tanggal_lahir = $request->tanggal_lahir;

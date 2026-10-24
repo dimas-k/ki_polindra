@@ -185,7 +185,12 @@ class HakCiptaController extends Controller
         ]);
 
         $hc = new HakCipta();
-        $hc->nama_lengkap = $request->nama_lengkap;
+        $namaLengkapInput = $request->nama_lengkap;
+        if (\Illuminate\Support\Facades\Auth::user() && \Illuminate\Support\Facades\Auth::user()->apakahDosen()) {
+            // Khusus pengajuan dosen: nama lengkap disimpan TANPA gelar.
+            $namaLengkapInput = \App\Helpers\GelarHelper::stripGelar($namaLengkapInput);
+        }
+        $hc->nama_lengkap = $namaLengkapInput;
         $hc->alamat = $request->alamat;
         $hc->no_telepon = $request->no_telepon;
         $hc->tanggal_lahir = $request->tanggal_lahir;

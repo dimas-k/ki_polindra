@@ -416,7 +416,8 @@ class AdminDesainIndustriController extends Controller
         // Create a new DesainIndustri instance
         $di = new DesainIndustri();
         $di->user_id = $request->user_id;
-        $di->nama_lengkap = $request->nama_lengkap;
+        // Pengajuan oleh admin untuk dosen: nama lengkap disimpan TANPA gelar.
+        $di->nama_lengkap = \App\Helpers\GelarHelper::stripGelar($request->nama_lengkap);
         $di->alamat = $request->alamat;
         $di->no_telepon = $request->no_telepon;
         $di->tanggal_lahir = $request->tanggal_lahir;

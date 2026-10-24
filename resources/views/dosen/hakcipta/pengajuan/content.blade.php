@@ -44,7 +44,7 @@
                                         <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
                                         <input type="text"
                                             class="form-control @error('nama_lengkap') is-invalid @enderror"
-                                            id="nama_lengkap" placeholder="Masukkan Nama" name="nama_lengkap" value="{{ auth()->user()->nama_lengkap }}">
+                                            id="nama_lengkap" placeholder="Masukkan Nama" name="nama_lengkap" value="{{ \App\Helpers\GelarHelper::stripGelar(auth()->user()->nama_lengkap) }}">
                                         @error('nama_lengkap')
                                             <div class="invalid-feedback">
                                                 {{ $message }}

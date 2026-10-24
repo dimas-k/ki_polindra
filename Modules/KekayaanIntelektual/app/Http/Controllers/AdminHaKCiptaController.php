@@ -449,7 +449,8 @@ class AdminHaKCiptaController extends Controller
 
         $hc = new HakCipta();
         $hc->user_id = $request->user_id;
-        $hc->nama_lengkap = $request->nama_lengkap;
+        // Pengajuan oleh admin untuk dosen: nama lengkap disimpan TANPA gelar.
+        $hc->nama_lengkap = \App\Helpers\GelarHelper::stripGelar($request->nama_lengkap);
         $hc->alamat = $request->alamat;
         $hc->no_telepon = $request->no_telepon;
         $hc->tanggal_lahir = $request->tanggal_lahir;

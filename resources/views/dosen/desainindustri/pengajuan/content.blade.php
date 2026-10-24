@@ -45,7 +45,7 @@
                                 <div class="container">
                                     <div class="mb-3">
                                         <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
-                                        <input type="text" value="{{ auth()->user()->nama_lengkap }}"
+                                        <input type="text" value="{{ \App\Helpers\GelarHelper::stripGelar(auth()->user()->nama_lengkap) }}"
                                             class="form-control"
                                             id="nama_lengkap" placeholder="Masukkan Nama"name="nama_lengkap">
                                         {{-- @error('nama_lengkap')

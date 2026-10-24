@@ -272,7 +272,12 @@ class PatenController extends Controller
             'gambar_tampilan.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
         ]);
         $paten = new Paten();
-        $paten->nama_lengkap = $request->nama_lengkap;
+        $namaLengkapInput = $request->nama_lengkap;
+        if (Auth::user() && Auth::user()->apakahDosen()) {
+            // Khusus pengajuan dosen: nama lengkap disimpan TANPA gelar.
+            $namaLengkapInput = \App\Helpers\GelarHelper::stripGelar($namaLengkapInput);
+        }
+        $paten->nama_lengkap = $namaLengkapInput;
         $paten->alamat = $request->alamat;
         $paten->no_telepon = $request->no_telepon;
         $paten->tanggal_lahir = $request->tanggal_lahir;

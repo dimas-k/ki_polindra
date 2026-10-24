@@ -67,7 +67,7 @@
                                 <select name="user_id" id="user_id" class="form-control" onchange="updateNamaLengkap()">
                                     <option value="" selected disabled>Pilih Nama</option>
                                     @foreach ($users as $user)
-                                        <option value="{{ $user->id }}" data-nama="{{ $user->nama_lengkap }}">
+                                        <option value="{{ $user->id }}" data-nama="{{ \App\Helpers\GelarHelper::stripGelar($user->nama_lengkap) }}">
                                             {{ $user->nama_lengkap }}
                                         </option>
                                     @endforeach

@@ -66,7 +66,7 @@
                                 <div class="container">
                                     <div class="mb-3">
                                         <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
-                                        <input type="text" value="{{ old('nama_lengkap', auth()->user()->nama_lengkap) }}"
+                                        <input type="text" value="{{ old('nama_lengkap', \App\Helpers\GelarHelper::stripGelar(auth()->user()->nama_lengkap)) }}"
                                             class="form-control @error('nama_lengkap') is-invalid @enderror"
                                             id="nama_lengkap" placeholder="Masukkan Nama" name="nama_lengkap" required>
                                         @error('nama_lengkap')
