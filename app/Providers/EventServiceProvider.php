@@ -8,6 +8,12 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Event;
 use App\Observers\UserObserver;
 use App\Models\User;
+use App\Observers\PatenObserver;
+use App\Observers\HakCiptaObserver;
+use App\Observers\DesainIndustriObserver;
+use App\Models\Paten;
+use App\Models\HakCipta;
+use App\Models\DesainIndustri;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -28,6 +34,9 @@ class EventServiceProvider extends ServiceProvider
     public function boot(): void
     {
         User::observe(UserObserver::class);
+        Paten::observe(PatenObserver::class);
+        HakCipta::observe(HakCiptaObserver::class);
+        DesainIndustri::observe(DesainIndustriObserver::class);
     }
 
     /**

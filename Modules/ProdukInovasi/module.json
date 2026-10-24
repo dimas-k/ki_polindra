@@ -1,0 +1,11 @@
+{
+    "name": "ProdukInovasi",
+    "alias": "produkinovasi",
+    "description": "Modul pengelolaan Produk Inovasi, Penelitian, dan Kelompok Bidang Keahlian (dari Dashboard Produk Inovasi Polindra)",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ProdukInovasi\\app\\Providers\\ProdukInovasiServiceProvider"
+    ],
+    "files": []
+}

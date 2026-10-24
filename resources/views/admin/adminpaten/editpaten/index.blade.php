@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en" data-bs-theme="auto">
 
 <head>
@@ -11,16 +11,23 @@
     <link href={{ asset('assets/bootstrap/css/bootstrap.min.css') }} rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href={{ asset('assets/css/admin-theme.css') }} rel="stylesheet">
 </head>
 
 <body>
     {{-- Top nav bar --}}
     <div class="container-fluid border">
-        <nav class="navbar navbar-expand bg-body-tertiary">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
                 <img class="navbar-brand" src={{ asset('assets/polindra2.jpg') }}>
-                <a class="navbar-brand fs-6 fw-normal font-family-Kokoro" href="#">Sistem Informasi Kekayaan
-                    Intelektual<br>Politeknik Negeri Indramayu</a>
+                <a class="navbar-brand fs-6 fw-normal font-family-Kokoro brand-text-responsive" href="#">
+                    <span class="d-inline d-md-none">SIKI POLINDRA</span>
+                    <span class="d-none d-md-inline">Sistem Informasi Kekayaan
+                        Intelektual<br>Politeknik Negeri Indramayu</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
@@ -29,6 +36,7 @@
                                 Selamat datang, {{ auth()->user()->nama_lengkap }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="/admin/dashboard"><i class="bi bi-grid me-2"></i>Pilih Aplikasi</a></li>
                                 <li><a class="dropdown-item" href="/logout"><i class="bi bi-arrow-bar-left me-2"></i>Log
                                         Out</a></li>
                             </ul>
@@ -44,7 +52,7 @@
             {{-- Side bar --}}
             @include('admin.layout.sidenav')
             {{-- end of sidebar --}}
-            <div class="col-lg-10 mt-2">
+            <div class="col-12 col-lg-10 mt-2">
                 <div class="container bg-light rounded border pt-3">
                     <h3 class="fw-normal font-family-Kokoro mb-3">
                         <i class="bi bi-file-earmark me-2"></i>Data Paten {{ $p->nama_lengkap }}
@@ -167,16 +175,11 @@
                                 <label for="jurusan" class="form-label">Jurusan</label>
                                 <select class="form-select" aria-label="Default select example" name="jurusan"
                                     id="jurusan">
-                                    <option value="">Pilih Jurusan</option>
-                                    <option value="Teknik Informatika"
-                                        {{ old('jurusan', $p->jurusan) == 'Teknik Informatika' ? 'selected' : '' }}>
-                                        Teknik Informatika</option>
-                                    <option value="Teknik"
-                                        {{ old('jurusan', $p->jurusan) == 'Teknik' ? 'selected' : '' }}>Teknik</option>
-                                    <option value="Kesehatan"
-                                        {{ old('jurusan', $p->jurusan) == 'Kesehatan' ? 'selected' : '' }}>Kesehatan
-                                    </option>
-                                </select>
+                <option value="">Pilih Jurusan</option>
+                @foreach($jurusanOptions as $j)
+                    <option value="{{ $j->nama_jurusan }}" {{ old('jurusan', $p->jurusan) == $j->nama_jurusan ? 'selected' : '' }}>{{ $j->nama_jurusan }}</option>
+                @endforeach
+            </select>
 
                                 {{-- @error('jurusan')
                                             <div class="invalid-feedback">
@@ -189,32 +192,11 @@
                                 <label for="prodi" class="form-label">Prodi</label>
                                 <select class="form-select" aria-label="Default select example" name="prodi"
                                     id="prodi">
-                                    <option value="">Pilih Prodi</option>
-                                    <option value="D3 Teknik Informatika"
-                                        {{ old('prodi', $p->prodi) == 'D3 Teknik Informatika' ? 'selected' : '' }}>D3
-                                        Teknik Informatika</option>
-                                    <option value="D4 Rekayasa Perangkat Lunak"
-                                        {{ old('prodi', $p->prodi) == 'D4 Rekayasa Perangkat Lunak' ? 'selected' : '' }}>
-                                        D4 Rekayasa Perangkat Lunak</option>
-                                    <option value="D4 Sistem Informasi Kota Cerdas"
-                                        {{ old('prodi', $p->prodi) == 'D4 Sistem Informasi Kota Cerdas' ? 'selected' : '' }}>
-                                        D4 Sistem Informasi Kota Cerdas</option>
-                                    <option value="D3 Teknik Mesin"
-                                        {{ old('prodi', $p->prodi) == 'D3 Teknik Mesin' ? 'selected' : '' }}>D3 Teknik
-                                        Mesin</option>
-                                    <option value="D4 Perancangan Manufaktur"
-                                        {{ old('prodi', $p->prodi) == 'D4 Perancangan Manufaktur' ? 'selected' : '' }}>
-                                        D4 Perancangan Manufaktur</option>
-                                    <option value="D3 Teknik Pendingin dan Tata Udara"
-                                        {{ old('prodi', $p->prodi) == 'D3 Teknik Pendingin dan Tata Udara' ? 'selected' : '' }}>
-                                        D3 Teknik Pendingin dan Tata Udara</option>
-                                    <option value="D4 Teknologi Rekayasa Instrumentasi dan Kontrol"
-                                        {{ old('prodi', $p->prodi) == 'D4 Teknologi Rekayasa Instrumentasi dan Kontrol' ? 'selected' : '' }}>
-                                        D4 Teknologi Rekayasa Instrumentasi dan Kontrol</option>
-                                    <option value="D3 Keperawatan"
-                                        {{ old('prodi', $p->prodi) == 'D3 Keperawatan' ? 'selected' : '' }}>D3
-                                        Keperawatan</option>
-                                </select>
+                <option value="">Pilih Prodi</option>
+                @foreach($prodiOptions as $pr)
+                    <option value="{{ $pr->nama_prodi }}" {{ old('prodi', $p->prodi) == $pr->nama_prodi ? 'selected' : '' }}>{{ $pr->nama_prodi }}</option>
+                @endforeach
+            </select>
                                 {{-- @error('prodi')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -355,12 +337,12 @@
                             <div class="mb-3">
                                 <label for="g_paten" class="form-label">gambar Paten</label><br>
                                 @if (!empty($p->gambar_paten))
-                                    File : {{ basename($p->gambar_paten) }}
+                                    File : {{ collect(\App\Support\MultiFileStorage::decode($p->gambar_paten))->map(fn($f) => basename($f))->implode(', ') }}
                                 @else
                                     File : Tidak ada
                                 @endif
                                 <input type="file" class="form-control " id="g_paten" placeholder=""
-                                    name="gambar_paten">
+                                    name="gambar_paten" accept=".pdf">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>masukan file jika ada perubahan</span>
                                 {{-- @error('gambar_paten')
@@ -372,12 +354,12 @@
                             <div class="mb-3">
                                 <label for="g_tampilan" class="form-label">gambar Tampilan</label><br>
                                 @if (!empty($p->gambar_tampilan))
-                                File : {{ basename($p->gambar_tampilan) }}
+                                File : {{ collect(\App\Support\MultiFileStorage::decode($p->gambar_tampilan))->map(fn($f) => basename($f))->implode(', ') }}
                             @else
                                 File : Tidak ada
                             @endif
                                 <input type="file" class="form-control " id="g_tampilan" placeholder=""
-                                    name="gambar_tampilan">
+                                    name="gambar_tampilan[]" multiple accept=".pdf,.jpg,.jpeg,.png">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>masukan file jika ada perubahan</span>
                                 {{-- @error('gambar_tampilan')
@@ -480,7 +462,7 @@
                         g_tampilan: $('#g_tampilan')[0].files[0],
                     };
         
-                    const maxSize = 10 * 1024 * 1024; // Max size: 10MB
+                    const maxSize = 2 * 1024 * 1024; // Max size: 2MB
                     const allowedExtensionPDF = /(\.pdf)$/i;
                     const allowedExtensionExcel = /(\.xlsx)$/i;
         
@@ -523,14 +505,14 @@
                             }
                         } else if (files[file]) {
                             // Validate other files
-                            if (!allowedExtensionPDF.exec(files[file].name)) {
+                            if (!(['g_tampilan','gambar_desain','gambar_di'].includes(file) ? /(\.(pdf|jpe?g|png))$/i : allowedExtensionPDF).exec(files[file].name)) {
                                 showError("Tolong Masukkan " + file.replace('_', ' ').toUpperCase() + " Dengan Ekstensi .pdf!");
                                 return false;
                             }
         
                             // Validate file size
                             if (files[file].size > maxSize) {
-                                showError("Ukuran File " + file.replace('_', ' ').toUpperCase() + " Lebih Dari 10 MB!");
+                                showError("Ukuran File " + file.replace('_', ' ').toUpperCase() + " Lebih Dari 2 MB!");
                                 return false;
                             }
                         }
@@ -542,6 +524,7 @@
             });
         </script> --}}
     </div>
+@include('layout.filepond')
 </body>
 
 </html>

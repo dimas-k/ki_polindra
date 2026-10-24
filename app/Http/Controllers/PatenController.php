@@ -6,6 +6,7 @@ use App\Models\Paten;
 use App\Models\HakCipta;
 use Illuminate\Http\Request;
 use App\Models\DesainIndustri;
+use App\Models\Jurusan;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,7 @@ class PatenController extends Controller
      */
     public function index(Request $request)
     {
-        $paten1 = Paten::latest()->paginate(5);
+        $paten1 = Paten::latest()->get();
         $carijudul = $request->get('cari_judul');
         $carinama = $request->get('cari_nama');
 
@@ -47,13 +48,22 @@ class PatenController extends Controller
         $patenDI = Paten::where('status', 'Diberi')->count();
         $patenDK = Paten::where('status', 'Ditolak')->count();
 
+        // Daftar jurusan untuk filter diagram Jumlah Paten per Jurusan.
+        // Default (tanpa pilihan) tetap menampilkan data seluruh jurusan seperti semula.
+        $jurusanList = Jurusan::orderBy('nama_jurusan')->get();
+        $jurusanId = $request->get('jurusan');
+        $jurusanTerpilih = $jurusanId ? Jurusan::find($jurusanId) : null;
+
         $data = Paten::selectRaw('YEAR(tanggal_permohonan) as tahun, COUNT(*) as jumlah')
+            ->when($jurusanTerpilih, function ($query) use ($jurusanTerpilih) {
+                $query->whereRaw('LOWER(TRIM(jurusan)) = ?', [strtolower(trim($jurusanTerpilih->nama_jurusan))]);
+            })
             ->groupByRaw('YEAR(tanggal_permohonan)')
             ->orderByRaw('YEAR(tanggal_permohonan) ASC')
             ->get();
 
 
-        $allYears = range($data->min('tahun'), $data->max('tahun'));
+        $allYears = $data->isNotEmpty() ? range($data->min('tahun'), $data->max('tahun')) : [];
 
         $formattedData = collect($allYears)->map(function ($year) use ($data) {
             return [
@@ -65,7 +75,7 @@ class PatenController extends Controller
         $tahun = $formattedData->pluck('tahun')->toArray();
         $jumlah = $formattedData->pluck('jumlah')->toArray();
 
-        return view('umum-page.paten.index', compact('pf', 'paten1', 'paten', 'mt', 'mp', 'mps', 'staw', 'stl', 'stak', 'mts', 'catat', 'tolak', 'hitung', 'patenPF', 'patenMTF', 'patenMP', 'patenMPS', 'patenSTAW', 'patenSTL', 'patenSTL', 'patenSTAK', 'patenMTS', 'patenDI', 'patenDK', 'tahun', 'jumlah', 'mvdov'));
+        return view('umum-page.paten.index', compact('pf', 'paten1', 'paten', 'mt', 'mp', 'mps', 'staw', 'stl', 'stak', 'mts', 'catat', 'tolak', 'hitung', 'patenPF', 'patenMTF', 'patenMP', 'patenMPS', 'patenSTAW', 'patenSTL', 'patenSTL', 'patenSTAK', 'patenMTS', 'patenDI', 'patenDK', 'tahun', 'jumlah', 'mvdov', 'jurusanList', 'jurusanTerpilih'));
     }
 
     public function cari(Request $request)
@@ -78,7 +88,7 @@ class PatenController extends Controller
             ->when($carinama, function ($query, $carinama) {
                 return $query->orWhere('nama_lengkap', 'LIKE', "%" . $carinama . "%");
             })
-            ->paginate(5);
+            ->get();
         // $paten = DB::table('paten')->whereRaw('judul_paten','LIKE',"%".$carijudul."%")->orWhere('nama_lengkap','LIKE',"%".$carinama."%")->paginate(5); //penggunaan raw queri
 
         $hitung = Paten::all()->count();
@@ -245,6 +255,7 @@ class PatenController extends Controller
             'no_telepon' => 'required',
             'tanggal_lahir' => 'required',
             'ktp_inventor' => 'required|mimes:pdf',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email.dns',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required|integer',
@@ -256,11 +267,17 @@ class PatenController extends Controller
             'klaim' => 'required|mimes:pdf',
             'pernyataan_kepemilikan' => 'required|mimes:pdf',
             'surat_kuasa' => 'required|mimes:pdf',
-            'gambar_paten' => 'required|mimes:pdf',
-            'gambar_tampilan' => 'required|mimes:pdf',
+            'gambar_paten' => 'required|mimes:pdf|max:2028',
+            'gambar_tampilan' => \App\Support\MultiFileStorage::RULE_REQUIRED,
+            'gambar_tampilan.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
         ]);
         $paten = new Paten();
-        $paten->nama_lengkap = $request->nama_lengkap;
+        $namaLengkapInput = $request->nama_lengkap;
+        if (Auth::user() && Auth::user()->apakahDosen()) {
+            // Khusus pengajuan dosen: nama lengkap disimpan TANPA gelar.
+            $namaLengkapInput = \App\Helpers\GelarHelper::stripGelar($namaLengkapInput);
+        }
+        $paten->nama_lengkap = $namaLengkapInput;
         $paten->alamat = $request->alamat;
         $paten->no_telepon = $request->no_telepon;
         $paten->tanggal_lahir = $request->tanggal_lahir;
@@ -281,7 +298,14 @@ class PatenController extends Controller
         }
 
         // File dokumen invensi disimpan di disk public
-        $publicFiles = ['abstrak_paten', 'deskripsi_paten', 'gambar_paten', 'gambar_tampilan'];
+        $publicFiles = ['abstrak_paten', 'deskripsi_paten'];
+        // field gambar boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+        foreach (['gambar_paten', 'gambar_tampilan'] as $mf) {
+            if ($request->hasFile($mf)) {
+                foreach (\App\Support\MultiFileStorage::decode($paten->{$mf}) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
+                $paten->{$mf} = \App\Support\MultiFileStorage::store($request, $mf, 'dokumen-paten', 'public');
+            }
+        }
         foreach ($publicFiles as $field) {
             if ($request->hasFile($field)) {
                 $file = $request->file($field);
@@ -297,6 +321,9 @@ class PatenController extends Controller
         $paten->judul_paten = $request->judul_paten;
         $paten->tanggal_permohonan = $request->tanggal_permohonan;
 
+        if ($request->hasFile('gambar_img')) {
+            $paten->gambar_img = \App\Support\GambarImage::store($request);
+        }
         $paten->save($validasidata);
 
         return redirect('/pengajuan-paten')->with('success', 'Data Paten berhasil Disimpan!');
@@ -322,8 +349,8 @@ class PatenController extends Controller
         $paten = Paten::where(function ($query) use ($filename) {
             $query->Where('abstrak_paten', 'dokumen-paten/' . $filename)
                 ->orWhere('deskripsi_paten', 'dokumen-paten/' . $filename)
-                ->orWhere('gambar_paten', 'dokumen-paten/' . $filename)
-                ->orWhere('gambar_tampilan', 'dokumen-paten/' . $filename)
+                ->orWhere('gambar_paten', 'LIKE', '%"dokumen-paten/' . $filename . '"%')
+                ->orWhere('gambar_tampilan', 'LIKE', '%"dokumen-paten/' . $filename . '"%')
                 ->orWhere('sertifikat_paten', 'dokumen-paten/' . $filename);
         })->first();
 
@@ -344,6 +371,7 @@ class PatenController extends Controller
 
         $hc = HakCipta::where(function ($query) use ($filename) {
             $query->where('dokumen_invensi', 'dokumen-hc/' . $filename)
+                ->orWhere('gambar_ciptaan', 'LIKE', '%"dokumen-hc/' . $filename . '"%')
                 ->orWhere('sertifikat_hakcipta', 'dokumen-hc/' . $filename);
         })->first();
 
@@ -364,7 +392,7 @@ class PatenController extends Controller
 
         $di = DesainIndustri::where(function ($query) use ($filename) {
             $query->where('uraian_di', 'dokumen-di/' . $filename)
-                ->orWhere('gambar_di', 'dokumen-di/' . $filename)
+                ->orWhere('gambar_di', 'LIKE', '%"dokumen-di/' . $filename . '"%')
                 ->orWhere('sertifikat_desain', 'dokumen-di/' . $filename);
         })->first();
 

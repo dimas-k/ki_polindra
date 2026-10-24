@@ -1,0 +1,11 @@
+{
+    "name": "KekayaanIntelektual",
+    "alias": "kekayaanintelektual",
+    "description": "Modul pengelolaan Paten, Hak Cipta, dan Desain Industri (SIKI Polindra)",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\KekayaanIntelektual\\app\\Providers\\KekayaanIntelektualServiceProvider"
+    ],
+    "files": []
+}

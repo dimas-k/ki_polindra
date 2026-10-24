@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href={{ asset('assets/bootstrap/css/bootstrap.min.css') }} rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
     <link rel="shortcut icon" href={{ asset('assets/logo-polindra.png') }}>
     <title>SIKI POLINDRA | Hak-Cipta</title>
 </head>
@@ -29,6 +30,59 @@
                 padding: 10px;
                 /* Tambahkan padding agar chart tidak terlalu menempel */
             }
+        }
+
+        .ki-jurusan-filter-wrap {
+            gap: 10px;
+        }
+
+        .ki-jurusan-btn {
+            background: linear-gradient(135deg, #003d7a, #0066cc);
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            padding: 8px 18px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(0, 61, 122, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ki-jurusan-btn:hover,
+        .ki-jurusan-btn:focus {
+            color: #fff;
+            background: linear-gradient(135deg, #002a57, #0055aa);
+            box-shadow: 0 3px 10px rgba(0, 61, 122, 0.4);
+        }
+
+        .ki-jurusan-menu {
+            max-height: 280px;
+            overflow-y: auto;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            padding: 6px;
+            min-width: 230px;
+        }
+
+        .ki-jurusan-menu .dropdown-item {
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 0.85rem;
+            color: #495057;
+        }
+
+        .ki-jurusan-menu .dropdown-item:hover,
+        .ki-jurusan-menu .dropdown-item:focus {
+            background: #eaf2ff;
+            color: #003d7a;
+        }
+
+        .ki-jurusan-menu .dropdown-item.active {
+            background: linear-gradient(135deg, #003d7a, #0066cc);
+            color: #fff;
         }
     </style>
     @include('layout.nav')
@@ -193,7 +247,7 @@
     <div class="container mt-4">
         <h3 class="fw-normal mb-3"><i class="bi bi-table me-2"></i>Daftar Hak Cipta</h3>
         <div class="table-responsive">
-            <table class="table table-hover">
+            <table id="tabel-hakcipta" class="table table-hover w-100">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -207,7 +261,7 @@
                 <tbody>
                     @forelse ($hc as $i => $p)
                         <tr>
-                            <th>{{ ($hc->currentPage() - 1) * $hc->perPage() + $loop->iteration }}</th>
+                            <th>{{ $loop->iteration }}</th>
                             <td>{{ $p->nama_lengkap }}</td>
                             <td>{{ $p->jenis_ciptaan }}</td>
                             <td>{{ $p->judul_ciptaan }}</td>
@@ -222,18 +276,36 @@
                 </tbody>
             </table>
         </div>
-        <div class="d-flex justify-content-end mb-3">
-            {{ $hc->links() }}
-        </div>
         <br>
         <!-- Chart Section -->
         <div class="row mt-4">
             <div class="col-12">
                 <div class="card shadow-sm">
-                    {{-- <div class="card-header">
-                        <h3 class="card-title">Diagram per-tahun Hak Cipta</h3>
-                    </div> --}}
                     <div class="card-body">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 ki-jurusan-filter-wrap">
+                            <h6 class="fw-semibold mb-2 mb-md-0 text-secondary">
+                                <i class="bi bi-bar-chart-line me-1"></i>Jumlah Hak Cipta per Tahun
+                            </h6>
+                            <div class="dropdown">
+                                <button class="btn ki-jurusan-btn dropdown-toggle" type="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-funnel"></i>
+                                    {{ $jurusanTerpilih->nama_jurusan ?? 'Semua Jurusan' }}
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end ki-jurusan-menu">
+                                    <li>
+                                        <a class="dropdown-item {{ !$jurusanTerpilih ? 'active' : '' }}"
+                                            href="/hak-cipta">Semua Jurusan</a>
+                                    </li>
+                                    @foreach ($jurusanList as $j)
+                                        <li>
+                                            <a class="dropdown-item {{ optional($jurusanTerpilih)->id == $j->id ? 'active' : '' }}"
+                                                href="/hak-cipta?jurusan={{ $j->id }}">{{ $j->nama_jurusan }}</a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
                         <div id="areaChart"></div>
                     </div>
                 </div>
@@ -247,8 +319,30 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
 
     <script>
+        $(function () {
+            $('#tabel-hakcipta').DataTable({
+                order: [[0, 'asc']], // default: No urut 1..N mengikuti data terbaru (latest()) dari server
+                language: {
+                    search: 'Cari:',
+                    lengthMenu: '_MENU_ entri per halaman',
+                    info: 'Menampilkan _START_ - _END_ dari _TOTAL_ data',
+                    infoEmpty: 'Tidak ada data',
+                    infoFiltered: '(disaring dari _MAX_ total data)',
+                    zeroRecords: 'Data tidak ditemukan',
+                    paginate: {
+                        first: 'Awal',
+                        last: 'Akhir',
+                        next: 'Berikutnya',
+                        previous: 'Sebelumnya',
+                    },
+                },
+            });
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             var options = {
                 chart: {

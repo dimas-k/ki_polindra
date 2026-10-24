@@ -165,7 +165,7 @@
 
                 //file
                 var ktp = $('#ktp')[0].files[0];
-                var gambar_desain = $('#gambar_desain')[0].files[0];
+                var gambar_desain_files = $('#gambar_desain')[0].files;
                 var uraian_desain = $('#uraian_desain')[0].files[0];
                 var pernyataan_kepemilikan = $('#pernyataan_kepemilikan')[0].files[0];
                 var pengalihan = $('#pengalihan')[0].files[0];
@@ -297,7 +297,7 @@
                     });
                     return false;
                 }
-                if (!gambar_desain) {
+                if (!gambar_desain_files || gambar_desain_files.length === 0) {
                     Swal.fire({
                         icon: "error",
                         title: "Oops... Ada yang salah...",
@@ -343,7 +343,7 @@
                 } else {
                     var allowedExtension = /(\.pdf)$/i; // Hanya memperbolehkan file berformat PDF
                     var allowedExtensionExel = /(\.xlsx)$/i; // Hanya memperbolehkan file berformat exel
-                    var maxSize = 10 * 1024 * 1024; // Maksimal ukuran file adalah 2 MB
+                    var maxSize = 2 * 1024 * 1024; // Maksimal ukuran file adalah 2 MB
 
                     // Validasi ekstensi file
                     // Cek apakah file diinputkan
@@ -359,16 +359,18 @@
                         });
                         return false;
                     }
-                    if (!allowedExtension.exec(gambar_desain.name)) {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops... Ada yang salah...",
-                            text: "Tolong Masukkan Gambar Desain Dengan Ekstensi .pdf!",
-                            position: "top-end",
-                            showConfirmButton: false,
-                            timer: 2500
-                        });
-                        return false;
+                    for (var i = 0; i < gambar_desain_files.length; i++) {
+                        if (!/(\.(pdf|jpe?g|png))$/i.exec(gambar_desain_files[i].name)) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops... Ada yang salah...",
+                                text: "Tolong Masukkan Gambar Desain Dengan Ekstensi .pdf/.jpg/.jpeg/.png (" + gambar_desain_files[i].name + ")!",
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 2500
+                            });
+                            return false;
+                        }
                     }
                     if (!allowedExtension.exec(uraian_desain.name)) {
                         Swal.fire({
@@ -409,29 +411,31 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Ukuran File KTP Lebih Dari 10mb!",
+                            text: "Ukuran File KTP Lebih Dari 2mb!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500
                         });
                         return false;
                     }
-                    if (gambar_desain.size > maxSize) {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops... Ada yang salah...",
-                            text: "Ukuran File Gambar Desain Lebih Dari 10mb!",
-                            position: "top-end",
-                            showConfirmButton: false,
-                            timer: 2500
-                        });
-                        return false;
+                    for (var i = 0; i < gambar_desain_files.length; i++) {
+                        if (gambar_desain_files[i].size > maxSize) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops... Ada yang salah...",
+                                text: "Ukuran File Gambar Desain Lebih Dari 2mb (" + gambar_desain_files[i].name + ")!",
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 2500
+                            });
+                            return false;
+                        }
                     }
                     if (uraian_desain.size > maxSize) {
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Ukuran Uraian Desain Lebih Dari 10mb!",
+                            text: "Ukuran Uraian Desain Lebih Dari 2mb!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500
@@ -442,7 +446,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Ukuran File Pernyataan Kepemilikan Lebih Dari 10mb!",
+                            text: "Ukuran File Pernyataan Kepemilikan Lebih Dari 2mb!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500
@@ -453,7 +457,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Ukuran File Surat Pengalihan Hak Lebih Dari 10mb!",
+                            text: "Ukuran File Surat Pengalihan Hak Lebih Dari 2mb!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500

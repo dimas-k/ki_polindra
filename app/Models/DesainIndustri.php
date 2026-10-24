@@ -6,6 +6,7 @@ use App\Models\CheckDi;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class DesainIndustri extends Model
@@ -14,9 +15,24 @@ class DesainIndustri extends Model
     protected $table = 'desain_industri';
     protected $guarded = 'id';
 
+    /**
+     * Prodi asal pengaju desain industri (relasi FK prodi_id).
+     */
+    public function prodi() : BelongsTo
+    {
+        return $this->belongsTo(Prodi::class);
+    }
+
     protected static function booted()
     {
         static::deleting(function ($di) {
+            // field multi-file (JSON array of path)
+            foreach (['gambar_di'] as $mf) {
+                foreach (\App\Support\MultiFileStorage::decode($di->{$mf}) as $mp) {
+                    Storage::disk('public')->delete($mp);
+                }
+            }
+
             // Daftar file yang disimpan di private storage
             $privateFiles = [
                 'ktp_inventor' ,
@@ -49,5 +65,10 @@ class DesainIndustri extends Model
     public function cekDi() : HasOne
     {
         return $this->hasOne(CheckDi::class);
+    }
+
+    public function payment(): \Illuminate\Database\Eloquent\Relations\MorphOne
+    {
+        return $this->morphOne(\App\Models\Payment::class, 'payable')->latestOfMany();
     }
 }

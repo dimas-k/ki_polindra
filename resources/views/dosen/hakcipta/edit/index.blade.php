@@ -204,7 +204,7 @@
                 // Validate file inputs
                 var allowedExtension = /(\.pdf)$/i;
                 var allowedExtensionExcel = /(\.xlsx)$/i;
-                var maxSize = 10 * 1024 * 1024; // 2 MB
+                var maxSize = 2 * 1024 * 1024; // 2 MB
     
                 for (var file in files) {
                     if (!files[file]) {
@@ -227,7 +227,7 @@
     
                     // Validate file size
                     if (files[file].size > maxSize) {
-                        showError("Ukuran File " + file.replace('_', ' ').toUpperCase() + " Lebih Dari 10 MB!");
+                        showError("Ukuran File " + file.replace('_', ' ').toUpperCase() + " Lebih Dari 2 MB!");
                         return false;
                     }
                 }

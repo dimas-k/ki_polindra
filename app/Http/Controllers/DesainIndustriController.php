@@ -6,6 +6,7 @@ use App\Models\Paten;
 use App\Models\HakCipta;
 use Illuminate\Http\Request;
 use App\Models\DesainIndustri;
+use App\Models\Jurusan;
 use Illuminate\Routing\Controller;
 
 class DesainIndustriController extends Controller
@@ -13,9 +14,9 @@ class DesainIndustriController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $di = DesainIndustri::latest()->paginate(5);
+        $di = DesainIndustri::latest()->get();
         $itung = DesainIndustri::all()->count();
         $beri = DesainIndustri::where('status','Diberi')->count();
         $proses = DesainIndustri::where('status','Dalam Proses Usulan')->count();
@@ -30,13 +31,22 @@ class DesainIndustriController extends Controller
         $desainKBL = DesainIndustri::where('status', 'Keterangan belum lengkap')->count();
         $desainDPU = DesainIndustri::where('status', 'Dalam proses usulan')->count();
 
+        // Daftar jurusan untuk filter diagram Jumlah Desain Industri per Jurusan.
+        // Default (tanpa pilihan) tetap menampilkan data seluruh jurusan seperti semula.
+        $jurusanList = Jurusan::orderBy('nama_jurusan')->get();
+        $jurusanId = $request->get('jurusan');
+        $jurusanTerpilih = $jurusanId ? Jurusan::find($jurusanId) : null;
+
         $data = DesainIndustri::selectRaw('YEAR(tanggal_permohonan) as tahun, COUNT(*) as jumlah')
+            ->when($jurusanTerpilih, function ($query) use ($jurusanTerpilih) {
+                $query->whereRaw('LOWER(TRIM(jurusan)) = ?', [strtolower(trim($jurusanTerpilih->nama_jurusan))]);
+            })
             ->groupByRaw('YEAR(tanggal_permohonan)')
             ->orderByRaw('YEAR(tanggal_permohonan) ASC')
             ->get();
 
 
-        $allYears = range($data->min('tahun'), $data->max('tahun'));
+        $allYears = $data->isNotEmpty() ? range($data->min('tahun'), $data->max('tahun')) : [];
 
         $formattedData = collect($allYears)->map(function ($year) use ($data) {
             return [
@@ -48,7 +58,7 @@ class DesainIndustriController extends Controller
         $tahun = $formattedData->pluck('tahun')->toArray();
         $jumlah = $formattedData->pluck('jumlah')->toArray();
 
-        return view('umum-page.Desainindustri.index', compact('di', 'priksa', 'proses', 'null','tolak','beri','itung','desainDi','desainDK','desainP','desainKBL','desainDPU','tahun','jumlah','mvdov')); 
+        return view('umum-page.Desainindustri.index', compact('di', 'priksa', 'proses', 'null','tolak','beri','itung','desainDi','desainDK','desainP','desainKBL','desainDPU','tahun','jumlah','mvdov','jurusanList','jurusanTerpilih')); 
     }
     public function cari(Request $request)
     {
@@ -61,7 +71,7 @@ class DesainIndustriController extends Controller
         ->when($carinama, function ($query, $carinama) {
             return $query->orWhere('nama_lengkap', 'LIKE', "%" . $carinama . "%");
         })
-        ->paginate(5);
+        ->get();
 
         $itung = DesainIndustri::all()->count();
         $beri = DesainIndustri::where('status','Diberi')->count();
@@ -188,19 +198,26 @@ class DesainIndustriController extends Controller
             'no_telepon'=> 'required',
             'tanggal_lahir'=> 'required',
             'ktp_inventor'=> 'required|mimes:pdf',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email'=> 'required|email',
             'kewarganegaraan'=> 'required',
             'kode_pos'=> 'required',
             'jenis_di'=> 'required',
             'judul_di'=>'required',
             'uraian_di'=>'required|mimes:pdf',
-            'gambar_di'=>'required|mimes:pdf',
+            'gambar_di'=> \App\Support\MultiFileStorage::RULE_REQUIRED,
+            'gambar_di.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
             'surat_kepemilikan'=>'required|mimes:pdf',
             'surat_pengalihan'=>'required|mimes:pdf',
             'tanggal_permohonan'=>'required'
         ]);
         $di = new DesainIndustri();
-        $di->nama_lengkap = $request->nama_lengkap;
+        $namaLengkapInput = $request->nama_lengkap;
+        if (\Illuminate\Support\Facades\Auth::user() && \Illuminate\Support\Facades\Auth::user()->apakahDosen()) {
+            // Khusus pengajuan dosen: nama lengkap disimpan TANPA gelar.
+            $namaLengkapInput = \App\Helpers\GelarHelper::stripGelar($namaLengkapInput);
+        }
+        $di->nama_lengkap = $namaLengkapInput;
         $di->alamat = $request->alamat;
         $di->no_telepon = $request->no_telepon;
         $di->tanggal_lahir = $request->tanggal_lahir;
@@ -226,7 +243,14 @@ class DesainIndustriController extends Controller
         }
 
         // Dokumen invensi (uraian & gambar) disimpan di disk public
-        $publicFiles = ['uraian_di', 'gambar_di'];
+        $publicFiles = ['uraian_di'];
+        // field gambar boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+        foreach (['gambar_di'] as $mf) {
+            if ($request->hasFile($mf)) {
+                foreach (\App\Support\MultiFileStorage::decode($di->{$mf}) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
+                $di->{$mf} = \App\Support\MultiFileStorage::store($request, $mf, 'dokumen-di', 'public');
+            }
+        }
         foreach ($publicFiles as $field) {
             if ($request->hasFile($field)) {
                 $file = $request->file($field);
@@ -235,6 +259,9 @@ class DesainIndustriController extends Controller
             }
         }
 
+        if ($request->hasFile('gambar_img')) {
+            $di->gambar_img = \App\Support\GambarImage::store($request);
+        }
         $di->save($validasidata);
 
         return redirect('/pengajuan-desain-industri')->with('success', 'Data desain industri berhasil Disimpan!');

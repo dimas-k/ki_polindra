@@ -13,12 +13,20 @@ class Role
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, $role): Response
+    public function handle(Request $request, Closure $next, string ...$roles): Response
     {
-        if (auth()->user()->role == $role) {
-            return $next($request);
+        $user = auth()->user();
+
+        foreach ($roles as $role) {
+            $lolos = $role === 'Ketua KBK'
+                ? $user->apakahKetuaKbk()
+                : $user->role === $role;
+
+            if ($lolos) {
+                return $next($request);
+            }
         }
- 
+
         abort(403, 'Anda tidak memiliki hak mengakses laman tersebut!');
     }
 }

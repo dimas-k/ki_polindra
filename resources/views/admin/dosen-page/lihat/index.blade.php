@@ -11,16 +11,23 @@
     <link href={{ asset('assets/bootstrap/css/bootstrap.min.css') }} rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href={{ asset('assets/css/admin-theme.css') }} rel="stylesheet">
 </head>
 
 <body>
     {{-- Top nav bar --}}
     <div class="container-fluid border">
-        <nav class="navbar navbar-expand bg-body-tertiary">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
                 <img class="navbar-brand" src={{ asset('assets/polindra2.jpg') }}>
-                <a class="navbar-brand fs-6 fw-normal font-family-Kokoro" href="#">Sistem Informasi Kekayaan
-                    Intelektual<br>Politeknik Negeri Indramayu</a>
+                <a class="navbar-brand fs-6 fw-normal font-family-Kokoro brand-text-responsive" href="#">
+                    <span class="d-inline d-md-none">SIKI POLINDRA</span>
+                    <span class="d-none d-md-inline">Sistem Informasi Kekayaan
+                        Intelektual<br>Politeknik Negeri Indramayu</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
@@ -29,6 +36,7 @@
                                 Selamat datang, {{ auth()->user()->nama_lengkap }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="/admin/dashboard"><i class="bi bi-grid me-2"></i>Pilih Aplikasi</a></li>
                                 <li><a class="dropdown-item" href="/logout"><i class="bi bi-arrow-bar-left me-2"></i>Log
                                         Out</a></li>
                             </ul>
@@ -44,7 +52,7 @@
             {{-- Side bar --}}
             @include('admin.layout.sidenav')
             {{-- end of sidebar --}}
-            <div class="col-lg-10 mt-2">
+            <div class="col-12 col-lg-10 mt-2">
                 <div class="container bg-light rounded border pt-3">
                     <h3 class="fw-normal font-family-Kokoro mb-3"><i class="bi bi-person me-3"></i>Akun Dosen
                     </h3>
@@ -79,7 +87,26 @@
                                 <th>Username</th>
                                 <td>: {{ $dsn->username }}</td>
                             </tr>
+                            <tr>
+                                <th>Status Verifikasi</th>
+                                <td>:
+                                    @if ($dsn->is_verified)
+                                        <span class="badge bg-success">Terverifikasi</span>
+                                    @else
+                                        <span class="badge bg-warning text-dark">Menunggu Verifikasi</span>
+                                    @endif
+                                </td>
+                            </tr>
                         </table>
+                        @unless ($dsn->is_verified)
+                            <a href="{{ route('dosen.verifikasi', $dsn->id) }}" class="btn btn-success mb-3 js-sweetalert-confirm"
+                            data-title="Verifikasi Akun"
+                            data-message="Verifikasi akun ini? Email konfirmasi akan dikirim ke pengguna."
+                            data-confirm-text="Ya, verifikasi"
+                            data-icon="question">
+                                <i class="bi bi-check-circle me-2"></i>Verifikasi Akun
+                            </a>
+                        @endunless
                     </div>
                 </div>
             </div>
@@ -93,6 +120,7 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js"
             integrity="sha384-eI7PSr3L1XLISH8JdDII5YN/njoSsxfbrkCTnJrzXt+ENP5MOVBxD+l6sEG4zoLp" crossorigin="anonymous">
         </script>
+    @include('admin.layout.sweetalert')
 </body>
 
 </html>

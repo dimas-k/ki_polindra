@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en" data-bs-theme="auto">
 
 <head>
@@ -9,16 +9,23 @@
     <link href={{ asset('assets/bootstrap/css/bootstrap.min.css') }} rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href={{ asset('assets/css/admin-theme.css') }} rel="stylesheet">
 </head>
 
 <body>
     {{-- Top nav bar --}}
     <div class="container-fluid border">
-        <nav class="navbar navbar-expand bg-body-tertiary">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
                 <img class="navbar-brand" src={{ asset('assets/polindra2.jpg') }}>
-                <a class="navbar-brand fs-6 fw-normal font-family-Kokoro" href="#">Sistem Informasi Kekayaan
-                    Intelektual<br>Politeknik Negeri Indramayu</a>
+                <a class="navbar-brand fs-6 fw-normal font-family-Kokoro brand-text-responsive" href="#">
+                    <span class="d-inline d-md-none">SIKI POLINDRA</span>
+                    <span class="d-none d-md-inline">Sistem Informasi Kekayaan
+                        Intelektual<br>Politeknik Negeri Indramayu</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
@@ -27,6 +34,7 @@
                                 Selamat datang, {{ auth()->user()->nama_lengkap }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="/admin/dashboard"><i class="bi bi-grid me-2"></i>Pilih Aplikasi</a></li>
                                 <li><a class="dropdown-item" href="/logout"><i class="bi bi-arrow-bar-left me-2"></i>Log
                                         Out</a></li>
                             </ul>
@@ -42,7 +50,7 @@
             {{-- Side bar --}}
             @include('admin.layout.sidenav')
             {{-- end of sidebar --}}
-            <div class="col-lg-10 mt-2">
+            <div class="col-12 col-lg-10 mt-2">
                 <div class="container bg-light rounded border pt-3">
                     <h3 class="fw-normal font-family-Kokoro mb-3">
                         <i class="bi bi-file-earmark-plus me-2"></i>Pengajuan Desain Industri Dosen
@@ -110,7 +118,7 @@
                                 <input type="file" class="form-control" id="ktp" name="ktp_inventor">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                    dari 10mb</span>
+                                    dari 2mb</span>
                                 {{-- @error('ktp_inventor')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -226,11 +234,11 @@
                             </div>
                             <div class="mb-3">
                                 <label for="gambar_desain" class="form-label">Gambar Desain Industri</label>
-                                <input type="file" class="form-control" placeholder="" name="gambar_di"
+                                <input type="file" class="form-control" placeholder="" name="gambar_di[]" multiple accept=".pdf,.jpg,.jpeg,.png"
                                     id="gambar_desain">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari
-                                    10mb</span>
+                                    2mb</span>
                                 {{-- @error('gambar_di')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -243,7 +251,7 @@
                                     id="uraian_desain">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari
-                                    10mb</span>
+                                    2mb</span>
                                 {{-- @error('uraian_di')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -257,7 +265,7 @@
                                     id="pernyataan_kepemilikan">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari
-                                    10mb</span>
+                                    2mb</span>
                                 {{-- @error('surat_kepemilikan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -270,7 +278,7 @@
                                     id="pengalihan">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari
-                                    10mb</span>
+                                    2mb</span>
                                 {{-- @error('surat_pengalihan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -370,7 +378,7 @@
                         pengalihan: $('#pengalihan')[0].files[0]
                     };
         
-                    const maxSize = 10 * 1024 * 1024; // Max size: 10MB
+                    const maxSize = 2 * 1024 * 1024; // Max size: 2MB
                     const allowedExtensionPDF = /(\.pdf)$/i;
                     const allowedExtensionExcel = /(\.xlsx)$/i;
         
@@ -413,14 +421,14 @@
                             }
                         } else if (files[file]) {
                             // Validate other files
-                            if (!allowedExtensionPDF.exec(files[file].name)) {
+                            if (!(['g_tampilan','gambar_desain','gambar_di'].includes(file) ? /(\.(pdf|jpe?g|png))$/i : allowedExtensionPDF).exec(files[file].name)) {
                                 showError("Tolong Masukkan " + file.replace('_', ' ').toUpperCase() + " Dengan Ekstensi .pdf!");
                                 return false;
                             }
         
                             // Validate file size
                             if (files[file].size > maxSize) {
-                                showError("Ukuran File " + file.replace('_', ' ').toUpperCase() + " Lebih Dari 10 MB!");
+                                showError("Ukuran File " + file.replace('_', ' ').toUpperCase() + " Lebih Dari 2 MB!");
                                 return false;
                             }
                         }
@@ -433,6 +441,7 @@
         </script>
     </div>
         
+@include('layout.filepond')
 </body>
 
 </html>

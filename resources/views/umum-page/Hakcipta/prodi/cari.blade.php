@@ -58,30 +58,11 @@
                 <label for="prodi" class="form-label me-3">Prodi</label>
                 <select id="prodi" class="form-select form-select-sm select2 flex-grow-1" name="prodi"
                     style="width: 100%;" title="Pilih prodi">
-                    <option></option>
-                    <option value="D3 Teknik Informatika"
-                        {{ old('prodi', $prodi) == 'D3 Teknik Informatika' ? 'selected' : '' }}>D3 Teknik Informatika
-                    </option>
-                    <option value="D4 Rekayasa Perangkat Lunak"
-                        {{ old('prodi', $prodi) == 'D4 Rekayasa Perangkat Lunak' ? 'selected' : '' }}>D4 Rekayasa
-                        Perangkat Lunak</option>
-                    <option value="D4 Sistem Informasi Kota Cerdas"
-                        {{ old('prodi', $prodi) == 'D4 Sistem Informasi Kota Cerdas' ? 'selected' : '' }}>D4 Sistem
-                        Informasi Kota Cerdas</option>
-                    <option value="D3 Teknik Mesin" {{ old('prodi', $prodi) == 'D3 Teknik Mesin' ? 'selected' : '' }}>D3
-                        Teknik Mesin</option>
-                    <option value="D4 Perancangan Manufaktur"
-                        {{ old('prodi', $prodi) == 'D4 Perancangan Manufaktur' ? 'selected' : '' }}>D4 Perancangan
-                        Manufaktur</option>
-                    <option value="D3 Teknik Pendingin dan Tata Udara"
-                        {{ old('prodi', $prodi) == 'D3 Teknik Pendingin dan Tata Udara' ? 'selected' : '' }}>D3 Teknik
-                        Pendingin dan Tata Udara</option>
-                    <option value="D4 Teknik Instrumentasi Kontrol"
-                        {{ old('prodi', $prodi) == 'D4 Teknik Instrumentasi Kontrol' ? 'selected' : '' }}>D4 Teknik
-                        Instrumentasi Kontrol</option>
-                    <option value="D3 Keperawatan" {{ old('prodi', $prodi) == 'D3 Keperawatan' ? 'selected' : '' }}>D3
-                        Keperawatan</option>
-                </select>
+                <option></option>
+                @foreach($prodiOptions as $pr)
+                    <option value="{{ $pr->nama_prodi }}">{{ $pr->nama_prodi }}</option>
+                @endforeach
+            </select>
                 <span class="ms-3"></span>
                 <button type="submit" class="btn btn-sm btn-primary">Cari</button>
             </form>

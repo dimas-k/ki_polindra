@@ -20,11 +20,7 @@
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title"><i class="fa fa-wpforms me-2" data-bs-toggle="tooltip">
-                                Formulir
-                                Pengajuan Paten
-                            </i>
-                            </h3>
+                            <h3 class="card-title"><i class="fa fa-wpforms me-2"></i>Formulir Pengajuan Paten</h3>
                         </div>
                         <div class="card-body">
                             @if (session()->has('success'))
@@ -70,7 +66,7 @@
                                 <div class="container">
                                     <div class="mb-3">
                                         <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
-                                        <input type="text" value="{{ old('nama_lengkap', auth()->user()->nama_lengkap) }}"
+                                        <input type="text" value="{{ old('nama_lengkap', \App\Helpers\GelarHelper::stripGelar(auth()->user()->nama_lengkap ?? '')) }}"
                                             class="form-control @error('nama_lengkap') is-invalid @enderror"
                                             id="nama_lengkap" placeholder="Masukkan Nama" name="nama_lengkap" required>
                                         @error('nama_lengkap')
@@ -81,7 +77,7 @@
                                         <label for="alamat" class="form-label">Alamat</label>
                                         <input type="text" class="form-control @error('alamat') is-invalid @enderror"
                                             id="alamat" placeholder="Masukkan Alamat" name="alamat"
-                                            value="{{ old('alamat', auth()->user()->alamat) }}" required>
+                                            value="{{ old('alamat', auth()->user()->alamat ?? '') }}" required>
                                         @error('alamat')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -91,7 +87,7 @@
                                         <input type="number"
                                             class="form-control @error('no_telepon') is-invalid @enderror"
                                             id="no_telepon" placeholder="Masukkan No telepon" name="no_telepon"
-                                            value="{{ old('no_telepon', auth()->user()->no_telepon) }}" required>
+                                            value="{{ old('no_telepon', auth()->user()->no_telepon ?? '') }}" required>
                                         @error('no_telepon')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -121,7 +117,7 @@
                                         <label for="email" class="form-label">Email</label>
                                         <input type="email" class="form-control @error('email') is-invalid @enderror"
                                             id="email" placeholder="Masukkan Email" name="email"
-                                            value="{{ old('email', auth()->user()->email) }}" required>
+                                            value="{{ old('email', auth()->user()->email ?? '') }}" required>
                                         @error('email')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -285,7 +281,7 @@
                                         <label for="g_paten" class="form-label">gambar Paten</label>
                                         <input type="file"
                                             class="form-control @error('gambar_paten') is-invalid @enderror"
-                                            id="g_paten" name="gambar_paten" accept="application/pdf" required>
+                                            id="g_paten" name="gambar_paten" accept=".pdf" required>
                                         <span class="text-danger"><i class="fa fa-warning me-2"
                                                 data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
                                             dari 2mb</span>
@@ -297,10 +293,9 @@
                                         <label for="g_tampilan" class="form-label">gambar Tampilan</label>
                                         <input type="file"
                                             class="form-control @error('gambar_tampilan') is-invalid @enderror"
-                                            id="g_tampilan" name="gambar_tampilan" accept="application/pdf" required>
+                                            id="g_tampilan" name="gambar_tampilan[]" multiple accept=".pdf,.jpg,.jpeg,.png" required data-filepond-multi>
                                         <span class="text-danger"><i class="fa fa-warning me-2"
-                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                            dari 2mb</span>
+                                                data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file maks 2MB. Khusus file gambar, ukurannya harus 1440px x 654px.</span>
                                         @error('gambar_tampilan')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror

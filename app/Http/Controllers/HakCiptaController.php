@@ -6,30 +6,40 @@ use App\Models\Paten;
 use App\Models\HakCipta;
 use Illuminate\Http\Request;
 use App\Models\DesainIndustri;
+use App\Models\Jurusan;
 use Illuminate\Routing\Controller;
 
 class HakCiptaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $itung = HakCipta::all()->count();
         $tercatat = HakCipta::where('status', 'Tercatat')->count();
         $null = HakCipta::where('status', 'Keterangan Belum Lengkap')->count();
         $tolak = HakCipta::where('status', 'Ditolak')->count();
-        $hc = HakCipta::latest()->paginate(5);
+        $hc = HakCipta::latest()->get();
 
         $hcTolak = HakCipta::where('status', 'Ditolak')->count();
         $hcTerima = HakCipta::where('status', 'Tercatat')->count();
         $hcKet = HakCipta::where('status', 'Keterangan belum lengkap')->count();
         $mvdov = HakCipta::where('status', 'Menunggu Verifikasi Data Oleh Verifikator')->count();
 
+        // Daftar jurusan untuk filter diagram Jumlah Hak Cipta per Jurusan.
+        // Default (tanpa pilihan) tetap menampilkan data seluruh jurusan seperti semula.
+        $jurusanList = Jurusan::orderBy('nama_jurusan')->get();
+        $jurusanId = $request->get('jurusan');
+        $jurusanTerpilih = $jurusanId ? Jurusan::find($jurusanId) : null;
+
         $data = HakCipta::selectRaw('YEAR(tanggal_permohonan) as tahun, COUNT(*) as jumlah')
+            ->when($jurusanTerpilih, function ($query) use ($jurusanTerpilih) {
+                $query->whereRaw('LOWER(TRIM(jurusan)) = ?', [strtolower(trim($jurusanTerpilih->nama_jurusan))]);
+            })
             ->groupByRaw('YEAR(tanggal_permohonan)')
             ->orderByRaw('YEAR(tanggal_permohonan) ASC')
             ->get();
 
 
-        $allYears = range($data->min('tahun'), $data->max('tahun'));
+        $allYears = $data->isNotEmpty() ? range($data->min('tahun'), $data->max('tahun')) : [];
 
         $formattedData = collect($allYears)->map(function ($year) use ($data) {
             return [
@@ -42,7 +52,7 @@ class HakCiptaController extends Controller
         $jumlah = $formattedData->pluck('jumlah')->toArray();
 
 
-        return view('umum-page.Hakcipta.index', compact('hc', 'tercatat', 'null', 'tolak', 'itung', 'hcTolak', 'hcTerima', 'hcKet', 'tahun','jumlah', 'mvdov'));
+        return view('umum-page.Hakcipta.index', compact('hc', 'tercatat', 'null', 'tolak', 'itung', 'hcTolak', 'hcTerima', 'hcKet', 'tahun','jumlah', 'mvdov', 'jurusanList', 'jurusanTerpilih'));
     }
     public function cari(Request $request)
     {
@@ -55,7 +65,7 @@ class HakCiptaController extends Controller
             ->when($carinama, function ($query, $carinama) {
                 return $query->orWhere('nama_lengkap', 'LIKE', "%" . $carinama . "%");
             })
-            ->paginate(5);
+            ->get();
         $itung = HakCipta::all()->count();
         $tercatat = HakCipta::where('status', 'Tercatat')->count();
         $null = HakCipta::where('status', 'Keterangan Belum Lengkap')->count();
@@ -158,6 +168,7 @@ class HakCiptaController extends Controller
             'no_telepon' => 'required',
             'tanggal_lahir' => 'required',
             'ktp_inventor' => 'required|mimes:pdf',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required',
@@ -165,6 +176,8 @@ class HakCiptaController extends Controller
             'judul_ciptaan' => 'required',
             'uraian_singkat' => 'required|max:60000',
             'dokumen_invensi' => 'required|mimes:pdf',
+            'gambar_ciptaan' => \App\Support\MultiFileStorage::RULE_NULLABLE,
+            'gambar_ciptaan.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
             'surat_pengalihan' => 'required|mimes:pdf',
             'surat_pernyataan' => 'required|mimes:pdf',
             'tanggal_permohonan' => 'required'
@@ -172,7 +185,12 @@ class HakCiptaController extends Controller
         ]);
 
         $hc = new HakCipta();
-        $hc->nama_lengkap = $request->nama_lengkap;
+        $namaLengkapInput = $request->nama_lengkap;
+        if (\Illuminate\Support\Facades\Auth::user() && \Illuminate\Support\Facades\Auth::user()->apakahDosen()) {
+            // Khusus pengajuan dosen: nama lengkap disimpan TANPA gelar.
+            $namaLengkapInput = \App\Helpers\GelarHelper::stripGelar($namaLengkapInput);
+        }
+        $hc->nama_lengkap = $namaLengkapInput;
         $hc->alamat = $request->alamat;
         $hc->no_telepon = $request->no_telepon;
         $hc->tanggal_lahir = $request->tanggal_lahir;
@@ -199,12 +217,20 @@ class HakCiptaController extends Controller
         }
 
         // Dokumen invensi disimpan di disk public
+        // gambar ciptaan boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+        if ($request->hasFile('gambar_ciptaan')) {
+            foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
+            $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'public');
+        }
         if ($request->hasFile('dokumen_invensi')) {
             $file = $request->file('dokumen_invensi');
             $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
             $hc->dokumen_invensi = $file->storeAs('dokumen-hc', $filename, 'public');
         }
 
+        if ($request->hasFile('gambar_img')) {
+            $hc->gambar_img = \App\Support\GambarImage::store($request);
+        }
         $hc->save($validasidata);
 
         return redirect('/pengajuan-hak-cipta')->with('success', 'Data hak cipta berhasil Disimpan!');

@@ -136,13 +136,26 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th>gambar desain</th>
+                                            <th>Gambar Desain Industri</th>
                                             <td>
+                                                @if (!empty($di->gambar_di))
+                                                    <div class="mb-2 small">
+                                                        <span class="text-muted fw-semibold">File saat ini:</span>
+                                                        <ul class="mb-1 ps-3">
+                                                            @foreach (\App\Support\MultiFileStorage::decode($di->gambar_di) as $gf)
+                                                                <li>
+                                                                    <a href="{{ route('private_di_umum', ['file' => basename($gf)]) }}" target="_blank" class="text-primary">
+                                                                        <i class="fa fa-file me-1"></i>{{ basename($gf) }}
+                                                                    </a>
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                @endif
                                                 <input type="file" class="form-control" placeholder=""
-                                                    name="gambar_di" id="gambar_desain">
+                                                    name="gambar_di[]" multiple accept=".pdf,.jpg,.jpeg,.png" id="gambar_desain" data-filepond-multi>
                                                 <span class="text-danger"><i class="fa fa-warning me-2"
-                                                        data-bs-toggle="tooltip"></i>Harus memasukkan kembali file yang
-                                                    sama atau yang sudah di perbarui</span>
+                                                        data-bs-toggle="tooltip"></i>Masukkan file baru jika ingin mengganti (boleh lebih dari 1 file, maks 2MB per file). Khusus file gambar, ukurannya harus 1440px x 654px.</span>
                                             </td>
                                         </tr>
                                         <tr>

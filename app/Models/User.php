@@ -28,11 +28,24 @@ class User extends Authenticatable
         'kerjaan',
         'jabatan',
         'nip',
+        'pas_foto',
+        'kbk_id',
         'username',
         'password',
         'role',
+        'is_verified',
+        'verified_at',
     ];
 
+
+    /**
+     * Relasi ke Kelompok Bidang Keahlian (KBK) yang dipimpin/diikuti
+     * oleh user ini (khususnya untuk role Ketua KBK).
+     */
+    public function kelompokKeahlian()
+    {
+        return $this->belongsTo(\Modules\ProdukInovasi\app\Models\KelompokKeahlian::class, 'kbk_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -50,6 +63,8 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'verified_at' => 'datetime',
+        'is_verified' => 'boolean',
         'password' => 'hashed',
     ];
     public function apakahAdmin(){
@@ -60,6 +75,10 @@ class User extends Authenticatable
     }
     public function apakahUmum(){
         return $this->role === 'Umum';
+    }
+    public function apakahKetuaKbk(){
+        return \App\Models\KbkPenugasan::where('user_id', $this->id)
+            ->where('peran', 'ketua')->whereNull('selesai')->exists();
     }
 
     // protected static function booted()

@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en" data-bs-theme="auto">
 
 <head>
@@ -11,16 +11,23 @@
     <link href={{ asset('assets/bootstrap/css/bootstrap.min.css') }} rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href={{ asset('assets/css/admin-theme.css') }} rel="stylesheet">
 </head>
 
 <body>
     {{-- Top nav bar --}}
     <div class="container-fluid border">
-        <nav class="navbar navbar-expand bg-body-tertiary">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
                 <img class="navbar-brand" src={{ asset('assets/polindra2.jpg') }}>
-                <a class="navbar-brand fs-6 fw-normal font-family-Kokoro" href="#">Sistem Informasi Kekayaan
-                    Intelektual<br>Politeknik Negeri Indramayu</a>
+                <a class="navbar-brand fs-6 fw-normal font-family-Kokoro brand-text-responsive" href="#">
+                    <span class="d-inline d-md-none">SIKI POLINDRA</span>
+                    <span class="d-none d-md-inline">Sistem Informasi Kekayaan
+                        Intelektual<br>Politeknik Negeri Indramayu</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
@@ -29,6 +36,7 @@
                                 Selamat datang, {{ auth()->user()->nama_lengkap }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="/admin/dashboard"><i class="bi bi-grid me-2"></i>Pilih Aplikasi</a></li>
                                 <li><a class="dropdown-item" href="/logout"><i class="bi bi-arrow-bar-left me-2"></i>Log
                                         Out</a></li>
                             </ul>
@@ -44,7 +52,7 @@
             {{-- Side bar --}}
             @include('admin.layout.sidenav')
             {{-- end of sidebar --}}
-            <div class="col-lg-10 mt-2">
+            <div class="col-12 col-lg-10 mt-2">
                 <div class="container bg-light rounded border pt-3">
                     <h3 class="fw-normal font-family-Kokoro mb-3">
                         <i class="bi bi-file-earmark me-2"></i>Data Paten {{ $p->nama_lengkap }}
@@ -100,7 +108,7 @@
                                 <input type="file" class="form-control" id="ktp" name="ktp_inventor">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                    dari 10mb</span>
+                                    dari 2mb</span>
                                 {{-- @error('ktp_inventor')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -174,7 +182,7 @@
                                     name="abstrak_paten">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                    dari 10mb</span>
+                                    dari 2mb</span>
                                 {{-- @error('abstrak_paten')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -187,7 +195,7 @@
                                     name="deskripsi_paten">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                    dari 10mb</span>
+                                    dari 2mb</span>
                                 {{-- @error('deskripsi_paten')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -200,7 +208,7 @@
                                     name="pengalihan_hak">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                    dari 10mb</span>
+                                    dari 2mb</span>
                                 {{-- @error('pengalihan_hak')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -213,7 +221,7 @@
                                     name="klaim">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                    dari 10mb</span>
+                                    dari 2mb</span>
                                 {{-- @error('klaim')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -227,7 +235,7 @@
                                     name="pernyataan_kepemilikan">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                    dari 10mb</span>
+                                    dari 2mb</span>
                                 {{-- @error('pernyataan_kepemilikan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -240,7 +248,7 @@
                                     name="surat_kuasa">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                    dari 10mb</span>
+                                    dari 2mb</span>
                                 {{-- @error('surat_kuasa')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -250,10 +258,10 @@
                             <div class="mb-3">
                                 <label for="g_paten" class="form-label">gambar Paten</label>
                                 <input type="file" class="form-control " id="g_paten" placeholder=""
-                                    name="gambar_paten">
+                                    name="gambar_paten" accept=".pdf">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                    dari 10mb</span>
+                                    dari 2mb</span>
                                 {{-- @error('gambar_paten')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -263,10 +271,10 @@
                             <div class="mb-3">
                                 <label for="g_tampilan" class="form-label">gambar Tampilan</label>
                                 <input type="file" class="form-control " id="g_tampilan" placeholder=""
-                                    name="gambar_tampilan">
+                                    name="gambar_tampilan[]" multiple accept=".pdf,.jpg,.jpeg,.png">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                    dari 10mb</span>
+                                    dari 2mb</span>
                                 {{-- @error('gambar_tampilan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -332,6 +340,7 @@
         <script src="{{ asset('assets-user/js/jquery.min.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+@include('layout.filepond')
 </body>
 
 </html>

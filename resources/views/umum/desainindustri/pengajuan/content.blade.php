@@ -21,9 +21,7 @@
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title"><i class="fa fa-wpforms me-2" data-bs-toggle="tooltip"></i>Formulir
-                                Pengajuan Desain Industri
-                            </h3>
+                            <h3 class="card-title"><i class="fa fa-wpforms me-2"></i>Formulir Pengajuan Desain Industri</h3>
                         </div>
                         <div class="card-body">
                             @if (session()->has('success'))
@@ -48,7 +46,7 @@
                                 <div class="container">
                                     <div class="mb-3">
                                         <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
-                                        <input type="text" value="{{ auth()->user()->nama_lengkap }}"
+                                        <input type="text" value="{{ old('nama_lengkap', auth()->user()->nama_lengkap ?? '') }}"
                                             class="form-control" id="nama_lengkap"
                                             placeholder="Masukkan Nama"name="nama_lengkap">
                                         {{-- @error('nama_lengkap')
@@ -61,7 +59,7 @@
                                         <label for="alamat" class="form-label">Alamat</label>
                                         <input type="text" class="form-control" id="alamat"
                                             placeholder="Masukkan Alamat" name="alamat"
-                                            value="{{ auth()->user()->alamat }}">
+                                            value="{{ old('alamat', auth()->user()->alamat ?? '') }}">
                                         {{-- @error('alamat')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -72,7 +70,7 @@
                                         <label for="no_telepon" class="form-label">No telepon</label>
                                         <input type="number" class="form-control " id="no_telepon"
                                             placeholder="Masukkan No telepon" name="no_telepon"
-                                            value="{{ auth()->user()->no_telepon }}">
+                                            value="{{ old('no_telepon', auth()->user()->no_telepon ?? '') }}">
                                         {{-- @error('no_telepon')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -94,7 +92,7 @@
                                         <input type="file" class="form-control" id="ktp" name="ktp_inventor">
                                         <span class="text-danger"><i class="fa fa-warning me-2"
                                                 data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                            dari 10mb</span>
+                                            dari 2mb</span>
                                         {{-- @error('ktp_inventor')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -105,7 +103,7 @@
                                         <label for="email" class="form-label">Email</label>
                                         <input type="email" class="form-control " id="email"
                                             placeholder="Masukkan Email" name="email"
-                                            value="{{ auth()->user()->email }}">
+                                            value="{{ old('email', auth()->user()->email ?? '') }}">
                                         {{-- @error('email')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -184,17 +182,10 @@
                                         @enderror --}}
                                     </div>
                                     <div class="mb-3">
-                                        <label for="gambar_desain" class="form-label">Gambar Desain Industri</label>
-                                        <input type="file" class="form-control" placeholder="" name="gambar_di"
-                                            id="gambar_desain">
-                                        <span class="text-danger"><i class="fa fa-warning me-2"
-                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                            dari 10mb</span>
-                                        {{-- @error('gambar_di')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror --}}
+                                        <label for="gambar_desain" class="form-label">Gambar Desain Industri (bisa lebih dari 1 file)</label>
+                                        <input type="file" class="form-control" placeholder="" name="gambar_di[]" multiple accept=".pdf,.jpg,.jpeg,.png"
+                                            id="gambar_desain" data-filepond-multi>
+                                        <span class="text-muted"><i class="fa fa-info-circle me-1"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file maks 2MB. Khusus file gambar, ukurannya harus 1440px x 654px.</span>
                                     </div>
                                     <div class="mb-3">
                                         <label for="uraian_desain" class="form-label">Uraian Desain Industri</label>
@@ -202,7 +193,7 @@
                                             id="uraian_desain">
                                         <span class="text-danger"><i class="fa fa-warning me-2"
                                                 data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                            dari 10mb</span>
+                                            dari 2mb</span>
                                         {{-- @error('uraian_di')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -216,7 +207,7 @@
                                             name="surat_kepemilikan" id="pernyataan_kepemilikan">
                                         <span class="text-danger"><i class="fa fa-warning me-2"
                                                 data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                            dari 10mb</span>
+                                            dari 2mb</span>
                                         {{-- @error('surat_kepemilikan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -229,7 +220,7 @@
                                             name="surat_pengalihan" id="pengalihan">
                                         <span class="text-danger"><i class="fa fa-warning me-2"
                                                 data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                            dari 10mb</span>
+                                            dari 2mb</span>
                                         {{-- @error('surat_pengalihan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}

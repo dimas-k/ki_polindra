@@ -131,17 +131,11 @@
                                                 {{-- @include('dosen.layout.jurusan-edit') --}}
                                                 <select class="form-select" aria-label="Default select example"
                                                     name="jurusan" id="jurusan">
-                                                    <option value="">Pilih Jurusan</option>
-                                                    <option value="Teknik Informatika"
-                                                        {{ old('jurusan', $p->jurusan) == 'Teknik Informatika' ? 'selected' : '' }}>
-                                                        Teknik Informatika</option>
-                                                    <option value="Teknik"
-                                                        {{ old('jurusan', $p->jurusan) == 'Teknik' ? 'selected' : '' }}>
-                                                        Teknik</option>
-                                                    <option value="Kesehatan"
-                                                        {{ old('jurusan', $p->jurusan) == 'Kesehatan' ? 'selected' : '' }}>
-                                                        Kesehatan</option>
-                                                </select>
+                <option value="">Pilih Jurusan</option>
+                @foreach($jurusanOptions as $j)
+                    <option value="{{ $j->nama_jurusan }}" {{ old('jurusan', $p->jurusan) == $j->nama_jurusan ? 'selected' : '' }}>{{ $j->nama_jurusan }}</option>
+                @endforeach
+            </select>
                                             </td>
                                         </tr>
                                         <tr>
@@ -150,32 +144,11 @@
                                                 {{-- @include('dosen.layout.prodi-edit') --}}
                                                 <select class="form-select" aria-label="Default select example"
                                                     name="prodi" id="prodi">
-                                                    <option value="">Pilih Prodi</option>
-                                                    <option value="D3 Teknik Informatika"
-                                                        {{ old('prodi', $p->prodi) == 'D3 Teknik Informatika' ? 'selected' : '' }}>
-                                                        D3 Teknik Informatika</option>
-                                                    <option value="D4 Rekayasa Perangkat Lunak"
-                                                        {{ old('prodi', $p->prodi) == 'D4 Rekayasa Perangkat Lunak' ? 'selected' : '' }}>
-                                                        D4 Rekayasa Perangkat Lunak</option>
-                                                    <option value="D4 Sistem Informasi Kota Cerdas"
-                                                        {{ old('prodi', $p->prodi) == 'D4 Sistem Informasi Kota Cerdas' ? 'selected' : '' }}>
-                                                        D4 Sistem Informasi Kota Cerdas</option>
-                                                    <option value="D3 Teknik Mesin"
-                                                        {{ old('prodi', $p->prodi) == 'D3 Teknik Mesin' ? 'selected' : '' }}>
-                                                        D3 Teknik Mesin</option>
-                                                    <option value="D4 Perancangan Manufaktur"
-                                                        {{ old('prodi', $p->prodi) == 'D4 Perancangan Manufaktur' ? 'selected' : '' }}>
-                                                        D4 Perancangan Manufaktur</option>
-                                                    <option value="D3 Teknik Pendingin dan Tata Udara"
-                                                        {{ old('prodi', $p->prodi) == 'D3 Teknik Pendingin dan Tata Udara' ? 'selected' : '' }}>
-                                                        D3 Teknik Pendingin dan Tata Udara</option>
-                                                    <option value="D4 Teknologi Rekayasa Instrumentasi dan Kontrol"
-                                                        {{ old('prodi', $p->prodi) == 'D4 Teknologi Rekayasa Instrumentasi dan Kontrol' ? 'selected' : '' }}>
-                                                        D4 Teknologi Rekayasa Instrumentasi dan Kontrol</option>
-                                                    <option value="D3 Keperawatan"
-                                                        {{ old('prodi', $p->prodi) == 'D3 Keperawatan' ? 'selected' : '' }}>
-                                                        D3 Keperawatan</option>
-                                                </select>
+                <option value="">Pilih Prodi</option>
+                @foreach($prodiOptions as $pr)
+                    <option value="{{ $pr->nama_prodi }}" {{ old('prodi', $p->prodi) == $pr->nama_prodi ? 'selected' : '' }}>{{ $pr->nama_prodi }}</option>
+                @endforeach
+            </select>
                                             </td>
                                         </tr>
                                         <tr>
@@ -300,12 +273,12 @@
                                             <th>gambar paten</th>
                                             <td>
                                                 @if (!empty($p->gambar_paten))
-                                                File : {{ basename($p->gambar_paten) }}
+                                                File : {{ collect(\App\Support\MultiFileStorage::decode($p->gambar_paten))->map(fn($f) => basename($f))->implode(', ') }}
                                             @else
                                                 File : Tidak ada
                                             @endif
                                                 <input type="file" class="form-control" id="g_paten"
-                                                    placeholder="" name="gambar_paten">
+                                                    placeholder="" name="gambar_paten" accept=".pdf">
                                                 <span class="text-danger"><i class="fa fa-warning me-2"
                                                         data-bs-toggle="tooltip"></i>masukan file jika ada
                                                     perubahan</span>
@@ -315,15 +288,14 @@
                                             <th>gambar tampilan</th>
                                             <td>
                                                 @if (!empty($p->gambar_tampilan))
-                                                File : {{ basename($p->gambar_tampilan) }}
+                                                File : {{ collect(\App\Support\MultiFileStorage::decode($p->gambar_tampilan))->map(fn($f) => basename($f))->implode(', ') }}
                                             @else
                                                 File : Tidak ada
                                             @endif
                                                 <input type="file" class="form-control" id="g_tampilan"
-                                                    placeholder="" name="gambar_tampilan">
+                                                    placeholder="" name="gambar_tampilan[]" multiple accept=".pdf,.jpg,.jpeg,.png">
                                                 <span class="text-danger"><i class="fa fa-warning me-2"
-                                                        data-bs-toggle="tooltip"></i>masukan file jika ada
-                                                    perubahan</span>
+                                                        data-bs-toggle="tooltip"></i>Masukkan file baru jika ingin mengganti (boleh lebih dari 1 file, maks 2MB per file). Khusus file gambar, ukurannya harus 1440px x 654px.</span>
                                             </td>
                                         </tr>
                                         <tr>

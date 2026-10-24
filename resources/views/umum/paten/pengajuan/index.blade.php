@@ -172,7 +172,7 @@
                 var kepemilikan = $('#kepemilikan')[0].files[0];
                 var kuasa = $('#kuasa')[0].files[0];
                 var g_paten = $('#g_paten')[0].files[0];
-                var g_tampilan = $('#g_tampilan')[0].files[0];
+                var g_tampilan_files = $('#g_tampilan')[0].files;
 
                 // var errorMessage = ''; // Variabel untuk menyimpan pesan error
 
@@ -379,7 +379,7 @@
                     });
                     return false;
                 }
-                if (!g_tampilan) {
+                if (!g_tampilan_files || g_tampilan_files.length === 0) {
                     Swal.fire({
                         icon: "error",
                         title: "Oops... Ada yang salah...",
@@ -391,7 +391,7 @@
                     return false;
                 } else {
                     var allowedExtension = /(\.pdf)$/i; // Hanya memperbolehkan file berformat PDF
-                    var maxSize = 10 * 1024 * 1024; // Maksimal ukuran file adalah 2 MB
+                    var maxSize = 2 * 1024 * 1024; // Maksimal ukuran file adalah 2 MB
 
                     // Validasi ekstensi file
                     // Cek apakah file diinputkan
@@ -472,27 +472,29 @@
                         });
                         return false;
                     }
-                    if (!allowedExtension.exec(g_paten.name)) {
+                    if (!/(\.pdf)$/i.exec(g_paten.name)) {
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Tolong Masukkan Gambar Paten Paten Dengan Ekstensi .pdf!",
+                            text: "Tolong Masukkan Gambar Paten Dengan Ekstensi .pdf!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500
                         });
                         return false;
                     }
-                    if (!allowedExtension.exec(g_tampilan.name)) {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops... Ada yang salah...",
-                            text: "Tolong Masukkan Gambar Tampilan Paten Dengan Ekstensi .pdf!",
-                            position: "top-end",
-                            showConfirmButton: false,
-                            timer: 2500
-                        });
-                        return false;
+                    for (var i = 0; i < g_tampilan_files.length; i++) {
+                        if (!/(\.(pdf|jpe?g|png))$/i.exec(g_tampilan_files[i].name)) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops... Ada yang salah...",
+                                text: "Tolong Masukkan Gambar Tampilan Paten Dengan Ekstensi .pdf/.jpg/.jpeg/.png (" + g_tampilan_files[i].name + ")!",
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 2500
+                            });
+                            return false;
+                        }
                     }
 
                     // Validasi ukuran file
@@ -500,7 +502,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Ukuran File KTP Lebih Dari 10mb!",
+                            text: "Ukuran File KTP Lebih Dari 2mb!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500
@@ -511,7 +513,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Ukuran File Abstrak Paten Lebih Dari 10mb!",
+                            text: "Ukuran File Abstrak Paten Lebih Dari 2mb!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500
@@ -522,7 +524,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Ukuran Deskripsi paten Lebih Dari 10mb!",
+                            text: "Ukuran Deskripsi paten Lebih Dari 2mb!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500
@@ -533,7 +535,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Ukuran File Surat Pengalihan Hak Lebih Dari 10mb!",
+                            text: "Ukuran File Surat Pengalihan Hak Lebih Dari 2mb!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500
@@ -544,7 +546,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Ukuran File Klaim Lebih Dari 10mb!",
+                            text: "Ukuran File Klaim Lebih Dari 2mb!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500
@@ -555,7 +557,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Ukuran File Pernyataan Kepemilikan Lebih Dari 10mb!",
+                            text: "Ukuran File Pernyataan Kepemilikan Lebih Dari 2mb!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500
@@ -566,7 +568,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Ukuran File Surat Kuasa Lebih Dari 10mb!",
+                            text: "Ukuran File Surat Kuasa Lebih Dari 2mb!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500
@@ -577,23 +579,25 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",
-                            text: "Ukuran File Gambar Paten Lebih Dari 10mb!",
+                            text: "Ukuran File Gambar Paten Lebih Dari 2mb!",
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 2500
                         });
                         return false;
                     }
-                    if (g_tampilan.size > maxSize) {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops... Ada yang salah...",
-                            text: "Ukuran File Gambar Tampilan Lebih Dari 10mb!",
-                            position: "top-end",
-                            showConfirmButton: false,
-                            timer: 2500
-                        });
-                        return false;
+                    for (var i = 0; i < g_tampilan_files.length; i++) {
+                        if (g_tampilan_files[i].size > maxSize) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops... Ada yang salah...",
+                                text: "Ukuran File Gambar Tampilan Lebih Dari 2mb (" + g_tampilan_files[i].name + ")!",
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 2500
+                            });
+                            return false;
+                        }
                     }
 
                 }

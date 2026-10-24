@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en" data-bs-theme="auto">
 
 <head>
@@ -11,16 +11,23 @@
     <link href={{ asset('assets/bootstrap/css/bootstrap.min.css') }} rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href={{ asset('assets/css/admin-theme.css') }} rel="stylesheet">
 </head>
 
 <body>
     {{-- Top nav bar --}}
     <div class="container-fluid border">
-        <nav class="navbar navbar-expand bg-body-tertiary">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
                 <img class="navbar-brand" src={{ asset('assets/polindra2.jpg') }}>
-                <a class="navbar-brand fs-6 fw-normal font-family-Kokoro" href="#">Sistem Informasi Kekayaan
-                    Intelektual<br>Politeknik Negeri Indramayu</a>
+                <a class="navbar-brand fs-6 fw-normal font-family-Kokoro brand-text-responsive" href="#">
+                    <span class="d-inline d-md-none">SIKI POLINDRA</span>
+                    <span class="d-none d-md-inline">Sistem Informasi Kekayaan
+                        Intelektual<br>Politeknik Negeri Indramayu</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
@@ -29,6 +36,7 @@
                                 Selamat datang, {{ auth()->user()->nama_lengkap }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="/admin/dashboard"><i class="bi bi-grid me-2"></i>Pilih Aplikasi</a></li>
                                 <li><a class="dropdown-item" href="/logout"><i class="bi bi-arrow-bar-left me-2"></i>Log
                                         Out</a></li>
                             </ul>
@@ -44,7 +52,7 @@
             {{-- Side bar --}}
             @include('admin.layout.sidenav')
             {{-- end of sidebar --}}
-            <div class="col-lg-10 mt-2">
+            <div class="col-12 col-lg-10 mt-2">
                 <div class="container bg-light rounded border pt-3">
                     <h3 class="fw-normal font-family-Kokoro mb-3">
                         <i class="bi bi-file-earmark me-2"></i>Data Hak Cipta {{ $di->nama_lengkap }}
@@ -101,7 +109,7 @@
                                 <input type="file" class="form-control" id="ktp" name="ktp_inventor">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih
-                                    dari 10mb</span>
+                                    dari 2mb</span>
                                 {{-- @error('ktp_inventor')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -161,17 +169,11 @@
                                     <td>
                                         <select class="form-select" aria-label="Default select example"
                                             name="jurusan" id="jurusan">
-                                            <option value="">Pilih Jurusan</option>
-                                            <option value="Teknik Informatika"
-                                                {{ old('jurusan', $di->jurusan) == 'Teknik Informatika' ? 'selected' : '' }}>
-                                                Teknik Informatika</option>
-                                            <option value="Teknik"
-                                                {{ old('jurusan', $di->jurusan) == 'Teknik' ? 'selected' : '' }}>Teknik
-                                            </option>
-                                            <option value="Kesehatan"
-                                                {{ old('jurusan', $di->jurusan) == 'Kesehatan' ? 'selected' : '' }}>
-                                                Kesehatan</option>
-                                        </select>
+                <option value="">Pilih Jurusan</option>
+                @foreach($jurusanOptions as $j)
+                    <option value="{{ $j->nama_jurusan }}" {{ old('jurusan', $di->jurusan) == $j->nama_jurusan ? 'selected' : '' }}>{{ $j->nama_jurusan }}</option>
+                @endforeach
+            </select>
                                     </td>
                                 </tr>
                                 {{-- @error('jurusan')
@@ -187,32 +189,11 @@
                                     <td>
                                         <select class="form-select" aria-label="Default select example"
                                             name="prodi" id="prodi">
-                                            <option value="">Pilih Prodi</option>
-                                            <option value="D3 Teknik Informatika"
-                                                {{ old('prodi', $di->prodi) == 'D3 Teknik Informatika' ? 'selected' : '' }}>
-                                                D3 Teknik Informatika</option>
-                                            <option value="D4 Rekayasa Perangkat Lunak"
-                                                {{ old('prodi', $di->prodi) == 'D4 Rekayasa Perangkat Lunak' ? 'selected' : '' }}>
-                                                D4 Rekayasa Perangkat Lunak</option>
-                                            <option value="D4 Sistem Informasi Kota Cerdas"
-                                                {{ old('prodi', $di->prodi) == 'D4 Sistem Informasi Kota Cerdas' ? 'selected' : '' }}>
-                                                D4 Sistem Informasi Kota Cerdas</option>
-                                            <option value="D3 Teknik Mesin"
-                                                {{ old('prodi', $di->prodi) == 'D3 Teknik Mesin' ? 'selected' : '' }}>
-                                                D3 Teknik Mesin</option>
-                                            <option value="D4 Perancangan Manufaktur"
-                                                {{ old('prodi', $di->prodi) == 'D4 Perancangan Manufaktur' ? 'selected' : '' }}>
-                                                D4 Perancangan Manufaktur</option>
-                                            <option value="D3 Teknik Pendingin dan Tata Udara"
-                                                {{ old('prodi', $di->prodi) == 'D3 Teknik Pendingin dan Tata Udara' ? 'selected' : '' }}>
-                                                D3 Teknik Pendingin dan Tata Udara</option>
-                                            <option value="D4 Teknologi Rekayasa Instrumentasi dan Kontrol"
-                                                {{ old('prodi', $di->prodi) == 'D4 Teknologi Rekayasa Instrumentasi dan Kontrol' ? 'selected' : '' }}>
-                                                D4 Teknologi Rekayasa Instrumentasi dan Kontrol</option>
-                                            <option value="D3 Keperawatan"
-                                                {{ old('prodi', $di->prodi) == 'D3 Keperawatan' ? 'selected' : '' }}>D3
-                                                Keperawatan</option>
-                                        </select>
+                <option value="">Pilih Prodi</option>
+                @foreach($prodiOptions as $pr)
+                    <option value="{{ $pr->nama_prodi }}" {{ old('prodi', $di->prodi) == $pr->nama_prodi ? 'selected' : '' }}>{{ $pr->nama_prodi }}</option>
+                @endforeach
+            </select>
                                     </td>
                                 </tr>
                                 {{-- @error('prodi')
@@ -278,11 +259,11 @@
                             </div>
                             <div class="mb-3">
                                 <label for="gambar_desain" class="form-label">Gambar Desain Industri</label>
-                                <input type="file" class="form-control" placeholder="" name="gambar_di"
+                                <input type="file" class="form-control" placeholder="" name="gambar_di[]" multiple accept=".pdf,.jpg,.jpeg,.png"
                                     id="gambar_desain">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari
-                                    10mb</span>
+                                    2mb</span>
                                 {{-- @error('gambar_di')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -295,7 +276,7 @@
                                     id="uraian_desain">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari
-                                    10mb</span>
+                                    2mb</span>
                                 {{-- @error('uraian_di')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -309,7 +290,7 @@
                                     id="pernyataan_kepemilikan">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari
-                                    10mb</span>
+                                    2mb</span>
                                 {{-- @error('surat_kepemilikan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -322,7 +303,7 @@
                                     id="pengalihan" value="{{ $di->surat_pengalihan }}">
                                 <span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"
                                         data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari
-                                    10mb</span>
+                                    2mb</span>
                                 {{-- @error('surat_pengalihan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -429,12 +410,12 @@
                         surat_pengalihan: $('#pengalihan')[0].files[0]
                     };
 
-                    const maxSize = 10 * 1024 * 1024; // 10MB dalam byte
+                    const maxSize = 2 * 1024 * 1024; // 2MB dalam byte
                     const allowedPDF = ['pdf'];
                     const allowedExcel = ['xls', 'xlsx'];
 
                     // Field yang seharusnya berformat PDF (jika diupload)
-                    const pdfFields = ['ktp_inventor', 'gambar_di', 'uraian_di', 'surat_kepemilikan',
+                    const pdfFields = ['ktp_inventor', 'uraian_di', 'surat_kepemilikan',
                         'surat_pengalihan'
                     ];
                     // Field untuk file Excel (opsional)
@@ -453,7 +434,7 @@
                             }
                             if (fileData.size > maxSize) {
                                 showError("Ukuran File " + key.replace('_', ' ').toUpperCase() +
-                                    " Melebihi 10MB!");
+                                    " Melebihi 2MB!");
                                 return false;
                             }
                         }
@@ -472,7 +453,7 @@
                             }
                             if (fileData.size > maxSize) {
                                 showError("Ukuran File " + key.replace('_', ' ').toUpperCase() +
-                                    " Melebihi 10MB!");
+                                    " Melebihi 2MB!");
                                 return false;
                             }
                         }
@@ -486,6 +467,7 @@
 
 
 
+@include('layout.filepond')
 </body>
 
 </html>

@@ -13,6 +13,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+
+        // Kirim email pengingat H-1 tenggat pembayaran & tandai tagihan lewat tenggat sebagai Kadaluarsa
+        $schedule->command('payments:remind-due')->hourly();
     }
 
     /**

@@ -359,7 +359,7 @@
                         });
                         return false;
                     }
-                    if (!allowedExtension.exec(gambar_desain.name)) {
+                    if (!/(\.(pdf|jpe?g|png))$/i.exec(gambar_desain.name)) {
                         Swal.fire({
                             icon: "error",
                             title: "Oops... Ada yang salah...",

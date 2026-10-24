@@ -212,6 +212,23 @@
                     </div>
                 </div>
 
+                @if (!empty($hc->gambar_ciptaan))
+                <div class="detail-row">
+                    <div class="detail-icon"><i class="bi bi-image"></i></div>
+                    <div>
+                        <div class="detail-label">Gambar Ciptaan</div>
+                        <div class="detail-value mt-1">
+                            @foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $__f)
+                                <a href="{{ route('public_hc_guest', ['filename' => basename($__f)]) }}"
+                                    target="_blank" class="btn-doc me-1 mb-1 d-inline-block">
+                                    <i class="bi bi-{{ \App\Support\MultiFileStorage::isImage($__f) ? 'image' : 'file-earmark-pdf' }}"></i> Lihat {{ \App\Support\MultiFileStorage::isImage($__f) ? 'Gambar' : 'PDF' }} {{ $loop->iteration }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                @endif
+
                 <div class="detail-row">
                     <div class="detail-icon"><i class="bi bi-calendar3"></i></div>
                     <div>

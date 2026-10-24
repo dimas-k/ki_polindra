@@ -192,20 +192,33 @@
                                             <th>gambar paten</th>
                                             <td>
                                                 <input type="file" class="form-control" id="g_paten"
-                                                    placeholder="" name="gambar_paten">
+                                                    placeholder="" name="gambar_paten" accept=".pdf">
                                                 <span class="text-danger"><i class="fa fa-warning me-2"
                                                         data-bs-toggle="tooltip"></i>Harus memasukkan kembali file yang
                                                     sama atau yang sudah di perbarui</span>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th>gambar tampilan</th>
+                                            <th>Gambar Tampilan</th>
                                             <td>
+                                                @if (!empty($p->gambar_tampilan))
+                                                    <div class="mb-2 small">
+                                                        <span class="text-muted fw-semibold">File saat ini:</span>
+                                                        <ul class="mb-1 ps-3">
+                                                            @foreach (\App\Support\MultiFileStorage::decode($p->gambar_tampilan) as $gf)
+                                                                <li>
+                                                                    <a href="{{ route('public_paten_umum', ['file' => basename($gf)]) }}" target="_blank" class="text-primary">
+                                                                        <i class="fa fa-file me-1"></i>{{ basename($gf) }}
+                                                                    </a>
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                @endif
                                                 <input type="file" class="form-control" id="g_tampilan"
-                                                    placeholder="" name="gambar_tampilan">
+                                                    placeholder="" name="gambar_tampilan[]" multiple accept=".pdf,.jpg,.jpeg,.png" data-filepond-multi>
                                                 <span class="text-danger"><i class="fa fa-warning me-2"
-                                                        data-bs-toggle="tooltip"></i>Harus memasukkan kembali file yang
-                                                    sama atau yang sudah di perbarui</span>
+                                                        data-bs-toggle="tooltip"></i>Masukkan file baru jika ingin mengganti (boleh lebih dari 1 file, maks 2MB per file). Khusus file gambar, ukurannya harus 1440px x 654px.</span>
                                             </td>
                                         </tr>
                                         <tr>

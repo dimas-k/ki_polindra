@@ -147,6 +147,29 @@
                                             </td>
                                         </tr>
                                         <tr>
+                                            <th>Gambar Ciptaan (opsional, boleh lebih dari 1 file)</th>
+                                            <td>
+                                                @if (!empty($hc->gambar_ciptaan))
+                                                    <div class="mb-2 small">
+                                                        <span class="text-muted fw-semibold">File saat ini:</span>
+                                                        <ul class="mb-1 ps-3">
+                                                            @foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $gf)
+                                                                <li>
+                                                                    <a href="{{ route('private_hc_umum', ['filename' => basename($gf)]) }}" target="_blank" class="text-primary">
+                                                                        <i class="fa fa-file me-1"></i>{{ basename($gf) }}
+                                                                    </a>
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                @endif
+                                                <input type="file" id="gambar_ciptaan"
+                                                    class="form-control"
+                                                    placeholder="" name="gambar_ciptaan[]" multiple accept=".pdf,.jpg,.jpeg,.png" data-filepond-multi>
+                                                <span class="text-danger"><i class="fa fa-warning me-2" data-bs-toggle="tooltip"></i>Masukkan file baru jika ingin mengganti (boleh lebih dari 1 file, maks 2MB per file). Khusus file gambar, ukurannya harus 1440px x 654px.</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
                                             <th>Surat Pengalihan Hak Cipta</th>
                                             <td>
                                                 <input type="file" id="surat_pengalihan"

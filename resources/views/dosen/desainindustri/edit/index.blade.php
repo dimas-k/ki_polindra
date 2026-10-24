@@ -160,7 +160,7 @@
                     pengalihan: $('#pengalihan')[0].files[0]
                 };
     
-                const maxSize = 10 * 1024 * 1024; // Max size: 10MB
+                const maxSize = 2 * 1024 * 1024; // Max size: 2MB
                 const allowedExtensionPDF = /(\.pdf)$/i;
                 const allowedExtensionExcel = /(\.xlsx)$/i;
     
@@ -203,14 +203,14 @@
                         }
                     } else if (files[file]) {
                         // Validate other files
-                        if (!allowedExtensionPDF.exec(files[file].name)) {
+                        if (!(['g_tampilan','gambar_desain','gambar_di'].includes(file) ? /(\.(pdf|jpe?g|png))$/i : allowedExtensionPDF).exec(files[file].name)) {
                             showError("Tolong Masukkan " + file.replace('_', ' ').toUpperCase() + " Dengan Ekstensi .pdf!");
                             return false;
                         }
     
                         // Validate file size
                         if (files[file].size > maxSize) {
-                            showError("Ukuran File " + file.replace('_', ' ').toUpperCase() + " Lebih Dari 10 MB!");
+                            showError("Ukuran File " + file.replace('_', ' ').toUpperCase() + " Lebih Dari 2 MB!");
                             return false;
                         }
                     }

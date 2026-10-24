@@ -18,9 +18,7 @@
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title"><i class="fa fa-wpforms me-2" data-bs-toggle="tooltip">
-                                Formulir Pengajuan Hak Cipta</i>
-                            </h3>
+                            <h3 class="card-title"><i class="fa fa-wpforms me-2"></i>Formulir Pengajuan Hak Cipta</h3>
                         </div>
                         <div class="card-body">
                             @if (session()->has('success'))
@@ -46,7 +44,7 @@
                                         <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
                                         <input type="text"
                                             class="form-control @error('nama_lengkap') is-invalid @enderror"
-                                            id="nama_lengkap" placeholder="Masukkan Nama" name="nama_lengkap" value="{{ auth()->user()->nama_lengkap }}">
+                                            id="nama_lengkap" placeholder="Masukkan Nama" name="nama_lengkap" value="{{ old('nama_lengkap', \App\Helpers\GelarHelper::stripGelar(auth()->user()->nama_lengkap ?? '')) }}">
                                         @error('nama_lengkap')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -56,7 +54,7 @@
                                     <div class="mb-3">
                                         <label for="alamat" class="form-label">Alamat</label>
                                         <input type="text" class="form-control @error('alamat') is-invalid @enderror"
-                                            id="alamat" placeholder="Masukkan Alamat" name="alamat" value="{{ auth()->user()->alamat }}">
+                                            id="alamat" placeholder="Masukkan Alamat" name="alamat" value="{{ old('alamat', auth()->user()->alamat ?? '') }}">
                                         @error('alamat')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -67,7 +65,7 @@
                                         <label for="no_telepon" class="form-label">No telepon</label>
                                         <input type="number"
                                             class="form-control @error('no_telepon') is-invalid @enderror"
-                                            id="no_telepon" placeholder="Masukkan No telepon" name="no_telepon" value="{{ auth()->user()->no_telepon }}">
+                                            id="no_telepon" placeholder="Masukkan No telepon" name="no_telepon" value="{{ old('no_telepon', auth()->user()->no_telepon ?? '') }}">
                                         @error('no_telepon')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -90,7 +88,7 @@
                                             class="form-control @error('ktp_inventor') is-invalid @enderror"
                                             id="ktp" name="ktp_inventor">
                                             <span class="text-danger"><i class="fa fa-warning me-2"
-                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 10mb</span>
+                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 2mb</span>
                                         @error('ktp_inventor')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -100,7 +98,7 @@
                                     <div class="mb-3">
                                         <label for="email" class="form-label">Email</label>
                                         <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                            id="email" placeholder="Masukkan Email" name="email" value="{{ auth()->user()->email }}">
+                                            id="email" placeholder="Masukkan Email" name="email" value="{{ old('email', auth()->user()->email ?? '') }}">
                                         @error('email')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -204,8 +202,21 @@
                                             class="form-control @error('dokumen_invensi') is-invalid @enderror"
                                             name="dokumen_invensi" id="invensi">
                                             <span class="text-danger"><i class="fa fa-warning me-2"
-                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 10mb</span>
+                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 2mb</span>
                                         @error('dokumen_invensi')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+<div class="mb-3">
+                                        <label for="gambar_ciptaan" class="form-label">Gambar Ciptaan (opsional, boleh lebih dari 1 file)</label>
+                                        <input type="file"
+                                            class="form-control @error('gambar_ciptaan') is-invalid @enderror"
+                                            name="gambar_ciptaan[]" multiple accept=".pdf,.jpg,.jpeg,.png" id="gambar_ciptaan">
+                                            <span class="text-danger"><i class="fa fa-warning me-2"
+                                                data-bs-toggle="tooltip"></i>Boleh pilih lebih dari 1 file (PDF dan/atau gambar .jpg/.jpeg/.png), tiap file maks 2MB. Khusus file gambar, ukurannya harus 1440px x 654px.</span>
+                                        @error('gambar_ciptaan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>
@@ -217,7 +228,7 @@
                                             class="form-control @error('surat_pengalihan') is-invalid @enderror"
                                             name="surat_pengalihan" id="surat_pengalihan">
                                             <span class="text-danger"><i class="fa fa-warning me-2"
-                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 10mb</span>
+                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 2mb</span>
                                         @error('surat_pengalihan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -230,7 +241,7 @@
                                             class="form-control @error('surat_pernyataan') is-invalid @enderror"
                                             name="surat_pernyataan">
                                             <span class="text-danger"><i class="fa fa-warning me-2"
-                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 10mb</span>
+                                                data-bs-toggle="tooltip"></i>File harus bertipe .pdf dan tidak lebih dari 2mb</span>
                                         @error('surat_pernyataan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}

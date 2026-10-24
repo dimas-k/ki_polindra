@@ -12,6 +12,9 @@
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
+        "nwidart/laravel-modules": "10.0",
+        "phpoffice/phpspreadsheet": "^5.9",
+        "predis/predis": "^2.2",
         "twbs/bootstrap-icons": "^1.11"
     },
     "require-dev": {
@@ -26,7 +29,8 @@
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/"
+            "Database\\Seeders\\": "database/seeders/",
+            "Modules\\": "Modules/"
         }
     },
     "autoload-dev": {
@@ -52,11 +56,7 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true,
-        "allow-plugins": {
-            "php-http/discovery": true,
-            "wikimedia/composer-merge-plugin": true
-        }
+        "sort-packages": true
     },
     "minimum-stability": "stable",
     "prefer-stable": true

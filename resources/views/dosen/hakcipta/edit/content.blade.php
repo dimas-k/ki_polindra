@@ -119,17 +119,11 @@
                                             <td>
                                                 <select class="form-select" aria-label="Default select example"
                                                     name="jurusan" id="jurusan">
-                                                    <option value="">Pilih Jurusan</option>
-                                                    <option value="Teknik Informatika"
-                                                        {{ old('jurusan', $hc->jurusan) == 'Teknik Informatika' ? 'selected' : '' }}>
-                                                        Teknik Informatika</option>
-                                                    <option value="Teknik"
-                                                        {{ old('jurusan', $hc->jurusan) == 'Teknik' ? 'selected' : '' }}>
-                                                        Teknik</option>
-                                                    <option value="Kesehatan"
-                                                        {{ old('jurusan', $hc->jurusan) == 'Kesehatan' ? 'selected' : '' }}>
-                                                        Kesehatan</option>
-                                                </select>
+                <option value="">Pilih Jurusan</option>
+                @foreach($jurusanOptions as $j)
+                    <option value="{{ $j->nama_jurusan }}" {{ old('jurusan', $hc->jurusan) == $j->nama_jurusan ? 'selected' : '' }}>{{ $j->nama_jurusan }}</option>
+                @endforeach
+            </select>
                                             </td>
                                         </tr>
                                         <tr>
@@ -137,32 +131,11 @@
                                             <td>
                                                 <select class="form-select" aria-label="Default select example"
                                                     name="prodi" id="prodi">
-                                                    <option value="">Pilih Prodi</option>
-                                                    <option value="D3 Teknik Informatika"
-                                                        {{ old('prodi', $hc->prodi) == 'D3 Teknik Informatika' ? 'selected' : '' }}>
-                                                        D3 Teknik Informatika</option>
-                                                    <option value="D4 Rekayasa Perangkat Lunak"
-                                                        {{ old('prodi', $hc->prodi) == 'D4 Rekayasa Perangkat Lunak' ? 'selected' : '' }}>
-                                                        D4 Rekayasa Perangkat Lunak</option>
-                                                    <option value="D4 Sistem Informasi Kota Cerdas"
-                                                        {{ old('prodi', $hc->prodi) == 'D4 Sistem Informasi Kota Cerdas' ? 'selected' : '' }}>
-                                                        D4 Sistem Informasi Kota Cerdas</option>
-                                                    <option value="D3 Teknik Mesin"
-                                                        {{ old('prodi', $hc->prodi) == 'D3 Teknik Mesin' ? 'selected' : '' }}>
-                                                        D3 Teknik Mesin</option>
-                                                    <option value="D4 Perancangan Manufaktur"
-                                                        {{ old('prodi', $hc->prodi) == 'D4 Perancangan Manufaktur' ? 'selected' : '' }}>
-                                                        D4 Perancangan Manufaktur</option>
-                                                    <option value="D3 Teknik Pendingin dan Tata Udara"
-                                                        {{ old('prodi', $hc->prodi) == 'D3 Teknik Pendingin dan Tata Udara' ? 'selected' : '' }}>
-                                                        D3 Teknik Pendingin dan Tata Udara</option>
-                                                    <option value="D4 Teknologi Rekayasa Instrumentasi dan Kontrol"
-                                                        {{ old('prodi', $hc->prodi) == 'D4 Teknologi Rekayasa Instrumentasi dan Kontrol' ? 'selected' : '' }}>
-                                                        D4 Teknologi Rekayasa Instrumentasi dan Kontrol</option>
-                                                    <option value="D3 Keperawatan"
-                                                        {{ old('prodi', $hc->prodi) == 'D3 Keperawatan' ? 'selected' : '' }}>
-                                                        D3 Keperawatan</option>
-                                                </select>
+                <option value="">Pilih Prodi</option>
+                @foreach($prodiOptions as $pr)
+                    <option value="{{ $pr->nama_prodi }}" {{ old('prodi', $hc->prodi) == $pr->nama_prodi ? 'selected' : '' }}>{{ $pr->nama_prodi }}</option>
+                @endforeach
+            </select>
                                             </td>
                                         </tr>
                                         <tr>
@@ -212,6 +185,20 @@
                                                 <span class="text-danger"><i class="fa fa-warning me-2"
                                                         data-bs-toggle="tooltip"></i>masukan file jika ada
                                                     perubahan</span>
+                                            </td>
+                                        </tr>
+<tr>
+                                            <th>Gambar Ciptaan (opsional, boleh lebih dari 1 file)</th>
+                                            <td>
+                                                @if (!empty($hc->gambar_ciptaan))
+                                                    File : {{ collect(\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan))->map(fn($f) => basename($f))->implode(', ') }}
+                                                @else
+                                                    File : Tidak ada
+                                                @endif
+                                                <input type="file" class="form-control " placeholder=""
+                                                    name="gambar_ciptaan[]" multiple accept=".pdf,.jpg,.jpeg,.png" id="gambar_ciptaan">
+                                                <span class="text-danger"><i class="fa fa-warning me-2"
+                                                        data-bs-toggle="tooltip"></i>Masukkan file baru jika ingin mengganti (boleh lebih dari 1 file, maks 2MB per file). Khusus file gambar, ukurannya harus 1440px x 654px.</span>
                                             </td>
                                         </tr>
                                         <tr>

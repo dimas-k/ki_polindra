@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\HakCipta;
+use App\Models\Prodi;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -93,6 +94,7 @@ class AdminHaKCiptaController extends Controller
         // Cari data paten berdasarkan salah satu kolom file
         $hc = HakCipta::where(function ($query) use ($filename) {
             $query->where('dokumen_invensi', 'dokumen-hc/' . $filename)
+                ->orWhere('gambar_ciptaan', 'LIKE', '%"dokumen-hc/' . $filename . '"%')
                 ->orWhere('sertifikat_hakcipta', 'dokumen-hc/' . $filename);
         })->first();
 
@@ -151,17 +153,20 @@ class AdminHaKCiptaController extends Controller
             'no_telepon' => 'required|max:14',
             'tanggal_lahir' => 'required|date',
             'ktp_inventor' => 'nullable|mimes:pdf|max:2028',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required|integer',
             'institusi' => 'required|string',
             'data_pengaju2' => 'nullable|mimes:xlsx',
-            'jurusan' => 'required',
-            'prodi' => 'required',
+            'jurusan' => 'required|exists:jurusan,nama_jurusan',
+            'prodi' => 'required|exists:prodi,nama_prodi',
             'jenis_ciptaan' => 'required',
             'judul_ciptaan' => 'required',
             'uraian_singkat' => 'required|max:60000',
             'dokumen_invensi' => 'nullable|mimes:pdf|max:2028',
+            'gambar_ciptaan' => \App\Support\MultiFileStorage::RULE_NULLABLE,
+            'gambar_ciptaan.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
             'surat_pengalihan' => 'nullable|mimes:pdf|max:2028',
             'surat_pernyataan' => 'nullable|mimes:pdf|max:2028',
             'tanggal_permohonan' => 'required|date'
@@ -180,14 +185,21 @@ class AdminHaKCiptaController extends Controller
             $hc->institusi = $request->institusi;
             $hc->jurusan = $request->jurusan;
             $hc->prodi = $request->prodi;
+            $hc->prodi_id = Prodi::findIdByName($request->prodi);
             $hc->jenis_ciptaan = $request->jenis_ciptaan;
             $hc->judul_ciptaan = $request->judul_ciptaan;
             $hc->uraian_singkat = $request->uraian_singkat;
             $hc->tanggal_permohonan = $request->tanggal_permohonan;
     
             $publicFiles = ['dokumen_invensi'];
+            // gambar ciptaan boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+            if ($request->hasFile('gambar_ciptaan')) {
+                foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
+                $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'public');
+            }
             $privateFiles = [
                 'ktp_inventor' => 'ktp_inventor',
+                'gambar_img' => \App\Support\GambarImage::RULE,
                 'data_pengaju2' => 'data_pengaju2',
                 'surat_pengalihan' => 'surat_pengalihan',
                 'surat_pernyataan' => 'surat_pernyataan',
@@ -218,6 +230,9 @@ class AdminHaKCiptaController extends Controller
                     $hc->{$field} = $path;
                 }
             }
+            if ($request->hasFile('gambar_img')) {
+                $hc->gambar_img = \App\Support\GambarImage::store($request);
+            }
             $hc->save($validasidata);
             return redirect('/admin/hak-cipta')->with('success','Data hak cipta berhasil di update');
         } catch(\Exception $e) {
@@ -233,6 +248,7 @@ class AdminHaKCiptaController extends Controller
             'no_telepon' => 'required',
             'tanggal_lahir' => 'required',
             'ktp_inventor' => 'required|mimes:pdf',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required',
@@ -241,6 +257,8 @@ class AdminHaKCiptaController extends Controller
             'judul_ciptaan' => 'required',
             'uraian_singkat' => 'required|max:60000',
             'dokumen_invensi' => 'required|mimes:pdf',
+            'gambar_ciptaan' => \App\Support\MultiFileStorage::RULE_NULLABLE,
+            'gambar_ciptaan.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
             'surat_pengalihan' => 'required|mimes:pdf',
             'surat_pernyataan' => 'required|mimes:pdf',
             'tanggal_permohonan' => 'required'
@@ -262,8 +280,14 @@ class AdminHaKCiptaController extends Controller
         $hc->tanggal_permohonan = $request->tanggal_permohonan;
 
         $publicFiles = ['dokumen_invensi'];
+        // gambar ciptaan boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+        if ($request->hasFile('gambar_ciptaan')) {
+            foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
+            $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'public');
+        }
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'surat_pengalihan' => 'surat_pengalihan',
             'surat_pernyataan' => 'surat_pernyataan',
         ];
@@ -295,6 +319,9 @@ class AdminHaKCiptaController extends Controller
         }
 
         // Simpan perubahan ke database
+        if ($request->hasFile('gambar_img')) {
+            $hc->gambar_img = \App\Support\GambarImage::store($request);
+        }
         $hc->save($validasidata);
         return redirect('/admin/hak-cipta')->with('success','Data hak cipta berhasil di update');
 
@@ -320,6 +347,9 @@ class AdminHaKCiptaController extends Controller
                 $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
                 $hc->sertifikat_hakcipta = $file->storeAs('dokumen-hc', $filename, 'public');
             }
+        }
+        if ($request->hasFile('gambar_img')) {
+            $hc->gambar_img = \App\Support\GambarImage::store($request);
         }
         $hc->save($validasidata);
         return redirect('/admin/hak-cipta')->with('success','Data hak cipta berhasil di update')
@@ -359,6 +389,9 @@ class AdminHaKCiptaController extends Controller
         }
 
         // Simpan perubahan ke database
+        if ($request->hasFile('gambar_img')) {
+            $hc->gambar_img = \App\Support\GambarImage::store($request);
+        }
         $hc->save();
 
         return redirect('/admin/hak-cipta')->with('success', 'Status Hak Cipta berhasil di update');
@@ -383,7 +416,7 @@ class AdminHaKCiptaController extends Controller
     public function tambahDosen()
     {
         $users = DB::table('users')
-        ->select('id', 'nama_lengkap')
+        ->select('id', 'nama_lengkap', 'alamat', 'no_telepon', 'email')
         ->where('role', '=', 'Dosen')
         ->get();
         return view('admin.adminhk.tambah.dosen', compact('users'));
@@ -391,7 +424,7 @@ class AdminHaKCiptaController extends Controller
     public function tambahHcUmum()
     {
         $users = DB::table('users')
-        ->select('id', 'nama_lengkap')
+        ->select('id', 'nama_lengkap', 'alamat', 'no_telepon', 'email')
         ->where('role', '=', 'Umum')
         ->get();
         return view('admin.adminhk.tambah.umum', compact('users'));
@@ -406,17 +439,20 @@ class AdminHaKCiptaController extends Controller
             'no_telepon' => 'required',
             'tanggal_lahir' => 'required',
             'ktp_inventor' => 'required|mimes:pdf',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required',
             'institusi' => 'required',
             'data_pengaju2' => 'mimes:xlsx',
-            'jurusan' => 'required',
-            'prodi' => 'required',
+            'jurusan' => 'required|exists:jurusan,nama_jurusan',
+            'prodi' => 'required|exists:prodi,nama_prodi',
             'jenis_ciptaan' => 'required',
             'judul_ciptaan' => 'required',
             'uraian_singkat' => 'required|max:60000',
             'dokumen_invensi' => 'required|mimes:pdf',
+            'gambar_ciptaan' => \App\Support\MultiFileStorage::RULE_NULLABLE,
+            'gambar_ciptaan.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
             'surat_pengalihan' => 'required|mimes:pdf',
             'surat_pernyataan' => 'required|mimes:pdf',
             'tanggal_permohonan' => 'required'
@@ -435,14 +471,21 @@ class AdminHaKCiptaController extends Controller
         $hc->institusi = $request->institusi;
         $hc->jurusan = $request->jurusan;
         $hc->prodi = $request->prodi;
+        $hc->prodi_id = Prodi::findIdByName($request->prodi);
         $hc->jenis_ciptaan = $request->jenis_ciptaan;
         $hc->judul_ciptaan = $request->judul_ciptaan;
         $hc->uraian_singkat = $request->uraian_singkat;
         $hc->tanggal_permohonan = $request->tanggal_permohonan;
 
         $publicFiles = ['dokumen_invensi'];
+        // gambar ciptaan boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+        if ($request->hasFile('gambar_ciptaan')) {
+            foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
+            $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'public');
+        }
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'data_pengaju2' => 'data_pengaju2',
             'surat_pengalihan' => 'surat_pengalihan',
             'surat_pernyataan' => 'surat_pernyataan'
@@ -468,6 +511,9 @@ class AdminHaKCiptaController extends Controller
                 $hc->{$field} = $path;
             }
         }
+        if ($request->hasFile('gambar_img')) {
+            $hc->gambar_img = \App\Support\GambarImage::store($request);
+        }
         $hc->save($validasidata);
 
         return redirect('/admin/hak-cipta')->with('success', 'Data hak cipta berhasil ditambahkan');
@@ -481,6 +527,7 @@ class AdminHaKCiptaController extends Controller
             'no_telepon' => 'required',
             'tanggal_lahir' => 'required',
             'ktp_inventor' => 'required|mimes:pdf',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required',
@@ -489,6 +536,8 @@ class AdminHaKCiptaController extends Controller
             'judul_ciptaan' => 'required',
             'uraian_singkat' => 'required|max:60000',
             'dokumen_invensi' => 'required|mimes:pdf',
+            'gambar_ciptaan' => \App\Support\MultiFileStorage::RULE_NULLABLE,
+            'gambar_ciptaan.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
             'surat_pengalihan' => 'required|mimes:pdf',
             'surat_pernyataan' => 'required|mimes:pdf',
             'tanggal_permohonan' => 'required'
@@ -511,8 +560,14 @@ class AdminHaKCiptaController extends Controller
         $hc->tanggal_permohonan = $request->tanggal_permohonan;
 
         $publicFiles = ['dokumen_invensi'];
+        // gambar ciptaan boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+        if ($request->hasFile('gambar_ciptaan')) {
+            foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
+            $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'public');
+        }
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
+            'gambar_img' => \App\Support\GambarImage::RULE,
             'data_pengaju2' => 'data_pengaju2',
             'surat_pengalihan' => 'surat_pengalihan',
             'surat_pernyataan' => 'surat_pernyataan'
@@ -537,6 +592,9 @@ class AdminHaKCiptaController extends Controller
                 $path = $file->storeAs('dokumen-hc', $filename, 'public');
                 $hc->{$field} = $path;
             }
+        }
+        if ($request->hasFile('gambar_img')) {
+            $hc->gambar_img = \App\Support\GambarImage::store($request);
         }
         $hc->save($validasidata);
         return redirect('/admin/hak-cipta')->with('success', 'Data hak cipta berhasil ditambahkan');

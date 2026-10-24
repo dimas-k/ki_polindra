@@ -22,9 +22,26 @@ class Paten extends Model
     protected $guarded = 'id';
     protected $table = 'paten';
 
+    /**
+     * Prodi asal pengaju paten (relasi FK prodi_id).
+     * Untuk data lama sebelum relasi ini dibuat, prodi_id bisa null
+     * — pakai kolom teks 'prodi'/'jurusan' sebagai fallback tampilan.
+     */
+    public function prodi() : BelongsTo
+    {
+        return $this->belongsTo(Prodi::class);
+    }
+
     protected static function booted()
     {
         static::deleting(function ($paten) {
+            // field multi-file (JSON array of path)
+            foreach (['gambar_tampilan', 'gambar_paten'] as $mf) {
+                foreach (\App\Support\MultiFileStorage::decode($paten->{$mf}) as $mp) {
+                    Storage::disk('public')->delete($mp);
+                }
+            }
+
             // Daftar file yang disimpan di private storage
             $privateFiles = [
                 'ktp_inventor',
@@ -69,5 +86,9 @@ class Paten extends Model
         return $this->hasMany(Jurusan::class);
     }
 
-    
+    public function payment(): \Illuminate\Database\Eloquent\Relations\MorphOne
+    {
+        return $this->morphOne(Payment::class, 'payable')->latestOfMany();
+    }
+
 }

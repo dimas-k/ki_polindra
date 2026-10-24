@@ -109,6 +109,17 @@
                                                 target="_blank">Lihat Dokumen Invensi
                                             </a>
                                     </tr>
+@if (!empty($hc->gambar_ciptaan))
+<tr>
+                                        <th>Gambar Ciptaan</th>
+                                        <td>:
+                                            @foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $__f)
+<a href="{{ route('public_hc_dosen', ['filename' => basename($__f)]) }}"
+                                                target="_blank">Lihat Gambar Ciptaan {{ $loop->iteration }} ({{ \App\Support\MultiFileStorage::isImage($__f) ? 'Gambar' : 'PDF' }})
+                                            </a>@if (!$loop->last)<br>@endif
+@endforeach
+                                    </tr>
+@endif
                                     <tr>
                                         <th>Surat Pengalihan Hak Cipta</th>
                                         <td>: 
