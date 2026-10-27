@@ -174,6 +174,22 @@
             <div class="card-body p-4">
 
                 <div class="detail-row">
+                    <div class="detail-icon"><i class="bi bi-hash"></i></div>
+                    <div>
+                        <div class="detail-label">No Pendaftaran</div>
+                        <div class="detail-value">{{ $paten->no_pendaftaran ?? '-' }}</div>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-icon"><i class="bi bi-list-ol"></i></div>
+                    <div>
+                        <div class="detail-label">No Antrian</div>
+                        <div class="detail-value">{{ $paten->no_antrian ?? '-' }}</div>
+                    </div>
+                </div>
+
+                <div class="detail-row">
                     <div class="detail-icon"><i class="bi bi-person"></i></div>
                     <div>
                         <div class="detail-label">Nama Lengkap</div>
@@ -196,35 +212,6 @@
                     <div>
                         <div class="detail-label">Jenis Paten</div>
                         <div class="detail-value">{{ $paten->jenis_paten }}</div>
-                    </div>
-                </div>
-
-                <div class="detail-row">
-                    <div class="detail-icon"><i class="bi bi-file-earmark-pdf"></i></div>
-                    <div>
-                        <div class="detail-label">Dokumen Publik</div>
-                        <div class="docs-grid">
-                            <a href="{{ route('public_paten_guest', ['filename' => basename($paten->abstrak_paten)]) }}"
-                                target="_blank" class="btn-doc">
-                                <i class="bi bi-file-text"></i> Abstrak
-                            </a>
-                            <a href="{{ route('public_paten_guest', ['filename' => basename($paten->deskripsi_paten)]) }}"
-                                target="_blank" class="btn-doc">
-                                <i class="bi bi-file-earmark-text"></i> Deskripsi
-                            </a>
-                            @foreach (\App\Support\MultiFileStorage::decode($paten->gambar_paten) as $__f)
-<a href="{{ route('public_paten_guest', ['filename' => basename($__f)]) }}"
-                                target="_blank" class="btn-doc">
-                                <i class="bi bi-{{ \App\Support\MultiFileStorage::isImage($__f) ? 'image' : 'file-earmark-pdf' }}"></i> {{ \App\Support\MultiFileStorage::isImage($__f) ? 'Gambar' : 'PDF' }} Paten {{ $loop->iteration }}
-                            </a>@if (!$loop->last)<br>@endif
-@endforeach
-                            @foreach (\App\Support\MultiFileStorage::decode($paten->gambar_tampilan) as $__f)
-<a href="{{ route('public_paten_guest', ['filename' => basename($__f)]) }}"
-                                target="_blank" class="btn-doc">
-                                <i class="bi bi-{{ \App\Support\MultiFileStorage::isImage($__f) ? 'image' : 'file-earmark-pdf' }}"></i> {{ \App\Support\MultiFileStorage::isImage($__f) ? 'Gambar' : 'PDF' }} Tampilan {{ $loop->iteration }}
-                            </a>@if (!$loop->last)<br>@endif
-@endforeach
-                        </div>
                     </div>
                 </div>
 

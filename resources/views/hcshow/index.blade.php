@@ -166,6 +166,14 @@
             <div class="card-body p-4">
 
                 <div class="detail-row">
+                    <div class="detail-icon"><i class="bi bi-hash"></i></div>
+                    <div>
+                        <div class="detail-label">No Pendaftaran</div>
+                        <div class="detail-value">{{ $hc->no_pendaftaran ?? '-' }}</div>
+                    </div>
+                </div>
+
+                <div class="detail-row">
                     <div class="detail-icon"><i class="bi bi-person"></i></div>
                     <div>
                         <div class="detail-label">Nama Lengkap</div>
@@ -198,36 +206,6 @@
                         <div class="detail-value" style="white-space:pre-line">{{ $hc->uraian_singkat }}</div>
                     </div>
                 </div>
-
-                <div class="detail-row">
-                    <div class="detail-icon"><i class="bi bi-file-earmark-pdf"></i></div>
-                    <div>
-                        <div class="detail-label">Dokumen Invensi</div>
-                        <div class="detail-value mt-1">
-                            <a href="{{ route('public_hc_guest', ['filename' => basename($hc->dokumen_invensi)]) }}"
-                                target="_blank" class="btn-doc">
-                                <i class="bi bi-eye"></i> Lihat Dokumen
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                @if (!empty($hc->gambar_ciptaan))
-                <div class="detail-row">
-                    <div class="detail-icon"><i class="bi bi-image"></i></div>
-                    <div>
-                        <div class="detail-label">Gambar Ciptaan</div>
-                        <div class="detail-value mt-1">
-                            @foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $__f)
-                                <a href="{{ route('public_hc_guest', ['filename' => basename($__f)]) }}"
-                                    target="_blank" class="btn-doc me-1 mb-1 d-inline-block">
-                                    <i class="bi bi-{{ \App\Support\MultiFileStorage::isImage($__f) ? 'image' : 'file-earmark-pdf' }}"></i> Lihat {{ \App\Support\MultiFileStorage::isImage($__f) ? 'Gambar' : 'PDF' }} {{ $loop->iteration }}
-                                </a>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-                @endif
 
                 <div class="detail-row">
                     <div class="detail-icon"><i class="bi bi-calendar3"></i></div>

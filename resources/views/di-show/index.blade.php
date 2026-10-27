@@ -168,6 +168,22 @@
             <div class="card-body p-4">
 
                 <div class="detail-row">
+                    <div class="detail-icon"><i class="bi bi-hash"></i></div>
+                    <div>
+                        <div class="detail-label">No Pendaftaran</div>
+                        <div class="detail-value">{{ $di->no_pendaftaran ?? '-' }}</div>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-icon"><i class="bi bi-list-ol"></i></div>
+                    <div>
+                        <div class="detail-label">No Antrian</div>
+                        <div class="detail-value">{{ $di->no_antrian ?? '-' }}</div>
+                    </div>
+                </div>
+
+                <div class="detail-row">
                     <div class="detail-icon"><i class="bi bi-person"></i></div>
                     <div>
                         <div class="detail-label">Nama Lengkap</div>
@@ -190,23 +206,6 @@
                     <div>
                         <div class="detail-label">Jenis Desain Industri</div>
                         <div class="detail-value">{{ $di->jenis_di }}</div>
-                    </div>
-                </div>
-
-                <div class="detail-row">
-                    <div class="detail-icon"><i class="bi bi-file-earmark-pdf"></i></div>
-                    <div>
-                        <div class="detail-label">Dokumen</div>
-                        <div class="detail-value mt-1 d-flex flex-wrap gap-2">
-                            @foreach (\App\Support\MultiFileStorage::decode($di->gambar_di) as $__f)
-<a href="{{ asset('storage/' . $__f) }}" target="_blank" class="btn-doc">
-                                <i class="bi bi-{{ \App\Support\MultiFileStorage::isImage($__f) ? 'image' : 'file-earmark-pdf' }}"></i> Lihat {{ \App\Support\MultiFileStorage::isImage($__f) ? 'Gambar' : 'PDF' }} DI {{ $loop->iteration }}
-                            </a>
-@endforeach
-                            <a href="{{ asset('storage/' . $di->uraian_di) }}" target="_blank" class="btn-doc">
-                                <i class="bi bi-file-text"></i> Lihat Uraian DI
-                            </a>
-                        </div>
                     </div>
                 </div>
 
