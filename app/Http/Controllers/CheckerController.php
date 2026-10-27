@@ -70,30 +70,11 @@ class CheckerController extends Controller
 
     public function viewSensitifFilesPaten($filename)
     {
-        $filePaten = storage_path('app/private/dokumen-paten/' . $filename);
-
-        // Pastikan file ada
-        if (!file_exists($filePaten)) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        // Cari data paten berdasarkan file terkait
-        $paten = Paten::where(function ($query) use ($filename) {
-            $query->where('ktp_inventor', 'dokumen-paten/' . $filename)
-                ->orWhere('data_pengaju2', 'dokumen-paten/' . $filename)
-                ->orWhere('pengalihan_hak', 'dokumen-paten/' . $filename)
-                ->orWhere('klaim', 'dokumen-paten/' . $filename)
-                ->orWhere('pernyataan_kepemilikan', 'dokumen-paten/' . $filename)
-                ->orWhere('surat_kuasa', 'dokumen-paten/' . $filename);
-        })->first();
-
-        // Validasi: file harus ada di database (kolom vital)
+        $paten = \App\Support\PatenPrivateFile::findRecord($filename);
         if (!$paten) {
             abort(404, 'File tidak ditemukan.');
         }
-
-        // Kirim file sebagai response
-        return response()->file($filePaten);
+        return \App\Support\PatenPrivateFile::response($filename);
     }
 
 
@@ -153,30 +134,11 @@ class CheckerController extends Controller
 
     public function viewPublicFilesPaten($filename)
     {
-        $filePaten = storage_path('app/public/dokumen-paten/' . $filename);
-
-        // Pastikan file ada
-        if (!file_exists($filePaten)) {
+        $paten = \App\Support\PatenPrivateFile::findRecord($filename);
+        if (!$paten) {
             abort(404, 'File tidak ditemukan.');
         }
-
-        // Cari data paten berdasarkan file terkait
-        $paten = Paten::where(function ($query) use ($filename) {
-            $query
-                ->Where('abstrak_paten', 'dokumen-paten/' . $filename)
-                ->orWhere('deskripsi_paten', 'dokumen-paten/' . $filename)
-                ->orWhere('gambar_paten', 'LIKE', '%"dokumen-paten/' . $filename . '"%')
-                ->orWhere('gambar_tampilan', 'LIKE', '%"dokumen-paten/' . $filename . '"%')
-                ->orWhere('sertifikat_paten', 'dokumen-paten/' . $filename);
-        })->first();
-
-        // Validasi akses: hanya pemilik file atau role Checker
-        if (!$paten || ($paten->user_id !== auth()->id() && auth()->user()->role !== 'Checker')) {
-            abort(403, 'Anda tidak memiliki akses ke file ini.');
-        }
-
-        // Kirim file sebagai response
-        return response()->file($filePaten);
+        return \App\Support\PatenPrivateFile::response($filename);
     }
 
 

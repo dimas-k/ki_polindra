@@ -41,8 +41,8 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::get('/admin/paten/show/{id}', [AdminPatenController::class, 'show'])->name('admin_paten.show');
     Route::get('/admin/paten/kirim-ke-dashboard/{id}', [AdminPatenController::class, 'formKirimKeDashboard'])->name('admin_paten.form_kirim');
     Route::post('/admin/paten/kirim-ke-dashboard/{id}', [AdminPatenController::class, 'kirimKeDashboard'])->name('admin_paten.kirim');
-    Route::get('/paten/{file}', [AdminPatenController::class, 'viewSensitifFilesPaten']);
-    Route::get('public/paten/{file}', [AdminPatenController::class, 'viewPublicFilesPaten']);
+    Route::get('/paten/{file}', [AdminPatenController::class, 'viewSensitifFilesPaten'])->name('private_paten_admin');
+    Route::get('public/paten/{file}', [AdminPatenController::class, 'viewPublicFilesPaten'])->name('public_paten_admin');
     Route::get('/desain-industri/{file}', [AdminDesainIndustriController::class, 'viewSensitifFilesDi'])->middleware(['auth', 'role:Admin'])->name('private_di');
     Route::get('/public/desain-industri/{file}', [AdminDesainIndustriController::class, 'viewPublicFilesDi'])->middleware(['auth', 'role:Admin'])->name('public_di');
     Route::get('/sertifikat-paten/{file}', [AdminPatenController::class, 'viewFilesPaten'])->middleware(['auth', 'role:Admin'])->name('public_paten');

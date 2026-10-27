@@ -311,55 +311,19 @@ class UmumController extends Controller
 
     public function viewSensitifFilesPaten($filename)
     {
-        // Path file yang akan diakses
-        $filePaten = storage_path('app/private/dokumen-paten/' . $filename);
-        // Pastikan file ada
-        if (!file_exists($filePaten)) {
-            abort(404, 'File tidak ditemukan.');
-        }
-        // Validasi akses file (hanya pemilik file yang bisa mengaksesnya)
-        $paten = Paten::where(function ($query) use ($filename) {
-            $query->where('ktp_inventor', 'dokumen-paten/' . $filename)
-                ->orWhere('pengalihan_hak', 'dokumen-paten/' . $filename)
-                ->orWhere('klaim', 'dokumen-paten/' . $filename)
-                ->orWhere('pernyataan_kepemilikan', 'dokumen-paten/' . $filename)
-                ->orWhere('surat_kuasa', 'dokumen-paten/' . $filename);
-        })->first();
-        // Pastikan file milik user yang sedang login
-        if (!$paten || $paten->user_id !== auth()->id()) {
+        $paten = \App\Support\PatenPrivateFile::findRecord($filename);
+        if (!$paten || (int) $paten->user_id !== (int) auth()->id()) {
             abort(403, 'Anda tidak memiliki akses ke file ini.');
         }
-
-        // Mengirim file sebagai response
-        return response()->file($filePaten);
-        
+        return \App\Support\PatenPrivateFile::response($filename);
     }
     public function viewPublicFilesPaten($filename)
     {
-        // Path file yang akan diakses
-        $filePaten = storage_path('app/public/dokumen-paten/' . $filename);
-        // Pastikan file ada
-        if (!file_exists($filePaten)) {
-            abort(404, 'File tidak ditemukan.');
-        }
-        // Validasi akses file (hanya pemilik file yang bisa mengaksesnya)
-        $paten = Paten::where(function ($query) use ($filename) {
-            $query
-                ->Where('abstrak_paten','dokumen-paten/' . $filename)
-                ->orWhere('deskripsi_paten','dokumen-paten/' . $filename)
-                ->orWhere('gambar_paten', 'LIKE', '%"dokumen-paten/' . $filename . '"%')
-                ->orWhere('gambar_tampilan', 'LIKE', '%"dokumen-paten/' . $filename . '"%')
-                ->orWhere('sertifikat_paten','dokumen-paten/' . $filename);
-
-        })->first();
-        // Pastikan file milik user yang sedang login
-        if (!$paten || $paten->user_id !== auth()->id()) {
+        $paten = \App\Support\PatenPrivateFile::findRecord($filename);
+        if (!$paten || (int) $paten->user_id !== (int) auth()->id()) {
             abort(403, 'Anda tidak memiliki akses ke file ini.');
         }
-
-        // Mengirim file sebagai response
-        return response()->file($filePaten);
-        
+        return \App\Support\PatenPrivateFile::response($filename);
     }
 
     public function editPaten(string $id)
@@ -381,29 +345,28 @@ class UmumController extends Controller
             'alamat' => 'required',
             'no_telepon' => 'required|max:14',
             'tanggal_lahir' => 'required|date',
-            'ktp_inventor' => 'required|mimes:pdf|max:2028',
+            'ktp_inventor' => 'nullable|mimes:pdf|max:2028',
             'gambar_img' => \App\Support\GambarImage::RULE,
             'email' => 'required|email',
             'kewarganegaraan' => 'required',
             'kode_pos' => 'required|integer',
             'jenis_paten' => 'required',
             'judul_paten' => 'required',
-            'deskripsi_paten' => 'required|mimes:pdf|max:2028',
-            'abstrak_paten' => 'required|mimes:pdf|max:2028',
-            'pengalihan_hak' => 'required|mimes:pdf|max:2028',
-            'klaim' => 'required|mimes:pdf|max:2028',
-            'pernyataan_kepemilikan' => 'required|mimes:pdf|max:2028',
-            'surat_kuasa' => 'required|mimes:pdf|max:2028',
-            'gambar_paten' => 'required|mimes:pdf|max:2028',
-            'gambar_tampilan' => \App\Support\MultiFileStorage::RULE_REQUIRED,
+            'deskripsi_paten' => 'nullable|mimes:pdf|max:2028',
+            'abstrak_paten' => 'nullable|mimes:pdf|max:2028',
+            'pengalihan_hak' => 'nullable|mimes:pdf|max:2028',
+            'klaim' => 'nullable|mimes:pdf|max:2028',
+            'pernyataan_kepemilikan' => 'nullable|mimes:pdf|max:2028',
+            'surat_kuasa' => 'nullable|mimes:pdf|max:2028',
+            'gambar_paten' => 'nullable|mimes:pdf|max:2028',
+            'gambar_tampilan' => \App\Support\MultiFileStorage::RULE_NULLABLE,
             'gambar_tampilan.*' => \App\Support\MultiFileStorage::RULE_EACH_FILE,
             'tanggal_permohonan' => 'required'
         ]);
 
         try {
-            // Cari data paten berdasarkan ID
-            $paten = new Paten();
-            $paten->user_id = Auth::user()->id;
+            // Update record yang dipilih agar file yang tidak diganti tetap dipertahankan.
+            $paten = Paten::findOrFail($id);
             $paten->nama_lengkap = $request->nama_lengkap;
             $paten->alamat = $request->alamat;
             $paten->no_telepon = $request->no_telepon;
@@ -429,6 +392,7 @@ class UmumController extends Controller
                     // Jika ada file lama, hapus dari disk 'private'
                     if ($paten->{$storageName}) {
                         Storage::disk('private')->delete($paten->{$storageName});
+                        Storage::disk('public')->delete($paten->{$storageName});
                     }
                     $file = $request->file($field);
                     $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
@@ -439,22 +403,33 @@ class UmumController extends Controller
             }
     
             $publicFiles = ['deskripsi_paten', 'abstrak_paten'];
-            // field gambar boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
-            foreach (['gambar_paten', 'gambar_tampilan'] as $mf) {
-                if ($request->hasFile($mf)) {
-                    foreach (\App\Support\MultiFileStorage::decode($paten->{$mf}) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
-                    $paten->{$mf} = \App\Support\MultiFileStorage::store($request, $mf, 'dokumen-paten', 'public');
+            // Gambar paten mengganti file sebelumnya; gambar tampilan ditambahkan ke daftar lama.
+            if ($request->hasFile('gambar_paten')) {
+                foreach (\App\Support\MultiFileStorage::decode($paten->gambar_paten) as $oldPath) {
+                    \Illuminate\Support\Facades\Storage::disk('private')->delete($oldPath);
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
                 }
+                $paten->gambar_paten = \App\Support\MultiFileStorage::store($request, 'gambar_paten', 'dokumen-paten', 'private');
+            }
+            if ($request->hasFile('gambar_tampilan')) {
+                $newPaths = \App\Support\MultiFileStorage::decode(
+                    \App\Support\MultiFileStorage::store($request, 'gambar_tampilan', 'dokumen-paten', 'private')
+                );
+                $paten->gambar_tampilan = json_encode(array_merge(
+                    \App\Support\MultiFileStorage::decode($paten->gambar_tampilan),
+                    $newPaths
+                ));
             }
             foreach ($publicFiles as $field) {
                 if ($request->hasFile($field)) {
                     if ($paten->{$field}) {
+                        Storage::disk('private')->delete($paten->{$field});
                         Storage::disk('public')->delete($paten->{$field});
                     }
                     $file = $request->file($field);
                     $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
-                    // Simpan file ke folder 'dokumen-paten' pada disk 'public'
-                    $path = $file->storeAs('dokumen-paten', $filename, 'public');
+                    // Semua dokumen paten umum disimpan di private storage.
+                    $path = $file->storeAs('dokumen-paten', $filename, 'private');
                     $paten->{$field} = $path;
                 }
             }
@@ -738,8 +713,7 @@ class UmumController extends Controller
             // field gambar boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
             foreach (['gambar_paten', 'gambar_tampilan'] as $mf) {
                 if ($request->hasFile($mf)) {
-                    foreach (\App\Support\MultiFileStorage::decode($paten->{$mf}) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
-                    $paten->{$mf} = \App\Support\MultiFileStorage::store($request, $mf, 'dokumen-paten', 'public');
+                    $paten->{$mf} = \App\Support\MultiFileStorage::store($request, $mf, 'dokumen-paten', 'private');
                 }
             }
             // Daftar file yang disimpan di private storage
@@ -765,8 +739,8 @@ class UmumController extends Controller
                 if ($request->hasFile($field)) {
                     $file = $request->file($field);
                     $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
-                    // Simpan di disk 'public' dalam folder 'dokumen-paten'
-                    $path = $file->storeAs('dokumen-paten', $filename, 'public');
+                    // Simpan di private storage agar dokumen tidak dipublikasikan.
+                    $path = $file->storeAs('dokumen-paten', $filename, 'private');
                     $paten->{$field} = $path;
                 }
             }

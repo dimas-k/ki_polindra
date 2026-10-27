@@ -343,6 +343,11 @@ class PatenController extends Controller
     }
     public function viewPublicFilesPatenGuest($filename)
     {
+        $linkedPaten = \App\Support\PatenPrivateFile::findRecord($filename);
+        if ($linkedPaten && \App\Models\User::whereKey($linkedPaten->user_id)->value('role') === 'Umum') {
+            abort(403, 'Dokumen pengajuan umum hanya dapat diakses oleh pemilik, admin, atau verifikator.');
+        }
+
         $filePaten = storage_path('app/public/dokumen-paten/' . $filename);
 
         if (!file_exists($filePaten)) {
