@@ -80,56 +80,12 @@ class CheckerController extends Controller
 
     public function viewSensitifFilesHc($filename)
     {
-        // Path file di disk 'private'
-        $fileHc = storage_path('app/private/dokumen-hc/' . $filename);
-
-        // Pastikan file ada
-        if (!file_exists($fileHc)) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        // Cari data paten berdasarkan salah satu kolom file
-        $hc = HakCipta::where(function ($query) use ($filename) {
-            $query->where('ktp_inventor', 'dokumen-hc/' . $filename)
-                ->orWhere('data_pengaju2', 'dokumen-hc/' . $filename)
-                ->orWhere('surat_pengalihan', 'dokumen-hc/' . $filename)
-                ->orWhere('surat_pernyataan', 'dokumen-hc/' . $filename);
-        })->first();
-
-        // Validasi akses: hanya Checker yang bisa melihat file vital (tanpa perlu jadi pemilik)
-        if (!$hc) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        // Kirim file sebagai respons
-        return response()->file($fileHc);
+        return \App\Support\KiPrivateFile::responseForStaff('hc', $filename);
     }
 
     public function viewSensitifFilesDi($filename)
     {
-        // Path file di disk 'private'
-        $fileDi = storage_path('app/private/dokumen-di/' . $filename);
-
-        // Pastikan file ada
-        if (!file_exists($fileDi)) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        // Cari data paten berdasarkan salah satu kolom file
-        $di = DesainIndustri::where(function ($query) use ($filename) {
-            $query->where('ktp_inventor', 'dokumen-di/' . $filename)
-                ->orWhere('data_pengaju2', 'dokumen-di/' . $filename)
-                ->orWhere('surat_kepemilikan', 'dokumen-di/' . $filename)
-                ->orWhere('surat_pengalihan', 'dokumen-di/' . $filename);
-        })->first();
-
-        // Validasi akses: Checker bisa melihat semua file vital
-        if (!$di) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        // Kirim file sebagai respons
-        return response()->file($fileDi);
+        return \App\Support\KiPrivateFile::responseForStaff('di', $filename);
     }
 
     public function viewPublicFilesPaten($filename)
@@ -144,54 +100,12 @@ class CheckerController extends Controller
 
     public function viewPublicFilesHc($filename)
     {
-        // Path file di disk 'public'
-        $fileHc = storage_path('app/public/dokumen-hc/' . $filename);
-
-        // Pastikan file ada
-        if (!file_exists($fileHc)) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        // Hanya kolom yang disimpan di disk public
-        $hc = HakCipta::where(function ($query) use ($filename) {
-            $query->where('dokumen_invensi', 'dokumen-hc/' . $filename)
-                ->orWhere('gambar_ciptaan', 'LIKE', '%"dokumen-hc/' . $filename . '"%')
-                ->orWhere('sertifikat_hakcipta', 'dokumen-hc/' . $filename);
-        })->first();
-
-        // Checker bisa melihat semua file public
-        if (!$hc) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        // Kirim file sebagai respons
-        return response()->file($fileHc);
+        return \App\Support\KiPrivateFile::responseForStaff('hc', $filename);
     }
 
     public function viewPublicFilesDi($filename)
     {
-        // Path file di disk 'public'
-        $fileDi = storage_path('app/public/dokumen-di/' . $filename);
-
-        // Pastikan file ada
-        if (!file_exists($fileDi)) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        // Hanya kolom yang disimpan di disk public
-        $di = DesainIndustri::where(function ($query) use ($filename) {
-            $query->where('uraian_di', 'dokumen-di/' . $filename)
-                ->orWhere('gambar_di', 'LIKE', '%"dokumen-di/' . $filename . '"%')
-                ->orWhere('sertifikat_desain', 'dokumen-di/' . $filename);
-        })->first();
-
-        // Checker bisa melihat semua file public tanpa perlu jadi pemilik
-        if (!$di) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        // Kirim file sebagai respons
-        return response()->file($fileDi);
+        return \App\Support\KiPrivateFile::responseForStaff('di', $filename);
     }
 
     public function cek(string $id)

@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 /**
  * Helper untuk field upload yang boleh diisi LEBIH DARI SATU file
@@ -45,7 +46,7 @@ class MultiFileStorage
             if (! $file) {
                 continue;
             }
-            $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+            $filename = Str::uuid() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
             $paths[] = $file->storeAs($folder, $filename, $disk);
         }
 

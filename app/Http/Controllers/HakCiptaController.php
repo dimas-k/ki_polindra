@@ -224,12 +224,12 @@ class HakCiptaController extends Controller
         // gambar ciptaan boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
         if ($request->hasFile('gambar_ciptaan')) {
             foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
-            $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'public');
+            $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'private');
         }
         if ($request->hasFile('dokumen_invensi')) {
             $file = $request->file('dokumen_invensi');
             $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
-            $hc->dokumen_invensi = $file->storeAs('dokumen-hc', $filename, 'public');
+            $hc->dokumen_invensi = $file->storeAs('dokumen-hc', $filename, 'private');
         }
 
         if ($request->hasFile('gambar_img')) {

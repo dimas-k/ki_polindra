@@ -30,6 +30,7 @@ class DesainIndustri extends Model
             foreach (['gambar_di'] as $mf) {
                 foreach (\App\Support\MultiFileStorage::decode($di->{$mf}) as $mp) {
                     Storage::disk('public')->delete($mp);
+                    Storage::disk('private')->delete($mp);
                 }
             }
 
@@ -38,25 +39,24 @@ class DesainIndustri extends Model
                 'ktp_inventor' ,
                 'data_pengaju2',
                 'surat_kepemilikan',
-                'surat_pengalihan'
+                'surat_pengalihan', 'uraian_di', 'gambar_di', 'sertifikat_desain'
             ];
 
             // Daftar file yang disimpan di public storage
             $publicFiles = [
-                'gambar_di', 
-                'uraian_di',
-                'sertifikat_desain'
             ];
 
             foreach ($privateFiles as $field) {
                 if (!empty($di->{$field})) {
                     Storage::disk('private')->delete($di->{$field});
+                    Storage::disk('public')->delete($di->{$field});
                 }
             }
 
             foreach ($publicFiles as $field) {
                 if (!empty($di->{$field})) {
                     Storage::disk('public')->delete($di->{$field});
+                    Storage::disk('private')->delete($di->{$field});
                 }
             }
         });

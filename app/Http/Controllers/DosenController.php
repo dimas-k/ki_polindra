@@ -773,11 +773,10 @@ class DosenController extends Controller
             $hc->uraian_singkat = $request->uraian_singkat;
             $hc->tanggal_permohonan = $request->tanggal_permohonan;
 
-            $publicFiles = ['dokumen_invensi'];
-            // gambar ciptaan boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+            // File gambar baru ditambahkan agar file yang sudah ada tetap tersimpan.
             if ($request->hasFile('gambar_ciptaan')) {
-                foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
-                $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'public');
+                $newPaths = \App\Support\MultiFileStorage::decode(\App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'private'));
+                $hc->gambar_ciptaan = json_encode(array_merge(\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan), $newPaths));
             }
             $privateFiles = [
                 'ktp_inventor' => 'ktp_inventor',
@@ -791,6 +790,7 @@ class DosenController extends Controller
                     // Jika ada file lama, hapus dari disk 'private'
                     if ($hc->{$storageName}) {
                         Storage::disk('private')->delete($hc->{$storageName});
+                        Storage::disk('public')->delete($hc->{$storageName});
                     }
                     $file = $request->file($field);
                     $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
@@ -799,17 +799,14 @@ class DosenController extends Controller
                     $hc->{$storageName} = $path;
                 }
             }
-            foreach ($publicFiles as $field) {
-                if ($request->hasFile($field)) {
-                    if ($hc->{$field}) {
-                        Storage::disk('public')->delete($hc->{$field});
-                    }
-                    $file = $request->file($field);
-                    $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
-                    // Simpan file ke folder 'dokumen-hc' pada disk 'public'
-                    $path = $file->storeAs('dokumen-hc', $filename, 'public');
-                    $hc->{$field} = $path;
+            if ($request->hasFile('dokumen_invensi')) {
+                if ($hc->dokumen_invensi) {
+                    Storage::disk('private')->delete($hc->dokumen_invensi);
+                    Storage::disk('public')->delete($hc->dokumen_invensi);
                 }
+                $file = $request->file('dokumen_invensi');
+                $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+                $hc->dokumen_invensi = $file->storeAs('dokumen-hc', $filename, 'private');
             }
 
             if ($request->hasFile('gambar_img')) {
@@ -872,11 +869,9 @@ class DosenController extends Controller
             $hc->uraian_singkat = $request->uraian_singkat;
             $hc->tanggal_permohonan = $request->tanggal_permohonan;
 
-            $publicFiles = ['dokumen_invensi'];
             // gambar ciptaan boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
             if ($request->hasFile('gambar_ciptaan')) {
-                foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
-                $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'public');
+                $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'private');
             }
             $privateFiles = [
                 'ktp_inventor' => 'ktp_inventor',
@@ -896,14 +891,10 @@ class DosenController extends Controller
                 }
             }
 
-            foreach ($publicFiles as $field) {
-                if ($request->hasFile($field)) {
-                    $file = $request->file($field);
-                    $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
-                    // Simpan di disk 'public' dalam folder 'dokumen-paten'
-                    $path = $file->storeAs('dokumen-hc', $filename, 'public');
-                    $hc->{$field} = $path;
-                }
+            if ($request->hasFile('dokumen_invensi')) {
+                $file = $request->file('dokumen_invensi');
+                $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+                $hc->dokumen_invensi = $file->storeAs('dokumen-hc', $filename, 'private');
             }
             // Simpan data ke database
             if ($request->hasFile('gambar_img')) {
@@ -923,107 +914,22 @@ class DosenController extends Controller
     // Method untuk menampilkan file sensitif
     public function viewSensitifFilesHc($filename)
     {
-        // Tentukan path file (pastikan sesuai struktur penyimpanan)
-        $filePath = storage_path('app/private/dokumen-hc/' . $filename);
-
-        // Cek keberadaan file
-        if (!file_exists($filePath)) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        // Validasi apakah file dimiliki oleh user yang sedang login
-        $hc = HakCipta::where(function ($query) use ($filename) {
-            $query->where('ktp_inventor', 'dokumen-hc/' . $filename)
-                ->orWhere('data_pengaju2', 'dokumen-hc/' . $filename)
-                ->orWhere('surat_pengalihan', 'dokumen-hc/' . $filename)
-                ->orWhere('surat_pernyataan', 'dokumen-hc/' . $filename);
-        })->first();
-
-
-        if (!$hc || $hc->user_id !== auth()->id()) {
-            abort(403, 'Anda tidak memiliki akses ke file ini.');
-        }
-
-        // Kembalikan file sebagai response
-        return response()->file($filePath);
+        return \App\Support\KiPrivateFile::responseForOwner('hc', $filename, (int) Auth::id());
     }
 
     public function viewPublicFilesHc($filename)
     {
-        // Path file di disk 'public'
-        $filehc = storage_path('app/public/dokumen-hc/' . $filename);
-
-        // Pastikan file ada
-        if (!file_exists($filehc)) {
-            abort(404, 'File tidak ditemukan.');
-        }
-        // Hanya kolom yang disimpan di disk public
-        $hc = HakCipta::where(function ($query) use ($filename) {
-            $query->where('dokumen_invensi', 'dokumen-hc/' . $filename)
-                ->orWhere('gambar_ciptaan', 'LIKE', '%"dokumen-hc/' . $filename . '"%')
-                ->orWhere('sertifikat_hakcipta', 'dokumen-hc/' . $filename);
-        })->first();
-        if (!$hc || $hc->user_id !== auth()->id()) {
-            abort(403, 'Anda tidak memiliki akses ke file ini.');
-        }
-        // Kirim file sebagai respons
-        return response()->file($filehc);
+        return \App\Support\KiPrivateFile::responseForOwner('hc', $filename, (int) Auth::id());
     }
 
     public function viewSensitifFilesDi($filename)
     {
-        // Path file yang akan diakses
-        $fileDi = storage_path('app/private/dokumen-di/' . $filename);
-
-        // Pastikan file ada
-        if (!file_exists($fileDi)) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        // Validasi akses file (hanya pemilik file yang bisa mengaksesnya)
-
-        $di = DesainIndustri::where(function ($query) use ($filename) {
-            $query->where('ktp_inventor', 'dokumen-di/' . $filename)
-                ->orWhere('data_pengaju2', 'dokumen-di/' . $filename)
-                ->orWhere('surat_kepemilikan', 'dokumen-di/' . $filename)
-                ->orWhere('surat_pengalihan', 'dokumen-di/' . $filename);
-        })->first();
-
-        // Pastikan file milik user yang sedang login
-        if (!$di || $di->user_id !== auth()->id()) {
-            abort(403, 'Anda tidak memiliki akses ke file ini.');
-        }
-
-        // Mengirim file sebagai response
-        return response()->file($fileDi);
+        return \App\Support\KiPrivateFile::responseForOwner('di', $filename, (int) Auth::id());
     }
 
     public function viewPublicFilesDi($filename)
     {
-        // Path file yang akan diakses
-        $fileDi = storage_path('app/public/dokumen-di/' . $filename);
-
-        // Pastikan file ada
-        if (!file_exists($fileDi)) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        // Validasi akses file (hanya pemilik file yang bisa mengaksesnya)
-
-        $di = DesainIndustri::where(function ($query) use ($filename) {
-            $query
-                ->Where('uraian_di', 'dokumen-di/' . $filename)
-                ->orWhere('gambar_di', 'LIKE', '%"dokumen-di/' . $filename . '"%');
-
-        })->first();
-
-        // Pastikan file milik user yang sedang login
-        if (!$di || $di->user_id !== auth()->id()) {
-            abort(403, 'Anda tidak memiliki akses ke file ini.');
-        }
-
-        // Mengirim file sebagai response
-        return response()->file($fileDi);
+        return \App\Support\KiPrivateFile::responseForOwner('di', $filename, (int) Auth::id());
     }
 
     public function editDi(string $id)
@@ -1102,6 +1008,7 @@ class DosenController extends Controller
                     // Jika ada file lama, hapus dari disk 'private'
                     if ($di->{$storageName}) {
                         Storage::disk('private')->delete($di->{$storageName});
+                        Storage::disk('public')->delete($di->{$storageName});
                     }
                     $file = $request->file($field);
                     $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
@@ -1111,25 +1018,21 @@ class DosenController extends Controller
                 }
             }
     
-            $publicFiles = ['uraian_di'];
-            // field gambar boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
+            // Tambahkan file gambar baru dan pertahankan yang sudah tersimpan.
             foreach (['gambar_di'] as $mf) {
                 if ($request->hasFile($mf)) {
-                    foreach (\App\Support\MultiFileStorage::decode($di->{$mf}) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
-                    $di->{$mf} = \App\Support\MultiFileStorage::store($request, $mf, 'dokumen-di', 'public');
+                    $newPaths = \App\Support\MultiFileStorage::decode(\App\Support\MultiFileStorage::store($request, $mf, 'dokumen-di', 'private'));
+                    $di->{$mf} = json_encode(array_merge(\App\Support\MultiFileStorage::decode($di->{$mf}), $newPaths));
                 }
             }
-            foreach ($publicFiles as $field) {
-                if ($request->hasFile($field)) {
-                    if ($di->{$field}) {
-                        Storage::disk('public')->delete($di->{$field});
-                    }
-                    $file = $request->file($field);
-                    $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
-                    // Simpan file ke folder 'dokumen-di' pada disk 'public'
-                    $path = $file->storeAs('dokumen-di', $filename, 'public');
-                    $di->{$field} = $path;
+            if ($request->hasFile('uraian_di')) {
+                if ($di->uraian_di) {
+                    Storage::disk('private')->delete($di->uraian_di);
+                    Storage::disk('public')->delete($di->uraian_di);
                 }
+                $file = $request->file('uraian_di');
+                $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+                $di->uraian_di = $file->storeAs('dokumen-di', $filename, 'private');
             }
     
 
@@ -1196,7 +1099,7 @@ class DosenController extends Controller
             foreach (['gambar_di'] as $mf) {
                 if ($request->hasFile($mf)) {
                     foreach (\App\Support\MultiFileStorage::decode($di->{$mf}) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
-                    $di->{$mf} = \App\Support\MultiFileStorage::store($request, $mf, 'dokumen-di', 'public');
+                    $di->{$mf} = \App\Support\MultiFileStorage::store($request, $mf, 'dokumen-di', 'private');
                 }
             }
 
@@ -1223,7 +1126,7 @@ class DosenController extends Controller
                     $file = $request->file($field);
                     $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
                     // Simpan di disk 'public' dalam folder 'dokumen-paten'
-                    $path = $file->storeAs('dokumen-di', $filename, 'public');
+                    $path = $file->storeAs('dokumen-di', $filename, 'private');
                     $di->{$field} = $path;
                 }
             }

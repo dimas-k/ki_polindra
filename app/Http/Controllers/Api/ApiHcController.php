@@ -54,7 +54,7 @@ class ApiHcController extends Controller
                     'jurusan' => $hc->prodi->jurusan->nama_jurusan ?? $hc->jurusan ?? null,
                     'uraian_singkat' => $hc->uraian_singkat,
                     'dokumen' => [
-                        'dokumen_invensi' => $hc->dokumen_invensi ? Storage::disk('public')->url($hc->dokumen_invensi) : null,
+                        'dokumen_invensi' => null,
                     ],
                 ];
             });

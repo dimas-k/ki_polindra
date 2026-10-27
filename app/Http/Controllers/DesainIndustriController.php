@@ -252,14 +252,14 @@ class DesainIndustriController extends Controller
         foreach (['gambar_di'] as $mf) {
             if ($request->hasFile($mf)) {
                 foreach (\App\Support\MultiFileStorage::decode($di->{$mf}) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
-                $di->{$mf} = \App\Support\MultiFileStorage::store($request, $mf, 'dokumen-di', 'public');
+                $di->{$mf} = \App\Support\MultiFileStorage::store($request, $mf, 'dokumen-di', 'private');
             }
         }
         foreach ($publicFiles as $field) {
             if ($request->hasFile($field)) {
                 $file = $request->file($field);
                 $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
-                $di->{$field} = $file->storeAs('dokumen-di', $filename, 'public');
+                $di->{$field} = $file->storeAs('dokumen-di', $filename, 'private');
             }
         }
 

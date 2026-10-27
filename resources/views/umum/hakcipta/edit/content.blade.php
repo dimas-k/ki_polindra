@@ -68,10 +68,13 @@
                                         <tr>
                                             <th>KTP</th>
                                             <td>
+                                                @if ($hc->ktp_inventor)
+                                                    <div class="small mb-1">File saat ini: <a href="{{ route('private_hc_umum', ['filename' => basename($hc->ktp_inventor)]) }}" target="_blank">{{ basename($hc->ktp_inventor) }}</a></div>
+                                                @endif
                                                 <input type="file" id="ktp"
                                                     class="form-control"
                                                      name="ktp_inventor" value="{{ $hc->ktp_inventor }}">
-                                                <span class="text-danger"><i class="fa fa-warning me-2" data-bs-toggle="tooltip"></i>Harus memasukkan kembali file yang sama atau yang sudah di perbarui</span>
+                                                <small class="text-muted">Biarkan kosong untuk mempertahankan file saat ini.</small>
                                                 
                                             </td>
                                         </tr>
@@ -138,11 +141,14 @@
                                         <tr>
                                             <th>Dokumen Invensi (Manual Book/Buku/Dll)</th>
                                             <td>
+                                                @if ($hc->dokumen_invensi)
+                                                    <div class="small mb-1">File saat ini: <a href="{{ route('private_hc_umum', ['filename' => basename($hc->dokumen_invensi)]) }}" target="_blank">{{ basename($hc->dokumen_invensi) }}</a></div>
+                                                @endif
                                                 <input type="file" id="invensi"
                                                     class="form-control"
                                                     placeholder="" name="dokumen_invensi"
                                                     value="{{ $hc->dokumen_invensi }}">
-                                                    <span class="text-danger"><i class="fa fa-warning me-2" data-bs-toggle="tooltip"></i>Harus memasukkan kembali file yang sama atau yang sudah di perbarui</span>
+                                                    <small class="text-muted">Biarkan kosong untuk mempertahankan file saat ini.</small>
                                                 
                                             </td>
                                         </tr>
@@ -172,22 +178,28 @@
                                         <tr>
                                             <th>Surat Pengalihan Hak Cipta</th>
                                             <td>
+                                                @if ($hc->surat_pengalihan)
+                                                    <div class="small mb-1">File saat ini: <a href="{{ route('private_hc_umum', ['filename' => basename($hc->surat_pengalihan)]) }}" target="_blank">{{ basename($hc->surat_pengalihan) }}</a></div>
+                                                @endif
                                                 <input type="file" id="surat_pengalihan"
                                                     class="form-control"
                                                     placeholder="" name="surat_pengalihan"
                                                     value="{{ $hc->surat_pengalihan }}">
-                                                    <span class="text-danger"><i class="fa fa-warning me-2" data-bs-toggle="tooltip"></i>Harus memasukkan kembali file yang sama atau yang sudah di perbarui</span>
+                                                    <small class="text-muted">Biarkan kosong untuk mempertahankan file saat ini.</small>
                                                 
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>Surat Pernyataan</th>
                                             <td>
+                                                @if ($hc->surat_pernyataan)
+                                                    <div class="small mb-1">File saat ini: <a href="{{ route('private_hc_umum', ['filename' => basename($hc->surat_pernyataan)]) }}" target="_blank">{{ basename($hc->surat_pernyataan) }}</a></div>
+                                                @endif
                                                 <input type="file" id="pernyataan"
                                                     class="form-control"
                                                     placeholder="" name="surat_pernyataan"
                                                     value="{{ $hc->surat_pernyataan }}">
-                                                    <span class="text-danger"><i class="fa fa-warning me-2" data-bs-toggle="tooltip"></i>Harus memasukkan kembali file yang sama atau yang sudah di perbarui</span>
+                                                    <small class="text-muted">Biarkan kosong untuk mempertahankan file saat ini.</small>
                                                 
                                             </td>
                                         </tr>

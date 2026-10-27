@@ -89,54 +89,11 @@ class AdminDesainIndustriController extends Controller
 
     public function viewPublicFilesDi($filename)
     {
-        // Path file di disk 'private'
-        $fileDi = storage_path('app/public/dokumen-di/' . $filename);
-
-        // Pastikan file ada
-        if (!file_exists($fileDi)) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        // Cari data paten berdasarkan salah satu kolom file
-        $di = DesainIndustri::where(function ($query) use ($filename) {
-            $query
-            ->Where('uraian_di', 'dokumen-di/' . $filename)
-            ->orWhere('gambar_di', 'dokumen-di/' . $filename);
-        })->first();
-
-        // Validasi akses: hanya pemilik atau admin/verifikator yang bisa melihat
-        if (!$di || ($di->user_id !== auth()->id() && auth()->user()->role !== 'Admin')) {
-            abort(403, 'Anda tidak memiliki akses ke file ini.');
-        }
-
-        // Kirim file sebagai respons
-        return response()->file($fileDi);
+        return \App\Support\KiPrivateFile::responseForStaff('di', $filename);
     }
     public function viewSensitifFilesDi($filename)
     {
-        // Path file di disk 'private'
-        $fileDi = storage_path('app/private/dokumen-di/' . $filename);
-
-        // Pastikan file ada
-        if (!file_exists($fileDi)) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        // Cari data paten berdasarkan salah satu kolom file
-        $di = DesainIndustri::where(function ($query) use ($filename) {
-            $query->where('ktp_inventor', 'dokumen-di/' . $filename)
-            ->orWhere('data_pengaju2', 'dokumen-di/' . $filename)
-            ->orWhere('surat_kepemilikan', 'dokumen-di/' . $filename)
-            ->orWhere('surat_pengalihan', 'dokumen-di/' . $filename);
-        })->first();
-
-        // Validasi akses: hanya pemilik atau admin/verifikator yang bisa melihat
-        if (!$di || ($di->user_id !== auth()->id() && auth()->user()->role !== 'Admin')) {
-            abort(403, 'Anda tidak memiliki akses ke file ini.');
-        }
-
-        // Kirim file sebagai respons
-        return response()->file($fileDi);
+        return \App\Support\KiPrivateFile::responseForStaff('di', $filename);
     }
 
     /**
@@ -222,7 +179,7 @@ class AdminDesainIndustriController extends Controller
                 $file = $request->file($field);
                 $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
                 // Simpan file ke folder 'dokumen-di' pada disk 'public'
-                $path = $file->storeAs('dokumen-di', $filename, 'public');
+                $path = $file->storeAs('dokumen-di', $filename, 'private');
                 $di->{$field} = $path;
             }
         }
@@ -298,7 +255,7 @@ class AdminDesainIndustriController extends Controller
                 $file = $request->file($field);
                 $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
                 // Simpan file ke folder 'dokumen-di' pada disk 'public'
-                $path = $file->storeAs('dokumen-di', $filename, 'public');
+                $path = $file->storeAs('dokumen-di', $filename, 'private');
                 $di->{$field} = $path;
             }
         }
@@ -334,7 +291,7 @@ class AdminDesainIndustriController extends Controller
            if ($request->hasFile('sertifikat_desain')) {
                 $file = $request->file('sertifikat_desain');
                 $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
-                $di->sertifikat_desain = $file->storeAs('dokumen-di', $filename, 'public');
+                $di->sertifikat_desain = $file->storeAs('dokumen-di', $filename, 'private');
             }
         }
         if ($request->hasFile('gambar_img')) {
@@ -446,7 +403,7 @@ class AdminDesainIndustriController extends Controller
                 $file = $request->file($field);
                 $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
                 // Simpan di disk 'public' dalam folder 'dokumen-paten'
-                $path = $file->storeAs('dokumen-di', $filename, 'public');
+                $path = $file->storeAs('dokumen-di', $filename, 'private');
                 $di->{$field} = $path;
             }
         }
@@ -521,7 +478,7 @@ class AdminDesainIndustriController extends Controller
                 $file = $request->file($field);
                 $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
                 // Simpan di disk 'public' dalam folder 'dokumen-paten'
-                $path = $file->storeAs('dokumen-di', $filename, 'public');
+                $path = $file->storeAs('dokumen-di', $filename, 'private');
                 $di->{$field} = $path;
             }
         }

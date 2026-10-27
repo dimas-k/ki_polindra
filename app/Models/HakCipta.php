@@ -29,6 +29,7 @@ class HakCipta extends Model
             foreach (['gambar_ciptaan'] as $mf) {
                 foreach (\App\Support\MultiFileStorage::decode($hc->{$mf}) as $mp) {
                     Storage::disk('public')->delete($mp);
+                    Storage::disk('private')->delete($mp);
                 }
             }
 
@@ -36,25 +37,24 @@ class HakCipta extends Model
             $privateFiles = [
                 'ktp_inventor',
                 'data_pengaju2',
-                'surat_pengalihan',
-                'surat_pernyataan'
+                'surat_pengalihan', 'surat_pernyataan', 'dokumen_invensi', 'sertifikat_hakcipta'
             ];
 
             // Daftar file yang disimpan di public storage
             $publicFiles = [
-                'dokumen_invensi',    
-                'sertifikat_hakcipta',    
             ];
 
             foreach ($privateFiles as $field) {
                 if (!empty($hc->{$field})) {
                     Storage::disk('private')->delete($hc->{$field});
+                    Storage::disk('public')->delete($hc->{$field});
                 }
             }
 
             foreach ($publicFiles as $field) {
                 if (!empty($hc->{$field})) {
                     Storage::disk('public')->delete($hc->{$field});
+                    Storage::disk('private')->delete($hc->{$field});
                 }
             }
         });
