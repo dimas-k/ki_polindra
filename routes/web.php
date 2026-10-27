@@ -4,6 +4,7 @@ use App\Services\PatenQueryBuilder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UmumController;
+use App\Http\Controllers\AdminHaKCiptaController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\PatenController;
@@ -126,8 +127,8 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     // Buat/kirim tagihan pembayaran (Admin) untuk Paten, Hak Cipta, Desain Industri
     Route::post('/admin/{jenis}/{id}/tagihan', [PaymentController::class, 'store'])->name('admin_payment.store');
 
-    Route::get('/hak-cipta/{file}', [AdminHakCiptaController::class, 'viewSensitifFilesHc'])->middleware(['auth', 'role:Admin'])->name('private_hc');
-    Route::get('/public/hak-cipta/{file}', [AdminHakCiptaController::class, 'viewPublicFilesHc'])->middleware(['auth', 'role:Admin'])->name('public_hc');
+    Route::get('/hak-cipta/{file}', [AdminHaKCiptaController::class, 'viewSensitifFilesHc'])->middleware(['auth', 'role:Admin'])->name('private_hc');
+    Route::get('/public/hak-cipta/{file}', [AdminHaKCiptaController::class, 'viewPublicFilesHc'])->middleware(['auth', 'role:Admin'])->name('public_hc');
 
     Route::get('/admin/listadmin', [AdminController::class, 'lihat'])->middleware('auth');
     Route::get('/admin/listadmin/edit/{id}', [AdminController::class, 'edit'])->name('admin.edit');

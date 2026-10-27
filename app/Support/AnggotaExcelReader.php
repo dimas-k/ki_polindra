@@ -54,6 +54,21 @@ class AnggotaExcelReader
                 }
             }
 
+            // Fallback: kalau tidak ada baris yang persis berjudul "Nama"
+            // (misal file dari dosen pakai format/judul kolom lain), jangan
+            // sembunyikan datanya. Anggap baris pertama yang tidak kosong
+            // sebagai baris header, supaya isinya tetap tampil sebagai teks.
+            if ($headerRowIndex === null) {
+                foreach ($rows as $i => $row) {
+                    foreach ($row as $cell) {
+                        if (trim((string) $cell) !== '') {
+                            $headerRowIndex = $i;
+                            break 2;
+                        }
+                    }
+                }
+            }
+
             if ($headerRowIndex === null) {
                 return null;
             }

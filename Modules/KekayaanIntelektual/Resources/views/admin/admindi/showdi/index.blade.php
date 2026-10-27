@@ -102,6 +102,7 @@
                                 @else
                                     Tidak ada data untuk diunduh.
                                 @endif
+                                @include('partials.anggota-excel-table', ['anggotaExcel' => \App\Support\AnggotaExcelReader::read($di->data_pengaju2), 'anggotaExcelPath' => $di->data_pengaju2])
                                 </td>
                             </tr>
                             <tr>
