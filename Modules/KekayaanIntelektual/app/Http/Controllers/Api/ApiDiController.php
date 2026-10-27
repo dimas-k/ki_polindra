@@ -28,8 +28,7 @@ class ApiDiController extends Controller
      * Daftar desain industri yang sudah "Diberi" (granted).
      * Field dibatasi ke data non-sensitif.
      *
-     * Catatan: uraian_di dan gambar_di semuanya berupa file PDF
-     * (bukan gambar biasa), jadi yang dikirim adalah URL dokumennya.
+     * Lampiran desain industri tidak diekspos lewat API publik.
      */
     public function getDataDiberi(): JsonResponse
     {
@@ -45,8 +44,8 @@ class ApiDiController extends Controller
                     'prodi' => $di->prodi->nama_prodi ?? $di->prodi ?? null,
                     'jurusan' => $di->prodi->jurusan->nama_jurusan ?? $di->jurusan ?? null,
                     'dokumen' => [
-                        'uraian_di' => $di->uraian_di ? Storage::disk('public')->url($di->uraian_di) : null,
-                        'gambar_di' => collect(\App\Support\MultiFileStorage::decode($di->gambar_di))->map(fn ($f) => Storage::disk('public')->url($f))->values()->all(),
+                        'uraian_di' => null,
+                        'gambar_di' => [],
                     ],
                 ];
             });

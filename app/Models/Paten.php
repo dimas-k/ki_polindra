@@ -38,6 +38,7 @@ class Paten extends Model
             // field multi-file (JSON array of path)
             foreach (['gambar_tampilan', 'gambar_paten'] as $mf) {
                 foreach (\App\Support\MultiFileStorage::decode($paten->{$mf}) as $mp) {
+                    Storage::disk('private')->delete($mp);
                     Storage::disk('public')->delete($mp);
                 }
             }
@@ -65,11 +66,13 @@ class Paten extends Model
             foreach ($privateFiles as $field) {
                 if (!empty($paten->{$field})) {
                     Storage::disk('private')->delete($paten->{$field});
+                    Storage::disk('public')->delete($paten->{$field});
                 }
             }
 
             foreach ($publicFiles as $field) {
                 if (!empty($paten->{$field})) {
+                    Storage::disk('private')->delete($paten->{$field});
                     Storage::disk('public')->delete($paten->{$field});
                 }
             }

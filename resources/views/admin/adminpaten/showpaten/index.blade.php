@@ -134,12 +134,12 @@
                             </tr>
                             <tr>
                                 <th>Abstrak Paten</th>
-                                <td>: <a href={{ route('public_paten_admin', ['file' => basename($p->abstrak_paten)]) }} class=""
+                                <td>: <a href={{ route('private_paten_admin', ['file' => basename($p->abstrak_paten)]) }} class=""
                                         target="_blank">Lihat Abstrak Paten</a></td>
                             </tr>
                             <tr>
                                 <th>Deskripsi Paten</th>
-                                <td>: <a href={{ route('public_paten_admin', ['file' => basename($p->deskripsi_paten)]) }} class=""
+                                <td>: <a href={{ route('private_paten_admin', ['file' => basename($p->deskripsi_paten)]) }} class=""
                                         target="_blank">Lihat Deskripsi Paten</a></td>
                             </tr>
                             <tr>
@@ -165,7 +165,7 @@
                             <tr>
                                 <th>Gambar Paten</th>
                                 <td>: @foreach (\App\Support\MultiFileStorage::decode($p->gambar_paten) as $__f)
-<a href={{ route('public_paten_admin', ['file' => basename($__f)]) }} class=""
+<a href={{ route('private_paten_admin', ['file' => basename($__f)]) }} class=""
                                         target="_blank">Lihat Gambar paten</a>@if (!$loop->last)<br>@endif
 @endforeach
                                 </td>
@@ -173,7 +173,7 @@
                             <tr>
                                 <th>Gambar Tampilan</th>
                                 <td>: @foreach (\App\Support\MultiFileStorage::decode($p->gambar_tampilan) as $__f)
-<a href={{ route('public_paten_admin', ['file' => basename($__f)]) }} class=""
+<a href={{ route('private_paten_admin', ['file' => basename($__f)]) }} class=""
                                     target="_blank">Lihat Gambar tampilan</a>@if (!$loop->last)<br>@endif
 @endforeach
                                 </td>
@@ -185,7 +185,7 @@
                             <tr>
                                 <th>Sertifikat Paten</th>
                                 <td>: @if ($p->sertifikat_paten != '')
-                                        <a href={{ route('public_paten_admin', ['file' => basename($p->sertifikat_paten)]) }} class=""
+                                        <a href={{ route('private_paten_admin', ['file' => basename($p->sertifikat_paten)]) }} class=""
                                             target="_blank">Lihat sertifikat</a>
                                     @else
                                         Paten Ini Belum Mendapatkan Sertifikat

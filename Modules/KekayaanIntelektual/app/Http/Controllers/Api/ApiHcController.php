@@ -36,7 +36,7 @@ class ApiHcController extends Controller
      *
      * Catatan: uraian_singkat itu TEKS asli (bukan file), beda dengan
      * Paten/Desain Industri yang field uraiannya berupa file PDF.
-     * dokumen_invensi tetap dikirim sebagai link PDF.
+     * Dokumen lampiran tidak diekspos lewat API publik.
      */
     public function getDataDiberi(): JsonResponse
     {
@@ -54,7 +54,7 @@ class ApiHcController extends Controller
                     'jurusan' => $hc->prodi->jurusan->nama_jurusan ?? $hc->jurusan ?? null,
                     'uraian_singkat' => $hc->uraian_singkat,
                     'dokumen' => [
-                        'dokumen_invensi' => $hc->dokumen_invensi ? Storage::disk('public')->url($hc->dokumen_invensi) : null,
+                        'dokumen_invensi' => null,
                     ],
                 ];
             });

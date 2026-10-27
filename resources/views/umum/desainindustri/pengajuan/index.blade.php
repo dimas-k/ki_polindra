@@ -165,7 +165,14 @@
 
                 //file
                 var ktp = $('#ktp')[0].files[0];
-                var gambar_desain_files = $('#gambar_desain')[0].files;
+                var gambar_desain_input = $('#gambar_desain')[0];
+                var gambar_desain_pond = (typeof FilePond !== 'undefined' && gambar_desain_input)
+                    ? FilePond.find(gambar_desain_input)
+                    : null;
+                // FilePond menyimpan file di state internal; input.files bisa kosong.
+                var gambar_desain_files = gambar_desain_pond
+                    ? gambar_desain_pond.getFiles().map(function(item) { return item.file; })
+                    : Array.from(gambar_desain_input.files || []);
                 var uraian_desain = $('#uraian_desain')[0].files[0];
                 var pernyataan_kepemilikan = $('#pernyataan_kepemilikan')[0].files[0];
                 var pengalihan = $('#pengalihan')[0].files[0];

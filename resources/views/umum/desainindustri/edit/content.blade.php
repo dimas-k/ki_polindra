@@ -64,6 +64,9 @@
                                         <tr>
                                             <th>KTP</th>
                                             <td>
+                                                @if ($di->ktp_inventor)
+                                                    <div class="small mb-1">File saat ini: <a href="{{ route('private_di_umum', ['file' => basename($di->ktp_inventor)]) }}" target="_blank">{{ basename($di->ktp_inventor) }}</a></div>
+                                                @endif
                                                 <input type="file" class="form-control" id="ktp"
                                                     name="ktp_inventor" value="{{ $di->ktp_inventor }}">
                                                 <span class="text-danger"><i class="fa fa-warning me-2"
@@ -161,34 +164,37 @@
                                         <tr>
                                             <th>Uraian desain industri</th>
                                             <td>
+                                                @if ($di->uraian_di)
+                                                    <div class="small mb-1">File saat ini: <a href="{{ route('private_di_umum', ['file' => basename($di->uraian_di)]) }}" target="_blank">{{ basename($di->uraian_di) }}</a></div>
+                                                @endif
                                                 <input type="file" class="form-control" placeholder=""
                                                     name="uraian_di" value="{{ old($di->uraian_di) }}" id="uraian_desain">
 
-                                                <span class="text-danger"><i class="fa fa-warning me-2"
-                                                        data-bs-toggle="tooltip"></i>Harus memasukkan kembali file yang
-                                                    sama atau yang sudah di perbarui</span>
+                                                <small class="text-muted">Biarkan kosong untuk mempertahankan file saat ini.</small>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>Surat Pernyataan Kepemilikan</th>
                                             <td>
+                                                @if ($di->surat_kepemilikan)
+                                                    <div class="small mb-1">File saat ini: <a href="{{ route('private_di_umum', ['file' => basename($di->surat_kepemilikan)]) }}" target="_blank">{{ basename($di->surat_kepemilikan) }}</a></div>
+                                                @endif
                                                 <input type="file" class="form-control" placeholder=""
                                                     name="surat_kepemilikan" value="{{ $di->surat_kepemilikan }}" id="pernyataan_kepemilikan">
-                                                <span class="text-danger"><i class="fa fa-warning me-2"
-                                                        data-bs-toggle="tooltip"></i>Harus memasukkan kembali file yang
-                                                    sama atau yang sudah di perbarui</span>
+                                                <small class="text-muted">Biarkan kosong untuk mempertahankan file saat ini.</small>
 
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>Surat Pengalihan Hak</th>
                                             <td>
+                                                @if ($di->surat_pengalihan)
+                                                    <div class="small mb-1">File saat ini: <a href="{{ route('private_di_umum', ['file' => basename($di->surat_pengalihan)]) }}" target="_blank">{{ basename($di->surat_pengalihan) }}</a></div>
+                                                @endif
                                                 <input type="file" class="form-control" placeholder=""
                                                     name="surat_pengalihan" value="{{ $di->surat_pengalihan }}" id="pengalihan">
 
-                                                <span class="text-danger"><i class="fa fa-warning me-2"
-                                                        data-bs-toggle="tooltip"></i>Harus memasukkan kembali file yang
-                                                    sama atau yang sudah di perbarui</span>
+                                                <small class="text-muted">Biarkan kosong untuk mempertahankan file saat ini.</small>
                                             </td>
                                         </tr>
                                         <tr>

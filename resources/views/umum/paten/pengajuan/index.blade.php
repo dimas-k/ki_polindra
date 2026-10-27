@@ -172,7 +172,14 @@
                 var kepemilikan = $('#kepemilikan')[0].files[0];
                 var kuasa = $('#kuasa')[0].files[0];
                 var g_paten = $('#g_paten')[0].files[0];
-                var g_tampilan_files = $('#g_tampilan')[0].files;
+                var g_tampilan_input = $('#g_tampilan')[0];
+                var g_tampilan_pond = (typeof FilePond !== 'undefined' && g_tampilan_input)
+                    ? FilePond.find(g_tampilan_input)
+                    : null;
+                // FilePond menyimpan pilihan dalam state-nya; input.files bisa kosong.
+                var g_tampilan_files = g_tampilan_pond
+                    ? g_tampilan_pond.getFiles().map(function(item) { return item.file; })
+                    : Array.from(g_tampilan_input.files || []);
 
                 // var errorMessage = ''; // Variabel untuk menyimpan pesan error
 

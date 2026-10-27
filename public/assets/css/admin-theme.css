@@ -1,0 +1,262 @@
+/*
+ * SIKI Polindra - Admin Theme
+ * Palet warna diambil dari logo Politeknik Negeri Indramayu (navy blue).
+ * Tidak pakai gradasi, flat & solid, biar konsisten di semua halaman admin.
+ */
+
+:root {
+    --polindra-navy: #000f56;
+    --polindra-blue: #0d3b8c;
+    --polindra-blue-light: #e8edfa;
+    --polindra-blue-soft: #f4f7fd;
+    --polindra-border: #d7e0f0;
+    --polindra-text: #1c2536;
+    --polindra-text-muted: #5b6779;
+    --polindra-danger: #c0392b;
+    --polindra-success: #1e7e4a;
+    --polindra-warning: #a5680d;
+}
+
+body {
+    background-color: #f2f4f9;
+    color: var(--polindra-text);
+}
+
+/* ===== Top navbar ===== */
+.navbar.bg-body-tertiary {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid var(--polindra-border);
+}
+
+.navbar-brand.font-family-Kokoro {
+    color: var(--polindra-navy) !important;
+    font-weight: 600;
+}
+
+img.navbar-brand {
+    height: 38px;
+    width: auto;
+}
+
+/* Di HP tampil versi singkat "SIKI POLINDRA" (1 baris), di tablet ke atas
+   tampil nama lengkap. Ukuran font disesuaikan tiap breakpoint. */
+.brand-text-responsive {
+    font-size: 1rem;
+    line-height: 1.25;
+}
+
+@media (min-width: 768px) {
+    .brand-text-responsive {
+        font-size: 0.95rem;
+    }
+}
+
+@media (min-width: 992px) {
+    .brand-text-responsive {
+        font-size: 1rem;
+    }
+}
+
+.navbar-nav .nav-link {
+    color: var(--polindra-text);
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link:focus {
+    color: var(--polindra-blue);
+}
+
+/* ===== Sidebar ===== */
+.col-lg-2.bg-light,
+.col-12.col-lg-2.bg-light {
+    background-color: #ffffff !important;
+    border: 1px solid var(--polindra-border) !important;
+}
+
+.offcanvas-body .nav-link,
+.offcanvas-header {
+    color: var(--polindra-text);
+}
+
+.offcanvas-body .nav-link {
+    padding: 0.55rem 0.75rem;
+    border-radius: 6px;
+    margin-bottom: 2px;
+}
+
+.offcanvas-body .nav-link:hover {
+    background-color: var(--polindra-blue-light);
+    color: var(--polindra-navy);
+}
+
+.offcanvas-body .nav-link.active,
+.offcanvas-body .nav-link[aria-current="page"] {
+    background-color: var(--polindra-blue);
+    color: #ffffff;
+}
+
+.offcanvas-body .btn-toggle {
+    color: var(--polindra-text);
+}
+
+.offcanvas-body .btn-toggle:hover {
+    background-color: var(--polindra-blue-light);
+}
+
+.offcanvas-body .btn-toggle-nav a {
+    color: var(--polindra-text-muted) !important;
+}
+
+.offcanvas-body .btn-toggle-nav a:hover {
+    color: var(--polindra-blue) !important;
+}
+
+/* ===== Konten utama ===== */
+.container.bg-light.rounded.border,
+.container-fluid.bg-light.rounded.border {
+    background-color: #ffffff !important;
+    border: 1px solid var(--polindra-border) !important;
+}
+
+h3.font-family-Kokoro,
+h5.font-family-Kokoro {
+    color: var(--polindra-navy);
+    font-weight: 600;
+}
+
+/* ===== Tombol ===== */
+.btn-primary {
+    background-color: var(--polindra-blue);
+    border-color: var(--polindra-blue);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--polindra-navy);
+    border-color: var(--polindra-navy);
+}
+
+.btn-outline-secondary {
+    color: var(--polindra-text-muted);
+    border-color: var(--polindra-border);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--polindra-blue-soft);
+    color: var(--polindra-navy);
+    border-color: var(--polindra-border);
+}
+
+.btn-success {
+    background-color: var(--polindra-success);
+    border-color: var(--polindra-success);
+}
+
+.btn-danger {
+    background-color: var(--polindra-danger);
+    border-color: var(--polindra-danger);
+}
+
+.btn-warning {
+    background-color: #d99a2b;
+    border-color: #d99a2b;
+    color: #ffffff;
+}
+
+.btn-warning:hover {
+    background-color: #b87e1c;
+    border-color: #b87e1c;
+    color: #ffffff;
+}
+
+/* ===== Tabel ===== */
+.table {
+    color: var(--polindra-text);
+}
+
+.table thead th {
+    background-color: var(--polindra-blue-soft);
+    color: var(--polindra-navy);
+    font-weight: 600;
+    border-bottom: 2px solid var(--polindra-border);
+}
+
+.table-hover tbody tr:hover {
+    background-color: var(--polindra-blue-light);
+}
+
+/* ===== Badge status ===== */
+.badge.bg-primary { background-color: var(--polindra-blue) !important; }
+.badge.bg-success { background-color: var(--polindra-success) !important; }
+.badge.bg-danger { background-color: var(--polindra-danger) !important; }
+.badge.bg-warning { background-color: #d99a2b !important; color: #fff !important; }
+
+/* ===== Alert ===== */
+.alert-success {
+    background-color: #eaf6ee;
+    border-color: #bfe3cc;
+    color: var(--polindra-success);
+}
+
+.alert-danger {
+    background-color: #fbeae8;
+    border-color: #eec3bd;
+    color: var(--polindra-danger);
+}
+
+/* ===== Modal ===== */
+.modal-content {
+    border: 1px solid var(--polindra-border);
+    border-radius: 10px;
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--polindra-border);
+}
+
+.modal-footer {
+    border-top: 1px solid var(--polindra-border);
+}
+
+/* ===== Form ===== */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--polindra-blue);
+    box-shadow: 0 0 0 0.2rem rgba(13, 59, 140, 0.15);
+}
+
+/* ===== Pagination ===== */
+.page-link {
+    color: var(--polindra-blue);
+}
+
+.page-item.active .page-link {
+    background-color: var(--polindra-blue);
+    border-color: var(--polindra-blue);
+}
+
+/* ===== Dropdown ===== */
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: var(--polindra-blue-light);
+    color: var(--polindra-navy);
+}
+
+/* ===== Kartu rincian status (dashboard, paten, HKI, desain industri) ===== */
+/* Sebelumnya kartu-kartu ini punya lebar tetap (18rem/23rem/25rem) dan
+   dibungkus flex-row tanpa wrap, jadi selalu sebaris & terpotong di HP.
+   Sekarang dibungkus grid Bootstrap (.row) + .h-100, jadi otomatis
+   menyesuaikan lebar layar dan tingginya seragam per baris. */
+.card.shadow-sm {
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.card.shadow-sm:hover {
+    box-shadow: 0 0.35rem 0.75rem rgba(0, 15, 86, 0.12) !important;
+}
+
+.card.shadow-sm .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

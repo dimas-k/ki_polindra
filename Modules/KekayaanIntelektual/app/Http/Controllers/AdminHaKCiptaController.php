@@ -84,54 +84,11 @@ class AdminHaKCiptaController extends Controller
 
     public function viewPublicFilesHc($filename)
     {
-        // Path file di disk 'private'
-        $fileHc = storage_path('app/public/dokumen-hc/' . $filename);
-
-        // Pastikan file ada
-        if (!file_exists($fileHc)) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        // Cari data paten berdasarkan salah satu kolom file
-        $hc = HakCipta::where(function ($query) use ($filename) {
-            $query->where('dokumen_invensi', 'dokumen-hc/' . $filename)
-                ->orWhere('gambar_ciptaan', 'LIKE', '%"dokumen-hc/' . $filename . '"%')
-                ->orWhere('sertifikat_hakcipta', 'dokumen-hc/' . $filename);
-        })->first();
-
-        // Validasi akses: hanya pemilik atau admin/verifikator yang bisa melihat
-        if (!$hc || ($hc->user_id !== auth()->id() && auth()->user()->role !== 'Admin')) {
-            abort(403, 'Anda tidak memiliki akses ke file ini.');
-        }
-
-        // Kirim file sebagai respons
-        return response()->file($fileHc);
+        return \App\Support\KiPrivateFile::responseForStaff('hc', $filename);
     }
     public function viewSensitifFilesHc($filename)
     {
-        // Path file di disk 'private'
-        $fileHc = storage_path('app/private/dokumen-hc/' . $filename);
-
-        // Pastikan file ada
-        if (!file_exists($fileHc)) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        // Cari data paten berdasarkan salah satu kolom file
-        $hc = HakCipta::where(function ($query) use ($filename) {
-            $query->where('ktp_inventor', 'dokumen-hc/' . $filename)
-                ->orWhere('data_pengaju2', 'dokumen-hc/' . $filename)
-                ->orWhere('surat_pengalihan', 'dokumen-hc/' . $filename)
-                ->orWhere('surat_pernyataan', 'dokumen-hc/' . $filename);
-        })->first();
-
-        // Admin bisa melihat semua file vital
-        if (!$hc) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        // Kirim file sebagai respons
-        return response()->file($fileHc);
+        return \App\Support\KiPrivateFile::responseForStaff('hc', $filename);
     }
 
     /**
@@ -197,7 +154,7 @@ class AdminHaKCiptaController extends Controller
             // gambar ciptaan boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
             if ($request->hasFile('gambar_ciptaan')) {
                 foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
-                $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'public');
+                $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'private');
             }
             $privateFiles = [
                 'ktp_inventor' => 'ktp_inventor',
@@ -227,7 +184,7 @@ class AdminHaKCiptaController extends Controller
                     $file = $request->file($field);
                     $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
                     // Simpan file ke folder 'dokumen-hc' pada disk 'public'
-                    $path = $file->storeAs('dokumen-hc', $filename, 'public');
+                    $path = $file->storeAs('dokumen-hc', $filename, 'private');
                     $hc->{$field} = $path;
                 }
             }
@@ -282,7 +239,7 @@ class AdminHaKCiptaController extends Controller
         // gambar ciptaan boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
         if ($request->hasFile('gambar_ciptaan')) {
             foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
-            $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'public');
+            $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'private');
         }
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
@@ -311,7 +268,7 @@ class AdminHaKCiptaController extends Controller
                 $file = $request->file($field);
                 $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
                 // Simpan file ke folder 'dokumen-hc' pada disk 'public'
-                $path = $file->storeAs('dokumen-hc', $filename, 'public');
+                $path = $file->storeAs('dokumen-hc', $filename, 'private');
                 $hc->{$field} = $path;
             }
         }
@@ -340,7 +297,7 @@ class AdminHaKCiptaController extends Controller
            if ($request->hasFile('sertifikat_hakcipta')) {
                 $file = $request->file('sertifikat_hakcipta');
                 $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
-                $hc->sertifikat_hakcipta = $file->storeAs('dokumen-hc', $filename, 'public');
+                $hc->sertifikat_hakcipta = $file->storeAs('dokumen-hc', $filename, 'private');
             }
         }
         $hc->save($validasidata);
@@ -374,7 +331,7 @@ class AdminHaKCiptaController extends Controller
                 // Buat nama file baru dengan timestamp dan mengganti spasi dengan underscore
                 $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
                 // Simpan file di disk 'private' dalam folder 'dokumen-hc'
-                $path = $file->storeAs('dokumen-hc', $filename, 'public');
+                $path = $file->storeAs('dokumen-hc', $filename, 'private');
                 // Set nilai properti model sesuai dengan $storageName
                 $hc->{$storageName} = $path;
             }
@@ -470,7 +427,7 @@ class AdminHaKCiptaController extends Controller
         // gambar ciptaan boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
         if ($request->hasFile('gambar_ciptaan')) {
             foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
-            $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'public');
+            $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'private');
         }
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
@@ -495,7 +452,7 @@ class AdminHaKCiptaController extends Controller
                 $file = $request->file($field);
                 $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
                 // Simpan di disk 'public' dalam folder 'dokumen-paten'
-                $path = $file->storeAs('dokumen-hc', $filename, 'public');
+                $path = $file->storeAs('dokumen-hc', $filename, 'private');
                 $hc->{$field} = $path;
             }
         }
@@ -547,7 +504,7 @@ class AdminHaKCiptaController extends Controller
         // gambar ciptaan boleh lebih dari 1 file (PDF dan/atau jpg/png) -> JSON array
         if ($request->hasFile('gambar_ciptaan')) {
             foreach (\App\Support\MultiFileStorage::decode($hc->gambar_ciptaan) as $oldPath) { \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath); }
-            $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'public');
+            $hc->gambar_ciptaan = \App\Support\MultiFileStorage::store($request, 'gambar_ciptaan', 'dokumen-hc', 'private');
         }
         $privateFiles = [
             'ktp_inventor' => 'ktp_inventor',
@@ -572,7 +529,7 @@ class AdminHaKCiptaController extends Controller
                 $file = $request->file($field);
                 $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
                 // Simpan di disk 'public' dalam folder 'dokumen-paten'
-                $path = $file->storeAs('dokumen-hc', $filename, 'public');
+                $path = $file->storeAs('dokumen-hc', $filename, 'private');
                 $hc->{$field} = $path;
             }
         }

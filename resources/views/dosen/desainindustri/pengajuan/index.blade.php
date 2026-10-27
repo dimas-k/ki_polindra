@@ -169,10 +169,17 @@
                 };
     
                 // File inputs
+                const gambarDesainInput = $('#gambar_desain')[0];
+                const gambarDesainPond = (typeof FilePond !== 'undefined' && gambarDesainInput)
+                    ? FilePond.find(gambarDesainInput)
+                    : null;
+                const gambarDesainFiles = gambarDesainPond
+                    ? gambarDesainPond.getFiles().map(function(item) { return item.file; })
+                    : Array.from(gambarDesainInput.files || []);
                 const files = {
                     ktp: $('#ktp')[0].files[0],
                     anggota_inventor: $('#pengaju2')[0].files[0],
-                    gambar_desain: $('#gambar_desain')[0].files[0],
+                    gambar_desain: gambarDesainFiles,
                     uraian_desain: $('#uraian_desain')[0].files[0],
                     pernyataan_kepemilikan: $('#pernyataan_kepemilikan')[0].files[0],
                     pengalihan: $('#pengalihan')[0].files[0]
@@ -208,7 +215,8 @@
                 // Validate file inputs
                 for (var file in files) {
                     // Check mandatory files that are empty
-                    if (mandatoryFiles.includes(file) && !files[file]) {
+                    const isEmpty = Array.isArray(files[file]) ? files[file].length === 0 : !files[file];
+                    if (mandatoryFiles.includes(file) && isEmpty) {
                         showError("File " + file.replace('_', ' ').toUpperCase() + " Wajib Diisi!");
                         return false;
                     }
@@ -218,6 +226,17 @@
                         if (!allowedExtensionExcel.exec(files[file].name)) {
                             showError("Tolong Masukkan Data anggota inventor Dengan Ekstensi .xlsx!");
                             return false;
+                        }
+                    } else if (file === 'gambar_desain' && files[file].length > 0) {
+                        for (const uploadedFile of files[file]) {
+                            if (!/(\.(pdf|jpe?g|png))$/i.exec(uploadedFile.name)) {
+                                showError('Tolong Masukkan Gambar Desain Dengan Ekstensi .pdf/.jpg/.jpeg/.png (' + uploadedFile.name + ')!');
+                                return false;
+                            }
+                            if (uploadedFile.size > maxSize) {
+                                showError('Ukuran File Gambar Desain Lebih Dari 2 MB (' + uploadedFile.name + ')!');
+                                return false;
+                            }
                         }
                     } else if (files[file]) {
                         // Validate other files

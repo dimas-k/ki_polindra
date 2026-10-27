@@ -343,6 +343,11 @@ class PatenController extends Controller
     }
     public function viewPublicFilesPatenGuest($filename)
     {
+        $linkedPaten = \App\Support\PatenPrivateFile::findRecord($filename);
+        if ($linkedPaten && \App\Models\User::whereKey($linkedPaten->user_id)->value('role') === 'Umum') {
+            abort(403, 'Dokumen pengajuan umum hanya dapat diakses oleh pemilik, admin, atau verifikator.');
+        }
+
         $filePaten = storage_path('app/public/dokumen-paten/' . $filename);
 
         if (!file_exists($filePaten)) {
@@ -367,44 +372,12 @@ class PatenController extends Controller
 
     public function viewPublicFilesHcGuest($filename)
     {
-        $fileHc = storage_path('app/public/dokumen-hc/' . $filename);
-
-        if (!file_exists($fileHc)) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        $hc = HakCipta::where(function ($query) use ($filename) {
-            $query->where('dokumen_invensi', 'dokumen-hc/' . $filename)
-                ->orWhere('gambar_ciptaan', 'LIKE', '%"dokumen-hc/' . $filename . '"%')
-                ->orWhere('sertifikat_hakcipta', 'dokumen-hc/' . $filename);
-        })->first();
-
-        if (!$hc) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        return response()->file($fileHc);
+        abort(403, 'Dokumen hak cipta hanya dapat dibuka oleh pengguna yang berwenang.');
     }
 
     public function viewPublicFilesDiGuest($filename)
     {
-        $fileDi = storage_path('app/public/dokumen-di/' . $filename);
-
-        if (!file_exists($fileDi)) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        $di = DesainIndustri::where(function ($query) use ($filename) {
-            $query->where('uraian_di', 'dokumen-di/' . $filename)
-                ->orWhere('gambar_di', 'LIKE', '%"dokumen-di/' . $filename . '"%')
-                ->orWhere('sertifikat_desain', 'dokumen-di/' . $filename);
-        })->first();
-
-        if (!$di) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        return response()->file($fileDi);
+        abort(403, 'Dokumen desain industri hanya dapat dibuka oleh pengguna yang berwenang.');
     }
     /**
      * Show the form for editing the specified resource.
