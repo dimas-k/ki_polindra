@@ -7,6 +7,7 @@ use Modules\ProdukInovasi\app\Http\Controllers\KelompokBidangController;
 use Modules\ProdukInovasi\app\Http\Controllers\AdminPenelitianController;
 use Modules\ProdukInovasi\app\Http\Controllers\AdminProdukInovasiController;
 use Modules\ProdukInovasi\app\Http\Controllers\AdminKetuaKbkController;
+use Modules\ProdukInovasi\app\Http\Controllers\AdminDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +47,12 @@ Route::prefix('dproin-polindra')->group(function () {
 
 // ===== Area Admin (produk/penelitian/KBK) — role disamakan ke 'Admin' =====
 Route::middleware(['auth', 'role:Admin'])->group(function () {
+    // Dashboard/laporan admin Produk Inovasi. Diberi path khusus
+    // '/admin/dashboard/produk-inovasi' (bukan '/admin/dashboard' seperti di
+    // app referensi) karena '/admin/dashboard' sudah dipakai halaman
+    // "Pilih Aplikasi" milik SIKI Polindra.
+    Route::get('/admin/dashboard/produk-inovasi', [AdminDashboardController::class, 'index'])->name('report.index');
+
     Route::get('/admin/kelompok-bidang-keahlian', [KelompokBidangController::class, 'pageKelompokBidang']);
     Route::post('/admin/kelompok-bidang-keahlian/create', [KelompokBidangController::class, 'storeKelompokKeahlian']);
     Route::post('/admin/kelompok-bidang-keahlian/update/{id}', [KelompokBidangController::class, 'update'])->name('updateKelompokBidang');

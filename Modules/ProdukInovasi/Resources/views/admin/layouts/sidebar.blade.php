@@ -18,7 +18,7 @@
         <!-- Dashboards -->
 
         <li class="menu-item">
-            <a href="/admin/dashboard" class="menu-link {{ Request::is('admin/dashboard') ? 'active bg-light' : '' }}">
+            <a href="/admin/dashboard/produk-inovasi" class="menu-link {{ Request::is('admin/dashboard/produk-inovasi') ? 'active bg-light' : '' }}">
                 <i class="menu-icon tf-icons bx bx-home-smile"></i>
                 <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
             </a>
