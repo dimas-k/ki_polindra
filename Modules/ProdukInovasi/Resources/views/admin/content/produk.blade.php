@@ -40,6 +40,9 @@
                                 <a href="{{ route('show.produk', $p->id) }}" class="btn btn-sm btn-success">
                                     <i class='bx bxs-show'></i>
                                 </a>
+                                <a href="{{ route('edit.produk', $p->id) }}" class="btn btn-sm btn-warning">
+                                    <i class='bx bx-pencil'></i>
+                                </a>
                             </td>
                             <td>
                                 <form id="form-validasi-{{ $p->id }}"

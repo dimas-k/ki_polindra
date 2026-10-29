@@ -8,6 +8,10 @@ use Modules\ProdukInovasi\app\Models\Produk;
 use Modules\ProdukInovasi\app\Models\Penelitian;
 use Modules\ProdukInovasi\app\Models\KelompokKeahlian;
 use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 
 /**
  * Dashboard/Laporan admin Produk Inovasi.
@@ -85,9 +89,9 @@ class AdminDashboardController extends Controller
         $produk = $queryProduk->get();
         $penelitian = $queryPenelitian->get();
 
-        // Cek apakah pengguna ingin mengunduh laporan (CSV, bisa dibuka langsung di Excel)
+        // Cek apakah pengguna ingin mengunduh laporan sebagai file Excel (.xlsx)
         if ($request->has('download') && $request->input('download') == 'Excel') {
-            return $this->downloadCsv($produk, $penelitian);
+            return $this->downloadExcel($produk, $penelitian);
         }
 
         return view('produkinovasi::admin.dashboard.index', compact(
@@ -105,68 +109,117 @@ class AdminDashboardController extends Controller
     }
 
     /**
-     * Unduh laporan Produk & Penelitian sebagai CSV (bisa langsung dibuka
-     * di Excel). Tidak memakai package Excel tambahan supaya tidak perlu
-     * dependency composer baru di project gabungan ini.
+     * Unduh laporan Produk & Penelitian sebagai file Excel asli (.xlsx),
+     * 2 sheet ('Produk' dan 'Penelitian'). Dipakai PhpSpreadsheet, package
+     * yang sudah jadi dependency project ini (dipakai juga oleh
+     * AnggotaExcelReader / KirimKeDashboardService), jadi tidak perlu
+     * tambah dependency composer baru.
      */
-    protected function downloadCsv($produk, $penelitian)
+    protected function downloadExcel($produk, $penelitian)
     {
-        $filename = 'report_' . now()->format('YmdHis') . '.csv';
+        $produk = $produk->sortBy('nama_produk')->values();
+        $penelitian = $penelitian->sortBy('judul')->values();
 
-        $produk = $produk->sortBy('nama_produk');
-        $penelitian = $penelitian->sortBy('judul');
+        $spreadsheet = new Spreadsheet();
 
-        $headers = [
-            'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => "attachment; filename=\"$filename\"",
-        ];
+        // ===== Sheet 1: Produk =====
+        $sheetProduk = $spreadsheet->getActiveSheet();
+        $sheetProduk->setTitle('Produk');
 
-        $callback = function () use ($produk, $penelitian) {
-            $out = fopen('php://output', 'w');
+        $headerProduk = ['No', 'No Id', 'Nama KBK', 'Nama Produk', 'Inventor', 'Tanggal Submit', 'Tanggal Granted', 'Status'];
+        $sheetProduk->fromArray($headerProduk, null, 'A1');
+        $this->styleHeaderRow($sheetProduk, count($headerProduk));
 
-            // BOM supaya karakter non-ASCII tampil benar saat dibuka di Excel
-            fwrite($out, "\xEF\xBB\xBF");
+        $row = 2;
+        $no = 1;
+        foreach ($produk as $item) {
+            $inventor = $item->inventor ?: $item->inventor_lainnya;
+            $sheetProduk->fromArray([
+                $no++,
+                $item->id,
+                $item->kelompokKeahlian->nama_kbk ?? '-',
+                $item->nama_produk,
+                $inventor,
+                $item->tanggal_submit ? Carbon::parse($item->tanggal_submit)->format('d-m-Y') : '-',
+                $item->tanggal_granted ? Carbon::parse($item->tanggal_granted)->format('d-m-Y') : '-',
+                $item->status,
+            ], null, 'A' . $row);
+            $row++;
+        }
 
-            fputcsv($out, ['Produk']);
-            fputcsv($out, ['No', 'No Id', 'Nama KBK', 'Nama Produk', 'Inventor', 'Tanggal Submit', 'Tanggal Granted', 'Status']);
+        $this->autosizeColumns($sheetProduk, count($headerProduk));
 
-            $no = 1;
-            foreach ($produk as $item) {
-                $inventor = $item->inventor ?: $item->inventor_lainnya;
-                fputcsv($out, [
-                    $no++,
-                    $item->id,
-                    $item->kelompokKeahlian->nama_kbk ?? '-',
-                    $item->nama_produk,
-                    $inventor,
-                    $item->tanggal_submit ? Carbon::parse($item->tanggal_submit)->format('d-m-Y') : '-',
-                    $item->tanggal_granted ? Carbon::parse($item->tanggal_granted)->format('d-m-Y') : '-',
-                    $item->status,
-                ]);
-            }
+        // ===== Sheet 2: Penelitian =====
+        $sheetPenelitian = $spreadsheet->createSheet();
+        $sheetPenelitian->setTitle('Penelitian');
 
-            fputcsv($out, []);
-            fputcsv($out, ['Penelitian']);
-            fputcsv($out, ['No', 'No Id', 'Nama KBK', 'Judul Penelitian', 'Penulis', 'Penulis Korespondensi', 'Tanggal Publikasi', 'Status']);
+        $headerPenelitian = ['No', 'No Id', 'Nama KBK', 'Judul Penelitian', 'Penulis', 'Penulis Korespondensi', 'Tanggal Publikasi', 'Status'];
+        $sheetPenelitian->fromArray($headerPenelitian, null, 'A1');
+        $this->styleHeaderRow($sheetPenelitian, count($headerPenelitian));
 
-            $no = 1;
-            foreach ($penelitian as $item) {
-                $penulis = $item->penulis ?: $item->penulis_lainnya;
-                fputcsv($out, [
-                    $no++,
-                    $item->id,
-                    $item->kelompokKeahlian->nama_kbk ?? '-',
-                    $item->judul,
-                    $penulis,
-                    $item->penulis_korespondensi,
-                    $item->tanggal_publikasi ? Carbon::parse($item->tanggal_publikasi)->format('d-m-Y') : '-',
-                    $item->status,
-                ]);
-            }
+        $row = 2;
+        $no = 1;
+        foreach ($penelitian as $item) {
+            $penulis = $item->penulis ?: $item->penulis_lainnya;
+            $sheetPenelitian->fromArray([
+                $no++,
+                $item->id,
+                $item->kelompokKeahlian->nama_kbk ?? '-',
+                $item->judul,
+                $penulis,
+                $item->penulis_korespondensi,
+                $item->tanggal_publikasi ? Carbon::parse($item->tanggal_publikasi)->format('d-m-Y') : '-',
+                $item->status,
+            ], null, 'A' . $row);
+            $row++;
+        }
 
-            fclose($out);
-        };
+        $this->autosizeColumns($sheetPenelitian, count($headerPenelitian));
 
-        return response()->stream($callback, 200, $headers);
+        // Tampilkan sheet Produk duluan saat file dibuka
+        $spreadsheet->setActiveSheetIndex(0);
+
+        $filename = 'report_' . now()->format('YmdHis') . '.xlsx';
+
+        return response()->streamDownload(function () use ($spreadsheet) {
+            $writer = new Xlsx($spreadsheet);
+            $writer->save('php://output');
+        }, $filename, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Cache-Control' => 'max-age=0',
+        ]);
+    }
+
+    /**
+     * Beri header row bold + background abu-abu + border tipis, supaya
+     * file Excel yang diunduh lebih enak dibaca (bukan sekadar data polos).
+     */
+    protected function styleHeaderRow($sheet, int $columnCount): void
+    {
+        $lastColumn = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnCount);
+        $range = "A1:{$lastColumn}1";
+
+        $sheet->getStyle($range)->applyFromArray([
+            'font' => ['bold' => true],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => 'D9D9D9'],
+            ],
+            'borders' => [
+                'allBorders' => ['borderStyle' => Border::BORDER_THIN],
+            ],
+        ]);
+    }
+
+    /**
+     * Lebarkan kolom otomatis mengikuti isinya supaya tidak perlu
+     * di-resize manual sehabis dibuka di Excel.
+     */
+    protected function autosizeColumns($sheet, int $columnCount): void
+    {
+        for ($i = 1; $i <= $columnCount; $i++) {
+            $column = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($i);
+            $sheet->getColumnDimension($column)->setAutoSize(true);
+        }
     }
 }

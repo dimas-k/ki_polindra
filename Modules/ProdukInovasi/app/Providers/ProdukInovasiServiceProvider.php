@@ -5,7 +5,10 @@ namespace Modules\ProdukInovasi\app\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Modules\ProdukInovasi\app\Models\KelompokKeahlian;
+use Modules\ProdukInovasi\app\Models\AnggotaKelompokKeahlian;
+use App\Models\User;
 
 class ProdukInovasiServiceProvider extends ServiceProvider
 {
@@ -18,6 +21,24 @@ class ProdukInovasiServiceProvider extends ServiceProvider
         $this->registerMigrations();
         $this->registerRoutes();
         $this->registerViewComposers();
+        $this->registerMorphMap();
+    }
+
+    /**
+     * Kolom 'anggota_type' di produks_anggotas / penelitians_anggotas
+     * disimpan sebagai nama tabel polos ('users',
+     * 'anggota_kelompok_keahlians') oleh kode yang sudah ada
+     * (KetuaKbkController, KirimKeDashboardService, dst), bukan nama
+     * class lengkap. Tanpa morph map ini, relasi morphTo() (ProdukAnggota
+     * @detail / @anggota, PenelitianAnggota @detail / @anggota) akan
+     * gagal resolve ke Model yang benar.
+     */
+    protected function registerMorphMap(): void
+    {
+        Relation::morphMap([
+            'users' => User::class,
+            'anggota_kelompok_keahlians' => AnggotaKelompokKeahlian::class,
+        ]);
     }
 
     public function register(): void

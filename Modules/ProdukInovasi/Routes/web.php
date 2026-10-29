@@ -61,6 +61,8 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::get('/admin/produk-inovasi/{id}', [AdminProdukInovasiController::class, 'pageProduk'])->name('admin.produk');
     Route::get('/admin/produk-inovasi/show/{id}', [AdminProdukInovasiController::class, 'ShowPageProduk'])->name('show.produk');
     Route::put('/admin/produk-inovasi/edit-status/{id}', [AdminProdukInovasiController::class, 'validateProduk'])->name('validate.produk');
+    Route::get('/admin/produk-inovasi/edit/{id}', [AdminProdukInovasiController::class, 'editProduk'])->name('edit.produk');
+    Route::put('/admin/produk-inovasi/update/{id}', [AdminProdukInovasiController::class, 'updateProduk'])->name('admin.update.produk');
 
     Route::get('/admin/penelitian/{id}', [AdminPenelitianController::class, 'pagePenelitian'])->name('admin.penelitian');
     Route::get('/admin/penelitian/show/{id}', [AdminPenelitianController::class, 'showPenelitian'])->name('admin.show.penelitian');

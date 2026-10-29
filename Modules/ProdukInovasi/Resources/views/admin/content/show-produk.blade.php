@@ -1,6 +1,11 @@
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="card p-2">
-        <h5 class="card-header border-3 w-100 mb-2"><i class='bx bx-table me-2'></i>Data {{ $produk->nama_produk }}</h5>
+        <h5 class="card-header border-3 w-100 mb-2 d-flex justify-content-between align-items-center">
+            <span><i class='bx bx-table me-2'></i>Data {{ $produk->nama_produk }}</span>
+            <a href="{{ route('edit.produk', $produk->id) }}" class="btn btn-sm btn-warning">
+                <i class='bx bx-pencil me-1'></i>Edit Produk
+            </a>
+        </h5>
         <img class="mx-auto d-block mb-5 mt-4" src="{{ asset( 'storage/' . $produk->gambar) }}" alt="" style="max-width: 50%; height: auto">
         <div class="table-responsive text-nowrap mt-4">
             <table class="table table-borderless">
@@ -24,7 +29,7 @@
                     @endforeach</td>
                 </tr>
                 <tr>
-                    <th>Anggota Lainnya (Mahasiswa)</th>
+                    <th>Anggota Lainnya (Mahasiswa/Dosen/Tendik)</th>
                     <td>
                         @if (!empty($produk->anggota_inventor_lainnya))
                             @foreach (array_filter(explode(',', $produk->anggota_inventor_lainnya)) as $anggota_lain)

@@ -42,7 +42,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>Anggota Lainnya (Mahasiswa)</th>
+                    <th>Anggota Lainnya (Mahasiswa/Dosen/Tendik)</th>
                     <td>
                         @if (!empty($produk->anggota_inventor_lainnya))
                             @foreach (array_filter(explode(',', $produk->anggota_inventor_lainnya)) as $anggota_lain)
